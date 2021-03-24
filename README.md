@@ -11,7 +11,7 @@ To import the NdArray library in your project, simply add the following dependen
 <dependency>
   <groupId>org.tensorflow</groupId>
   <artifactId>ndarray</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -120,9 +120,3 @@ try (EagerSession session = EagerSession.create()) {
   );
 }
 ```
-
-## How to Contribute?
-
-This repository is maintained by TensorFlow JVM Special Interest Group (SIG). You can easily join the group
-by subscribing to the [jvm@tensorflow.org](https://groups.google.com/a/tensorflow.org/forum/#!forum/jvm)
-mailing list, or you can simply send pull requests and raise issues to this repository.
