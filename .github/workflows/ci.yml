@@ -26,5 +26,5 @@ jobs:
       - name: Deploy snapshot artifacts
         if: github.event_name == 'push' && contains(github.ref, 'main')
         run: |
-          echo "<settings><servers><server><id>ossrh</id><username>${{ secrets.CI_DEPLOY_USERNAME }}</username><password>${{ secrets.CI_DEPLOY_PASSWORD }}</password></server></servers></settings>" > settings.xml
+          echo "<settings><servers><server><id>ossrh</id><username>${{ secrets.CI_DEPLOY_USERNAME }}</username><password>${{ secrets.CI_DEPLOY_PASSWORD }}</password></server></servers></settings>" > $HOME/.m2/settings.xml
           mvn deploy -B -U -e
