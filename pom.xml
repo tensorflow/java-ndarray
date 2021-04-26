@@ -207,7 +207,7 @@
   <!-- http://central.sonatype.org/pages/requirements.html#developer-information -->
   <developers>
     <developer>
-      <name>TensorFlowers</name>
+      <name>SIG JVM</name>
       <organization>TensorFlow</organization>
       <organizationUrl>http://www.tensorflow.org</organizationUrl>
     </developer>
