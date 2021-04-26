@@ -91,31 +91,30 @@ assertEquals(3, slice.getInt(1, 0));  // (1, 1, 0) in the original matrix
 
 The NdArray library is independent of the TensorFlow runtime library, making it a good choice for
 manipulating multi-dimensional data structures from anywhere. But as an example, here
-is how it is actually being used by the [TensorFlow Core API](https://github.com/tensorflow/java/tree/master/tensorflow-core/tensorflow-core-api):
+is how it is actually being used by the [TensorFlow Java API](https://github.com/tensorflow/java/):
 
 ```java
 // Allocate a tensor of 32-bits integer of the shape (2, 3, 2)
-Tensor<TInt32> tensor = TInt32.ofShape(2, 3, 2);
+TInt32 tensor = TInt32.ofShape(2, 3, 2);
 
 // Access tensor memory directly
-IntNdArray tensorData = tensor.data();
-assertEquals(3, tensorData.rank());
-assertEquals(12, tensorData.size());
+assertEquals(3, tensor.rank());
+assertEquals(12, tensor.size());
 
 try (EagerSession session = EagerSession.create()) {
   Ops tf = Ops.create(session);
 
   // Initialize tensor memory with zeros and take a snapshot
-  tensorData.scalars().forEach(scalar -> scalar.setInt(0));
+  tensor.scalars().forEach(scalar -> scalar.setInt(0));
   Constant<T> x = tf.constant(tensor);
 
   // Initialize the same tensor memory with ones and take a snapshot
-  tensorData.scalars().forEach(scalar -> scalar.setInt(1));
+  tensor.scalars().forEach(scalar -> scalar.setInt(1));
   Constant<T> y = tf.constant(tensor);
 
   // Subtract y from x and validate the result
   Sub<T> sub = tf.math.sub(x, y);
-  sub.data().scalars().forEach(scalar ->
+  sub.asTensor().scalars().forEach(scalar ->
       assertEquals(-1, scalar.getInt())
   );
 }
