@@ -25,14 +25,12 @@ import java.util.List;
  * The shape of a Tensor or {@link NdArray}.
  *
  * <p>A {@code Shape} defines sizes along its axes. It may contain an unknown size for one of the
- * axes or may be totally unknown, in which case not even the number of axes is known. If the size of an axis is
- * unknown, {@link Shape#UNKNOWN_SIZE} should be used as its size.
+ * axes or may be totally unknown, in which case not even the number of axes is known. If the size
+ * of an axis is unknown, {@link Shape#UNKNOWN_SIZE} should be used as its size.
  */
 public final class Shape {
 
-  /**
-   * The size of an unknown axis or the total unknown size for an unknown Shape.
-   */
+  /** The size of an unknown axis or the total unknown size for an unknown Shape. */
   public static long UNKNOWN_SIZE = -1L;
 
   /**
@@ -57,8 +55,9 @@ public final class Shape {
    * Create a Shape representing a scalar or an N-dimensional value.
    *
    * <p>Creates a Shape representing a scalar or an N-dimensional value (N being at least 1), with
-   * the provided size for each dimension. A -1 indicates that the size of the corresponding dimension is unknown. If no
-   * sizes are provided, a Shape representing a scalar is created. For example:
+   * the provided size for each dimension. A -1 indicates that the size of the corresponding
+   * dimension is unknown. If no sizes are provided, a Shape representing a scalar is created. For
+   * example:
    *
    * <pre>{@code
    * // A 2-element vector.
@@ -77,8 +76,8 @@ public final class Shape {
    * Shape scalar = Shape.of()
    * }</pre>
    *
-   * @param dimensionSizes number of elements in each dimension of this shape, if any, or
-   *                       {@link Shape#UNKNOWN_SIZE} if unknown.
+   * @param dimensionSizes number of elements in each dimension of this shape, if any, or {@link
+   *     Shape#UNKNOWN_SIZE} if unknown.
    * @return a new shape
    */
   public static Shape of(long... dimensionSizes) {
@@ -94,8 +93,8 @@ public final class Shape {
    * <p>If {@link Shape#isUnknown()} is true or {@link Shape#hasUnknownDimension()} is true, {@link
    * Shape#UNKNOWN_SIZE} is returned.
    *
-   * @return The total number of elements a Tensor with this shape would have if it can be calculated, else {@link
-   * Shape#UNKNOWN_SIZE}.
+   * @return The total number of elements a Tensor with this shape would have if it can be
+   *     calculated, else {@link Shape#UNKNOWN_SIZE}.
    */
   public long size() {
     if (size == null) {
@@ -110,11 +109,13 @@ public final class Shape {
    * <p>If {@link Shape#isUnknown()} is true or the size of the dimension with the given index has
    * an unknown size, {@link Shape#UNKNOWN_SIZE} is returned.
    *
-   * @param i the index of the dimension to get the size for. If this Shape has a known number of dimensions, it must be
-   * &lt; {@link Shape#numDimensions()}. The index may be negative, in which case the position is counted from the end
-   * of the shape. E.g.: {@code size(-1)} returns the size of the last dimension, {@code size(-2)} the size of the
-   * second to last dimension etc.
-   * @return The size of the dimension with the given index if known, {@link Shape#UNKNOWN_SIZE} otherwise.
+   * @param i the index of the dimension to get the size for. If this Shape has a known number of
+   *     dimensions, it must be &lt; {@link Shape#numDimensions()}. The index may be negative, in
+   *     which case the position is counted from the end of the shape. E.g.: {@code size(-1)}
+   *     returns the size of the last dimension, {@code size(-2)} the size of the second to last
+   *     dimension etc.
+   * @return The size of the dimension with the given index if known, {@link Shape#UNKNOWN_SIZE}
+   *     otherwise.
    */
   public long get(int i) {
     if (dimensionSizes == null) {
@@ -127,15 +128,14 @@ public final class Shape {
   }
 
   /**
-   * Returns the number of dimensions of this Shape. -1 if unknown, 0 for a scalar, 1 for a vector, 2 for a matrix etc.
+   * Returns the number of dimensions of this Shape. -1 if unknown, 0 for a scalar, 1 for a vector,
+   * 2 for a matrix etc.
    */
   public int numDimensions() {
     return dimensionSizes != null ? dimensionSizes.length : -1;
   }
 
-  /**
-   * Returns whether one or more dimensions of this Shape have an unknown size.
-   */
+  /** Returns whether one or more dimensions of this Shape have an unknown size. */
   public boolean hasUnknownDimension() {
     if (dimensionSizes == null) {
       return true;
@@ -148,37 +148,29 @@ public final class Shape {
     return false;
   }
 
-  /**
-   * Returns whether this Shape represents a scalar.
-   */
+  /** Returns whether this Shape represents a scalar. */
   public boolean isScalar() {
     return dimensionSizes != null && dimensionSizes.length == 0;
   }
 
-  /**
-   * Returns whether this Shape is the shape of a vector.
-   */
+  /** Returns whether this Shape is the shape of a vector. */
   public boolean isVector() {
     return dimensionSizes != null && dimensionSizes.length == 1;
   }
 
-  /**
-   * Returns whether this Shape is the shape of a matrix
-   */
+  /** Returns whether this Shape is the shape of a matrix */
   public boolean isMatrix() {
     return dimensionSizes != null && dimensionSizes.length == 2;
   }
 
-  /**
-   * Returns whether the number of dimensions of this Shape is unknown.
-   */
+  /** Returns whether the number of dimensions of this Shape is unknown. */
   public boolean isUnknown() {
     return dimensionSizes == null;
   }
 
   /**
-   * Returns a defensive copy of the this Shape's axes. Changes to the returned array to not change this Shape's state.
-   * Returns null if {@link Shape#isUnknown()} is true.
+   * Returns a defensive copy of the this Shape's axes. Changes to the returned array to not change
+   * this Shape's state. Returns null if {@link Shape#isUnknown()} is true.
    */
   public long[] asArray() {
     if (this.dimensionSizes == null) {
@@ -189,8 +181,8 @@ public final class Shape {
   }
 
   /**
-   * Returns a defensive copy of the this Shape's axes. Changes to the returned list do not change this Shape's state.
-   * Returns null if {@link Shape#isUnknown()} is true.
+   * Returns a defensive copy of the this Shape's axes. Changes to the returned list do not change
+   * this Shape's state. Returns null if {@link Shape#isUnknown()} is true.
    */
   public List<Long> toListOrNull() {
     long[] array = asArray();
@@ -215,6 +207,7 @@ public final class Shape {
    * Equals implementation for Shapes. Two Shapes are considered equal iff:
    *
    * <p>
+   *
    * <ul>
    *   <li>the number of dimensions is defined and equal for both
    *   <li>the size of each dimension is defined and equal for both
@@ -241,9 +234,7 @@ public final class Shape {
     return false;
   }
 
-  /**
-   * Succinct description of the Shape meant for debugging.
-   */
+  /** Succinct description of the Shape meant for debugging. */
   @Override
   public String toString() {
     return Arrays.toString(dimensionSizes);
@@ -264,10 +255,13 @@ public final class Shape {
   }
 
   /**
-   * Returns an n-dimensional Shape with the dimensions matching the first n dimensions of this shape
+   * Returns an n-dimensional Shape with the dimensions matching the first n dimensions of this
+   * shape
    *
-   * @param n the number of leading dimensions to get, must be &lt;= than {@link Shape#numDimensions()}
-   * @return an n-dimensional Shape with the first n dimensions matching the first n dimensions of this Shape
+   * @param n the number of leading dimensions to get, must be &lt;= than {@link
+   *     Shape#numDimensions()}
+   * @return an n-dimensional Shape with the first n dimensions matching the first n dimensions of
+   *     this Shape
    */
   public Shape take(int n) {
     if (n > numDimensions()) {
@@ -279,9 +273,7 @@ public final class Shape {
     return Shape.of(newDimensions);
   }
 
-  /**
-   * Returns a new Shape, with this Shape's first dimension removed.
-   */
+  /** Returns a new Shape, with this Shape's first dimension removed. */
   public Shape tail() {
     if (dimensionSizes.length < 2) {
       return Shape.of();
@@ -290,10 +282,13 @@ public final class Shape {
   }
 
   /**
-   * Returns an n-dimensional Shape with the dimensions matching the last n dimensions of this Shape.
+   * Returns an n-dimensional Shape with the dimensions matching the last n dimensions of this
+   * Shape.
    *
-   * @param n the number of trailing dimensions to get, must be &lt;= than {@link Shape#numDimensions()}
-   * @return an n-dimensional shape with the dimensions matching the last n dimensions of this Shape, never null
+   * @param n the number of trailing dimensions to get, must be &lt;= than {@link
+   *     Shape#numDimensions()}
+   * @return an n-dimensional shape with the dimensions matching the last n dimensions of this
+   *     Shape, never null
    */
   public Shape takeLast(int n) {
     if (n > numDimensions()) {
@@ -306,8 +301,8 @@ public final class Shape {
   }
 
   /**
-   * Return a {@code end - begin} dimensional shape with dimensions matching this Shape from {@code begin} to {@code
-   * end}.
+   * Return a {@code end - begin} dimensional shape with dimensions matching this Shape from {@code
+   * begin} to {@code end}.
    *
    * @param begin Where to start the sub-shape.
    * @param end Where to end the sub-shape, exclusive.
@@ -316,7 +311,11 @@ public final class Shape {
   public Shape subShape(int begin, int end) {
     if (end > numDimensions()) {
       throw new ArrayIndexOutOfBoundsException(
-          "End index " + end + " out of bounds: shape only has " + numDimensions() + " dimensions.");
+          "End index "
+              + end
+              + " out of bounds: shape only has "
+              + numDimensions()
+              + " dimensions.");
     }
     if (begin < 0) {
       throw new ArrayIndexOutOfBoundsException(
@@ -329,11 +328,12 @@ public final class Shape {
   }
 
   /**
-   * Returns a new Shape, with a new first dimension added. In order for this call to succeed, {@link Shape#isUnknown()}
-   * must be {@code false}.
+   * Returns a new Shape, with a new first dimension added. In order for this call to succeed,
+   * {@link Shape#isUnknown()} must be {@code false}.
    *
    * @param firstDimension the dimension to prepend
-   * @return a new shape with the given dimension first, followed by this Shape's dimensions, never null
+   * @return a new shape with the given dimension first, followed by this Shape's dimensions, never
+   *     null
    */
   public Shape prepend(long firstDimension) {
     long[] newDimensions = new long[dimensionSizes.length + 1];
@@ -344,8 +344,8 @@ public final class Shape {
   }
 
   /**
-   * Returns a new Shape, with a new last dimension added. In order for this call to succeed, {@link Shape#isUnknown()}
-   * must be {@code false}.
+   * Returns a new Shape, with a new last dimension added. In order for this call to succeed, {@link
+   * Shape#isUnknown()} must be {@code false}.
    *
    * @param lastDimension the dimension to append
    * @return a new Shape with this Shape's dimensions followed by the given dimension, never null
@@ -359,11 +359,13 @@ public final class Shape {
   }
 
   /**
-   * Returns a new Shape, with another Shape's dimensions prepended. For both this Shape and the other Shape, {@link
-   * Shape#isUnknown()} must return false. E.g. {@code Shape.of(3,4).prepend(Shape.of(1,2)) => Shape.of(1,2,3,4) }
+   * Returns a new Shape, with another Shape's dimensions prepended. For both this Shape and the
+   * other Shape, {@link Shape#isUnknown()} must return false. E.g. {@code
+   * Shape.of(3,4).prepend(Shape.of(1,2)) => Shape.of(1,2,3,4) }
    *
    * @param other another Shape, must not be {@code null}, must not be unknown
-   * @return A new Shape consisting of the given Shape's dimensions followed by this Shape's dimensions, never null
+   * @return A new Shape consisting of the given Shape's dimensions followed by this Shape's
+   *     dimensions, never null
    */
   public Shape prepend(Shape other) {
     long[] newDimensions = new long[other.dimensionSizes.length + dimensionSizes.length];
@@ -374,11 +376,13 @@ public final class Shape {
   }
 
   /**
-   * Returns a new Shape, with another Shapes' dimensions appended. For both this Shape and the other Shape, {@link
-   * Shape#isUnknown()} must return false. E.g. @code Shape.of(3,4).append(Shape.of(1,2)) =&gt; Shape.of(3,4,1,2) }
+   * Returns a new Shape, with another Shapes' dimensions appended. For both this Shape and the
+   * other Shape, {@link Shape#isUnknown()} must return false. E.g. @code
+   * Shape.of(3,4).append(Shape.of(1,2)) =&gt; Shape.of(3,4,1,2) }
    *
    * @param other another Shape, must not be {@code null}, must not be unknown
-   * @return A new Shape consisting of this Shape's dimensions followed by the given Shape's dimensions
+   * @return A new Shape consisting of this Shape's dimensions followed by the given Shape's
+   *     dimensions
    */
   public Shape append(Shape other) {
     long[] newDimensions = new long[dimensionSizes.length + other.dimensionSizes.length];
@@ -408,8 +412,8 @@ public final class Shape {
    * <p>
    *
    * <p>Two possibly-partially-defined shapes are compatible if there exists a fully-defined shape
-   * that both shapes can represent. Thus, compatibility allows the shape inference code to reason about
-   * partially-defined shapes. For example:
+   * that both shapes can represent. Thus, compatibility allows the shape inference code to reason
+   * about partially-defined shapes. For example:
    *
    * <ul>
    *   <li><code>Shape.unknown()</code> is compatible with all shapes.
