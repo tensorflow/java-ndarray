@@ -1,5 +1,7 @@
 package org.tensorflow.ndarray;
 
+import static org.tensorflow.ndarray.NdArrays.vectorOf;
+
 import java.lang.reflect.Array;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 
@@ -535,7 +537,7 @@ public final class StdArrays {
    */
   public static <T> NdArray<T> ndCopyOf(T[][] array) {
     @SuppressWarnings("unchecked")
-    NdArray<T> ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
+    NdArray<T>ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
     copyTo(array, ndArray);
     return ndArray;
   }
@@ -549,7 +551,7 @@ public final class StdArrays {
    */
   public static <T> NdArray<T> ndCopyOf(T[][][] array) {
     @SuppressWarnings("unchecked")
-    NdArray<T> ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
+    NdArray<T>ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
     copyTo(array, ndArray);
     return ndArray;
   }
@@ -563,7 +565,7 @@ public final class StdArrays {
    */
   public static <T> NdArray<T> ndCopyOf(T[][][][] array) {
     @SuppressWarnings("unchecked")
-    NdArray<T> ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
+    NdArray<T>ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
     copyTo(array, ndArray);
     return ndArray;
   }
@@ -577,7 +579,7 @@ public final class StdArrays {
    */
   public static <T> NdArray<T> ndCopyOf(T[][][][][] array) {
     @SuppressWarnings("unchecked")
-    NdArray<T> ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
+    NdArray<T>ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
     copyTo(array, ndArray);
     return ndArray;
   }
@@ -591,7 +593,7 @@ public final class StdArrays {
    */
   public static <T> NdArray<T> ndCopyOf(T[][][][][][] array) {
     @SuppressWarnings("unchecked")
-    NdArray<T> ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
+    NdArray<T>ndArray = NdArrays.ofObjects(componentTypeOf(array), shapeOf(array));
     copyTo(array, ndArray);
     return ndArray;
   }
@@ -601,8 +603,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static int[] array1dCopyOf(IntNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 1);
@@ -616,8 +618,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static int[][] array2dCopyOf(IntNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 2);
@@ -631,8 +633,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static int[][][] array3dCopyOf(IntNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 3);
@@ -646,8 +648,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static int[][][][] array4dCopyOf(IntNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 4);
@@ -661,8 +663,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static int[][][][][] array5dCopyOf(IntNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 5);
@@ -676,8 +678,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static int[][][][][][] array6dCopyOf(IntNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 6);
@@ -691,8 +693,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static long[] array1dCopyOf(LongNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 1);
@@ -706,8 +708,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static long[][] array2dCopyOf(LongNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 2);
@@ -721,8 +723,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static long[][][] array3dCopyOf(LongNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 3);
@@ -736,8 +738,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static long[][][][] array4dCopyOf(LongNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 4);
@@ -751,8 +753,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static long[][][][][] array5dCopyOf(LongNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 5);
@@ -766,8 +768,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static long[][][][][][] array6dCopyOf(LongNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 6);
@@ -781,8 +783,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static float[] array1dCopyOf(FloatNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 1);
@@ -796,8 +798,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static float[][] array2dCopyOf(FloatNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 2);
@@ -811,8 +813,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static float[][][] array3dCopyOf(FloatNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 3);
@@ -826,8 +828,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static float[][][][] array4dCopyOf(FloatNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 4);
@@ -841,8 +843,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static float[][][][][] array5dCopyOf(FloatNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 5);
@@ -856,8 +858,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static float[][][][][][] array6dCopyOf(FloatNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 6);
@@ -871,8 +873,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static double[] array1dCopyOf(DoubleNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 1);
@@ -886,8 +888,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static double[][] array2dCopyOf(DoubleNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 2);
@@ -901,8 +903,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static double[][][] array3dCopyOf(DoubleNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 3);
@@ -916,8 +918,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static double[][][][] array4dCopyOf(DoubleNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 4);
@@ -931,8 +933,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static double[][][][][] array5dCopyOf(DoubleNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 5);
@@ -946,8 +948,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static double[][][][][][] array6dCopyOf(DoubleNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 6);
@@ -961,8 +963,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static byte[] array1dCopyOf(ByteNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 1);
@@ -976,8 +978,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static byte[][] array2dCopyOf(ByteNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 2);
@@ -991,8 +993,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static byte[][][] array3dCopyOf(ByteNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 3);
@@ -1006,8 +1008,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static byte[][][][] array4dCopyOf(ByteNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 4);
@@ -1021,8 +1023,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static byte[][][][][] array5dCopyOf(ByteNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 5);
@@ -1036,8 +1038,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static byte[][][][][][] array6dCopyOf(ByteNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 6);
@@ -1051,8 +1053,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static short[] array1dCopyOf(ShortNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 1);
@@ -1066,8 +1068,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static short[][] array2dCopyOf(ShortNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 2);
@@ -1081,8 +1083,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static short[][][] array3dCopyOf(ShortNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 3);
@@ -1096,8 +1098,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static short[][][][] array4dCopyOf(ShortNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 4);
@@ -1111,8 +1113,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static short[][][][][] array5dCopyOf(ShortNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 5);
@@ -1126,8 +1128,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static short[][][][][][] array6dCopyOf(ShortNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 6);
@@ -1141,8 +1143,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static boolean[] array1dCopyOf(BooleanNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 1);
@@ -1156,8 +1158,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static boolean[][] array2dCopyOf(BooleanNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 2);
@@ -1171,8 +1173,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static boolean[][][] array3dCopyOf(BooleanNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 3);
@@ -1186,8 +1188,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static boolean[][][][] array4dCopyOf(BooleanNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 4);
@@ -1201,8 +1203,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static boolean[][][][][] array5dCopyOf(BooleanNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 5);
@@ -1216,8 +1218,8 @@ public final class StdArrays {
    *
    * @param ndArray source array
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static boolean[][][][][][] array6dCopyOf(BooleanNdArray ndArray) {
     int[] dims = computeArrayDims(ndArray, 6);
@@ -1233,12 +1235,12 @@ public final class StdArrays {
    * @param objectType type of object
    * @param <T> data type
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-1 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static <T> T[] array1dCopyOf(NdArray<T> ndArray, Class<T> objectType) {
     int[] dims = computeArrayDims(ndArray, 1);
-    T[] array = (T[]) Array.newInstance(objectType, dims[0]);
+    T[] array = (T[])Array.newInstance(objectType, dims[0]);
     copyFrom(ndArray, array);
     return array;
   }
@@ -1250,12 +1252,12 @@ public final class StdArrays {
    * @param objectType type of object
    * @param <T> data type
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-2 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static <T> T[][] array2dCopyOf(NdArray<T> ndArray, Class<T> objectType) {
     int[] dims = computeArrayDims(ndArray, 2);
-    T[][] array = (T[][]) Array.newInstance(objectType, dims[0], dims[1]);
+    T[][] array = (T[][])Array.newInstance(objectType, dims[0], dims[1]);
     copyFrom(ndArray, array);
     return array;
   }
@@ -1267,12 +1269,12 @@ public final class StdArrays {
    * @param objectType type of object
    * @param <T> data type
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-3 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static <T> T[][][] array3dCopyOf(NdArray<T> ndArray, Class<T> objectType) {
     int[] dims = computeArrayDims(ndArray, 3);
-    T[][][] array = (T[][][]) Array.newInstance(objectType, dims[0], dims[1], dims[2]);
+    T[][][] array = (T[][][])Array.newInstance(objectType, dims[0], dims[1], dims[2]);
     copyFrom(ndArray, array);
     return array;
   }
@@ -1284,12 +1286,12 @@ public final class StdArrays {
    * @param objectType type of object
    * @param <T> data type
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-4 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static <T> T[][][][] array4dCopyOf(NdArray<T> ndArray, Class<T> objectType) {
     int[] dims = computeArrayDims(ndArray, 4);
-    T[][][][] array = (T[][][][]) Array.newInstance(objectType, dims[0], dims[1], dims[2], dims[3]);
+    T[][][][] array = (T[][][][])Array.newInstance(objectType, dims[0], dims[1], dims[2], dims[3]);
     copyFrom(ndArray, array);
     return array;
   }
@@ -1301,13 +1303,13 @@ public final class StdArrays {
    * @param objectType type of object
    * @param <T> data type
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-5 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static <T> T[][][][][] array5dCopyOf(NdArray<T> ndArray, Class<T> objectType) {
     int[] dims = computeArrayDims(ndArray, 5);
     T[][][][][] array =
-        (T[][][][][]) Array.newInstance(objectType, dims[0], dims[1], dims[2], dims[3], dims[4]);
+        (T[][][][][])Array.newInstance(objectType, dims[0], dims[1], dims[2], dims[3], dims[4]);
     copyFrom(ndArray, array);
     return array;
   }
@@ -1319,13 +1321,13 @@ public final class StdArrays {
    * @param objectType type of object
    * @param <T> data type
    * @return the array copy
-   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that exceeds standard arrays
-   * limits
+   * @throws IllegalArgumentException if {@code ndArray} is not of rank-6 or has a shape that
+   *                                  exceeds standard arrays limits
    */
   public static <T> T[][][][][][] array6dCopyOf(NdArray<T> ndArray, Class<T> objectType) {
     int[] dims = computeArrayDims(ndArray, 6);
     T[][][][][][] array =
-        (T[][][][][][]) Array.newInstance(objectType, dims[0], dims[1], dims[2], dims[3], dims[4], dims[5]);
+        (T[][][][][][])Array.newInstance(objectType, dims[0], dims[1], dims[2], dims[3], dims[4], dims[5]);
     copyFrom(ndArray, array);
     return array;
   }
@@ -1335,8 +1337,8 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-1 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(int[] src, IntNdArray dst) {
     NdArrays.vectorOf(src).copyTo(dst);
@@ -1347,12 +1349,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-2 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(int[][] src, IntNdArray dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1361,12 +1363,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-3 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(int[][][] src, IntNdArray dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1375,12 +1377,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-4 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(int[][][][] src, IntNdArray dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1389,12 +1391,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-5 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(int[][][][][] src, IntNdArray dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1403,12 +1405,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-6 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(int[][][][][][] src, IntNdArray dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -1417,8 +1419,8 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-1 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(long[] src, LongNdArray dst) {
     NdArrays.vectorOf(src).copyTo(dst);
@@ -1429,12 +1431,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-2 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(long[][] src, LongNdArray dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1443,12 +1445,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-3 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(long[][][] src, LongNdArray dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1457,12 +1459,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-4 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(long[][][][] src, LongNdArray dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1471,12 +1473,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-5 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(long[][][][][] src, LongNdArray dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1485,12 +1487,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-6 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(long[][][][][][] src, LongNdArray dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -1499,8 +1501,8 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-1 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(float[] src, FloatNdArray dst) {
     NdArrays.vectorOf(src).copyTo(dst);
@@ -1511,12 +1513,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-2 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(float[][] src, FloatNdArray dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1525,12 +1527,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-3 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(float[][][] src, FloatNdArray dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1539,12 +1541,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-4 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(float[][][][] src, FloatNdArray dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1553,12 +1555,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-5 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(float[][][][][] src, FloatNdArray dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1567,12 +1569,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-6 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(float[][][][][][] src, FloatNdArray dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -1581,8 +1583,8 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-1 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(double[] src, DoubleNdArray dst) {
     NdArrays.vectorOf(src).copyTo(dst);
@@ -1593,12 +1595,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-2 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(double[][] src, DoubleNdArray dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1607,12 +1609,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-3 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(double[][][] src, DoubleNdArray dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1621,12 +1623,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-4 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(double[][][][] src, DoubleNdArray dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1635,12 +1637,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-5 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(double[][][][][] src, DoubleNdArray dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1649,12 +1651,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-6 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(double[][][][][][] src, DoubleNdArray dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -1663,8 +1665,8 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-1 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(byte[] src, ByteNdArray dst) {
     NdArrays.vectorOf(src).copyTo(dst);
@@ -1675,12 +1677,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-2 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(byte[][] src, ByteNdArray dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1689,12 +1691,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-3 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(byte[][][] src, ByteNdArray dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1703,12 +1705,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-4 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(byte[][][][] src, ByteNdArray dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1717,12 +1719,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-5 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(byte[][][][][] src, ByteNdArray dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1731,12 +1733,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-6 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(byte[][][][][][] src, ByteNdArray dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -1745,8 +1747,8 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-1 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(short[] src, ShortNdArray dst) {
     NdArrays.vectorOf(src).copyTo(dst);
@@ -1757,12 +1759,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-2 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(short[][] src, ShortNdArray dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1771,12 +1773,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-3 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(short[][][] src, ShortNdArray dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1785,12 +1787,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-4 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(short[][][][] src, ShortNdArray dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1799,12 +1801,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-5 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(short[][][][][] src, ShortNdArray dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1813,12 +1815,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-6 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(short[][][][][][] src, ShortNdArray dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -1827,8 +1829,8 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-1 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(boolean[] src, BooleanNdArray dst) {
     NdArrays.vectorOf(src).copyTo(dst);
@@ -1839,12 +1841,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-2 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(boolean[][] src, BooleanNdArray dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1853,12 +1855,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-3 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(boolean[][][] src, BooleanNdArray dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1867,12 +1869,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-4 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(boolean[][][][] src, BooleanNdArray dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1881,12 +1883,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-5 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(boolean[][][][][] src, BooleanNdArray dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1895,12 +1897,12 @@ public final class StdArrays {
    *
    * @param src source array
    * @param dst destination rank-6 array
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static void copyTo(boolean[][][][][][] src, BooleanNdArray dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOf(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOf(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -1910,8 +1912,8 @@ public final class StdArrays {
    * @param src source array
    * @param dst destination rank-1 array
    * @param <T> data type
-   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-1 or has an incompatible shape
+   *                                  with the source array
    */
   public static <T> void copyTo(T[] src, NdArray<T> dst) {
     NdArrays.vectorOfObjects(src).copyTo(dst);
@@ -1923,12 +1925,12 @@ public final class StdArrays {
    * @param src source array
    * @param dst destination rank-2 array
    * @param <T> data type
-   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-2 or has an incompatible shape
+   *                                  with the source array
    */
   public static <T> void copyTo(T[][] src, NdArray<T> dst) {
     dst.elements(0).forEachIndexed((idx, e) ->
-        NdArrays.vectorOfObjects(src[(int) idx[0]]).copyTo(e)
+        NdArrays.vectorOfObjects(src[(int)idx[0]]).copyTo(e)
     );
   }
 
@@ -1938,12 +1940,12 @@ public final class StdArrays {
    * @param src source array
    * @param dst destination rank-3 array
    * @param <T> data type
-   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-3 or has an incompatible shape
+   *                                  with the source array
    */
   public static <T> void copyTo(T[][][] src, NdArray<T> dst) {
     dst.elements(1).forEachIndexed((idx, e) ->
-        NdArrays.vectorOfObjects(src[(int) idx[0]][(int) idx[1]]).copyTo(e)
+        NdArrays.vectorOfObjects(src[(int)idx[0]][(int)idx[1]]).copyTo(e)
     );
   }
 
@@ -1953,12 +1955,12 @@ public final class StdArrays {
    * @param src source array
    * @param dst destination rank-4 array
    * @param <T> data type
-   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-4 or has an incompatible shape
+   *                                  with the source array
    */
   public static <T> void copyTo(T[][][][] src, NdArray<T> dst) {
     dst.elements(2).forEachIndexed((idx, e) ->
-        NdArrays.vectorOfObjects(src[(int) idx[0]][(int) idx[1]][(int) idx[2]]).copyTo(e)
+        NdArrays.vectorOfObjects(src[(int)idx[0]][(int)idx[1]][(int)idx[2]]).copyTo(e)
     );
   }
 
@@ -1968,12 +1970,12 @@ public final class StdArrays {
    * @param src source array
    * @param dst destination rank-5 array
    * @param <T> data type
-   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-5 or has an incompatible shape
+   *                                  with the source array
    */
   public static <T> void copyTo(T[][][][][] src, NdArray<T> dst) {
     dst.elements(3).forEachIndexed((idx, e) ->
-        NdArrays.vectorOfObjects(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]]).copyTo(e)
+        NdArrays.vectorOfObjects(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]]).copyTo(e)
     );
   }
 
@@ -1983,12 +1985,12 @@ public final class StdArrays {
    * @param src source array
    * @param dst destination rank-6 array
    * @param <T> data type
-   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape with the source
-   * array
+   * @throws IllegalArgumentException if {@code dst} is not of rank-6 or has an incompatible shape
+   *                                  with the source array
    */
   public static <T> void copyTo(T[][][][][][] src, NdArray<T> dst) {
     dst.elements(4).forEachIndexed((idx, e) ->
-        NdArrays.vectorOfObjects(src[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]]).copyTo(e)
+        NdArrays.vectorOfObjects(src[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]]).copyTo(e)
     );
   }
 
@@ -2024,7 +2026,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2041,7 +2043,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2058,7 +2060,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2075,7 +2077,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2092,7 +2094,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -2127,7 +2129,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2144,7 +2146,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2161,7 +2163,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2178,7 +2180,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2195,7 +2197,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -2230,7 +2232,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2247,7 +2249,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2264,7 +2266,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2281,7 +2283,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2298,7 +2300,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -2333,7 +2335,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2350,7 +2352,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2367,7 +2369,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2384,7 +2386,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2401,7 +2403,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -2436,7 +2438,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2453,7 +2455,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2470,7 +2472,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2487,7 +2489,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2504,7 +2506,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -2539,7 +2541,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2556,7 +2558,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2573,7 +2575,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2590,7 +2592,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2607,7 +2609,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -2642,7 +2644,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2659,7 +2661,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2676,7 +2678,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2693,7 +2695,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2710,7 +2712,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -2747,7 +2749,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(0).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]])
+        copyFrom(e, dst[(int)idx[0]])
     );
   }
 
@@ -2765,7 +2767,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(1).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]])
     );
   }
 
@@ -2783,7 +2785,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(2).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]])
     );
   }
 
@@ -2801,7 +2803,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(3).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]])
     );
   }
 
@@ -2819,7 +2821,7 @@ public final class StdArrays {
       throw new IllegalArgumentException("Array cannot be copied from NdArray of rank " + src.rank());
     }
     src.elements(4).forEachIndexed((idx, e) ->
-        copyFrom(e, dst[(int) idx[0]][(int) idx[1]][(int) idx[2]][(int) idx[3]][(int) idx[4]])
+        copyFrom(e, dst[(int)idx[0]][(int)idx[1]][(int)idx[2]][(int)idx[3]][(int)idx[4]])
     );
   }
 
@@ -3786,7 +3788,7 @@ public final class StdArrays {
     while (componentType.isArray()) {
       componentType = componentType.getComponentType();
     }
-    return (Class<T>) componentType;
+    return (Class<T>)componentType;
   }
 
   private static int[] computeArrayDims(NdArray<?> ndArray, int expectedRank) {
@@ -3798,10 +3800,9 @@ public final class StdArrays {
     for (int i = 0; i < expectedRank; ++i) {
       long dimSize = shape.get(i);
       if (dimSize > Integer.MAX_VALUE) {
-        throw new IllegalArgumentException(
-            "Dimension " + i + " is too large to fit in a standard array (" + shape.get(i) + ")");
+        throw new IllegalArgumentException("Dimension " + i + " is too large to fit in a standard array (" + shape.size(i) + ")");
       }
-      arrayShape[i] = (int) dimSize;
+      arrayShape[i] = (int)dimSize;
     }
     return arrayShape;
   }
