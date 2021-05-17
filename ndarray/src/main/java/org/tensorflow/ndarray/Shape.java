@@ -77,8 +77,8 @@ public final class Shape {
    * Shape scalar = Shape.of()
    * }</pre>
    *
-   * @param dimensionSizes number of elements in each dimension of this shape, if any, or {@link Shape#UNKNOWN_SIZE} if
-   * unknown.
+   * @param dimensionSizes number of elements in each dimension of this shape, if any, or
+   *                       {@link Shape#UNKNOWN_SIZE} if unknown.
    * @return a new shape
    */
   public static Shape of(long... dimensionSizes) {
