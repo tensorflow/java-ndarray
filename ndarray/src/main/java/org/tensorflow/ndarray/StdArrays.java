@@ -3800,7 +3800,7 @@ public final class StdArrays {
     for (int i = 0; i < expectedRank; ++i) {
       long dimSize = shape.get(i);
       if (dimSize > Integer.MAX_VALUE) {
-        throw new IllegalArgumentException("Dimension " + i + " is too large to fit in a standard array (" + shape.size(i) + ")");
+        throw new IllegalArgumentException("Dimension " + i + " is too large to fit in a standard array (" + shape.get(i) + ")");
       }
       arrayShape[i] = (int)dimSize;
     }
