@@ -116,6 +116,26 @@ public final class Shape {
    *     dimension etc.
    * @return The size of the dimension with the given index if known, {@link Shape#UNKNOWN_SIZE}
    *     otherwise.
+   * @deprecated Renamed to {@link #get(int)}.
+   */
+  @Deprecated
+  public long size(int i){
+    return get(i);
+  }
+
+  /**
+   * The size of the dimension with the given index.
+   *
+   * <p>If {@link Shape#isUnknown()} is true or the size of the dimension with the given index has
+   * an unknown size, {@link Shape#UNKNOWN_SIZE} is returned.
+   *
+   * @param i the index of the dimension to get the size for. If this Shape has a known number of
+   *     dimensions, it must be &lt; {@link Shape#numDimensions()}. The index may be negative, in
+   *     which case the position is counted from the end of the shape. E.g.: {@code size(-1)}
+   *     returns the size of the last dimension, {@code size(-2)} the size of the second to last
+   *     dimension etc.
+   * @return The size of the dimension with the given index if known, {@link Shape#UNKNOWN_SIZE}
+   *     otherwise.
    */
   public long get(int i) {
     if (dimensionSizes == null) {
