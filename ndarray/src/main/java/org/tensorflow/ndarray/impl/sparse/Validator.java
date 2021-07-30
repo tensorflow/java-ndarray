@@ -21,28 +21,26 @@ import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 
 final class Validator extends org.tensorflow.ndarray.impl.Validator {
 
-    static void coordinates(DimensionalSpace dimensions, long[] coords,
-                            boolean isValue) {
-        if (coords.length > dimensions.numDimensions()) {
-            throw new IndexOutOfBoundsException();
-        }
-        if (isValue && coords.length != dimensions.numDimensions()) {
-            throw new IllegalRankException("Not a scalar value");
-        }
-    }
+  private Validator() {}
 
-    static void denseShape(DataBuffer<?> buffer, Shape shape) {
-        if (shape == null) {
-            throw new IllegalArgumentException("Shape cannot be null");
-        }
-        if (shape.hasUnknownDimension()) {
-            throw new IllegalArgumentException("Sparse arrays cannot have unknown dimension(s)");
-        }
-        if (buffer.size() < shape.size()) {
-            throw new IllegalArgumentException("Buffer size is smaller than the shape size");
-        }
+  static void coordinates(DimensionalSpace dimensions, long[] coords, boolean isValue) {
+    if (coords.length > dimensions.numDimensions()) {
+      throw new IndexOutOfBoundsException();
     }
+    if (isValue && coords.length != dimensions.numDimensions()) {
+      throw new IllegalRankException("Not a scalar value");
+    }
+  }
 
-    private Validator() {
+  static void denseShape(DataBuffer<?> buffer, Shape shape) {
+    if (shape == null) {
+      throw new IllegalArgumentException("Shape cannot be null");
     }
+    if (shape.hasUnknownDimension()) {
+      throw new IllegalArgumentException("Sparse arrays cannot have unknown dimension(s)");
+    }
+    if (buffer.size() < shape.size()) {
+      throw new IllegalArgumentException("Buffer size is smaller than the shape size");
+    }
+  }
 }

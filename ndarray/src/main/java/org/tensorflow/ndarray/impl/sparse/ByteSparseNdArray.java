@@ -14,17 +14,17 @@ limitations under the License.
 =======================================================================*/
 package org.tensorflow.ndarray.impl.sparse;
 
-import org.tensorflow.ndarray.FloatNdArray;
+import org.tensorflow.ndarray.ByteNdArray;
 import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.StdArrays;
+import org.tensorflow.ndarray.buffer.ByteDataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
-import org.tensorflow.ndarray.buffer.FloatDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
-import org.tensorflow.ndarray.impl.sparse.window.FloatSparseWindow;
+import org.tensorflow.ndarray.impl.sparse.window.ByteSparseWindow;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
@@ -34,18 +34,18 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * sparse array for the float data type
+ * sparse array for the byte data type
  *
  * <p>A sparse array as two separate dense arrays: indices, values, and a shape that represents the
  * dense shape.
  *
  * <p><em>NOTE:</em> all Sparse Arrays are readonly for the {@link #set(NdArray, long...)} and
- * {@link #setObject(Float, long...)} methods
+ * {@link #setObject(Byte, long...)} methods
  *
  * <pre>{@code
- * FloatSparseNdArray st = new FloatSparseNdArray(
+ * ByteSparseNdArray st = new ByteSparseNdArray(
  *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new float[] {1f, 2f},
+ *      StdArrays.of(new float[] {true, true},
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -53,56 +53,56 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>represents the dense array:
  *
  * <pre>{@code
- * [[1, 0, 0, 0]
- *  [0, 0, 2, 0]
- *  [0, 0, 0, 0]]
+ * [[true, false, false, false]
+ *  [false, false, true, false]
+ *  [false, false, false, false]]
  *
  * }</pre>
  */
-public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArray>
-    implements FloatNdArray {
-  private static final FloatNdArray zeroArray = NdArrays.scalarOf(0f);
+public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
+    implements ByteNdArray {
+  private static final ByteNdArray zeroArray = NdArrays.scalarOf((byte) 0);
 
   /**
-   * Creates a FloatSparseNdArray
+   * Creates a ByteSparseNdArray
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
    *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
    *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
    *     [1,3]} and {@code [2,4]} have nonzero values.
-   * @param values A 1-D FloatNdArray of shape {@code [N]}, which supplies the values for each
-   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
-   *     values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
-   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param values A 1-D NdArray of Byte type and shape {@code [N]}, which supplies the values for
+   *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
+   *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
-  FloatSparseNdArray(LongNdArray indices, FloatNdArray values, DimensionalSpace dimensions) {
+  ByteSparseNdArray(LongNdArray indices, ByteNdArray values, DimensionalSpace dimensions) {
     super(indices, values, dimensions);
   }
 
   /**
-   * Creates a FloatSparseNdArray
+   * Creates a ByteSparseNdArray
    *
    * @param dataBuffer a dense dataBuffer used to create the spars array
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
-  FloatSparseNdArray(FloatDataBuffer dataBuffer, DimensionalSpace dimensions) {
+  ByteSparseNdArray(ByteDataBuffer dataBuffer, DimensionalSpace dimensions) {
     super(dimensions);
     // use write to set up the indices and values
     write(dataBuffer);
   }
 
   /**
-   * Creates a zero-filled FloatSparseNdArray
+   * Creates a zero-filled ByteSparseNdArray
    *
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
-  FloatSparseNdArray(DimensionalSpace dimensions) {
+  ByteSparseNdArray(DimensionalSpace dimensions) {
     super(dimensions);
   }
 
   /**
-   * Creates a new FloatSparseNdArray
+   * Creates a new ByteSparseNdArray
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
    *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
@@ -115,113 +115,113 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
    * @param dimensions the dimensional space for the dense object represented by this sparse array.
    * @return the new Sparse Array
    */
-  public static FloatSparseNdArray create(
-      LongNdArray indices, FloatNdArray values, DimensionalSpace dimensions) {
-    return new FloatSparseNdArray(indices, values, dimensions);
+  public static ByteSparseNdArray create(
+      LongNdArray indices, ByteNdArray values, DimensionalSpace dimensions) {
+    return new ByteSparseNdArray(indices, values, dimensions);
   }
 
   /**
-   * Creates a new FloatSparseNdArray from a data buffer
+   * Creates a new ByteSparseNdArray from a data buffer
    *
    * @param dataBuffer the databuffer containing the dense array
    * @param dimensions the dimensional space for the sparse array
    * @return the new Sparse Array
    */
-  public static FloatSparseNdArray create(FloatDataBuffer dataBuffer, DimensionalSpace dimensions) {
-    return new FloatSparseNdArray(dataBuffer, dimensions);
+  public static ByteSparseNdArray create(ByteDataBuffer dataBuffer, DimensionalSpace dimensions) {
+    return new ByteSparseNdArray(dataBuffer, dimensions);
   }
 
   /**
-   * Creates a new empty FloatSparseNdArray from a data buffer
+   * Creates a new empty ByteSparseNdArray from a data buffer
    *
    * @param dimensions the dimensions array
    * @return the new Sparse Array
    */
-  public static FloatSparseNdArray create(DimensionalSpace dimensions) {
-    return new FloatSparseNdArray(dimensions);
+  public static ByteSparseNdArray create(DimensionalSpace dimensions) {
+    return new ByteSparseNdArray(dimensions);
   }
 
   /**
-   * Creates a new empty FloatSparseNdArray from a float data buffer
+   * Creates a new empty ByteSparseNdArray from a float data buffer
    *
    * @param buffer the data buffer
    * @param shape the shape of the sparse array.
    * @return the new Sparse Array
    */
-  public static FloatSparseNdArray create(FloatDataBuffer buffer, Shape shape) {
-    return new FloatSparseNdArray(buffer, DimensionalSpace.create(shape));
+  public static ByteSparseNdArray create(ByteDataBuffer buffer, Shape shape) {
+    return new ByteSparseNdArray(buffer, DimensionalSpace.create(shape));
   }
 
   /**
-   * Creates a new FloatSparseNdArray from a FloatNdArray
+   * Creates a new ByteSparseNdArray from a ByteNdArray
    *
-   * @param src the FloatNdArray
+   * @param src the ByteNdArray
    * @return the new Sparse Array
    */
-  public static FloatSparseNdArray create(FloatNdArray src) {
-    FloatDataBuffer buffer = DataBuffers.ofFloats(src.size());
+  public static ByteSparseNdArray create(ByteNdArray src) {
+    ByteDataBuffer buffer = DataBuffers.ofBytes(src.size());
     src.read(buffer);
-    return new FloatSparseNdArray(buffer, DimensionalSpace.create(src.shape()));
+    return new ByteSparseNdArray(buffer, DimensionalSpace.create(src.shape()));
   }
 
   /**
-   * Gets zero as a Float
+   * Gets zero as a Byte
    *
-   * @return zero as a Float
+   * @return zero as a Byte
    */
-  public Float zero() {
-    return 0f;
+  public Byte zero() {
+    return (byte) 0;
   }
 
   /**
-   * Gets a FloatNdArray containing a zero scalar value
+   * Gets a ByteNdArray containing a zero scalar value
    *
-   * @return a FloatNdArray containing a zero scalar value
+   * @return a ByteNdArray containing a zero scalar value
    */
-  public FloatNdArray zeroArray() {
+  public ByteNdArray zeroArray() {
     return zeroArray;
   }
 
   /**
-   * Creates a FloatNdArray of the specified shape
+   * Creates a ByteNdArray of the specified shape
    *
    * @param shape the shape of the dense array.
-   * @return a FloatNdArray of the specified shape
+   * @return a ByteNdArray of the specified shape
    */
-  public FloatNdArray createValues(Shape shape) {
-    return NdArrays.ofFloats(shape);
+  public ByteNdArray createValues(Shape shape) {
+    return NdArrays.ofBytes(shape);
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new FloatSparseWindow(this, position, sliceDimensions);
+  public ByteNdArray slice(long position, DimensionalSpace sliceDimensions) {
+    return new ByteSparseWindow(this, position, sliceDimensions);
   }
 
   /** {@inheritDoc} */
   @Override
-  public float getFloat(long... coordinates) {
+  public byte getByte(long... coordinates) {
     return getObject(coordinates);
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray setFloat(float value, long... coordinates) {
+  public ByteNdArray setByte(byte value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray read(DataBuffer<Float> dst) {
-    return read((FloatDataBuffer) dst);
+  public ByteNdArray read(DataBuffer<Byte> dst) {
+    return read((ByteDataBuffer) dst);
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray read(FloatDataBuffer dst) {
+  public ByteNdArray read(ByteDataBuffer dst) {
     // zero out buf.
-    Float[] zeros = new Float[(int) shape().size()];
-    Arrays.fill(zeros, 0f);
+    Byte[] zeros = new Byte[(int) shape().size()];
+    Arrays.fill(zeros, (byte) 0);
     dst.write(zeros);
 
     AtomicInteger i = new AtomicInteger();
@@ -230,7 +230,7 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
         .forEachIndexed(
             (idx, l) -> {
               long[] coordinates = getIndicesCoordinates(l);
-              float value = getValues().getFloat(i.getAndIncrement());
+              byte value = getValues().getByte(i.getAndIncrement());
               dst.setObject(value, dimensions.positionOf(coordinates));
             });
     return this;
@@ -238,18 +238,18 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray write(FloatDataBuffer src) {
+  public ByteNdArray write(ByteDataBuffer src) {
     List<long[]> indices = new ArrayList<>();
-    List<Float> values = new ArrayList<>();
+    List<Byte> values = new ArrayList<>();
 
     for (long i = 0; i < src.size(); i++) {
-      if (src.getObject(i) != 0) {
+      if (src.getObject(i) != (byte) 0) {
         indices.add(toCoordinates(dimensions, i));
         values.add(src.getObject(i));
       }
     }
     long[][] indicesArray = new long[indices.size()][];
-    float[] valuesArray = new float[values.size()];
+    byte[] valuesArray = new byte[values.size()];
     for (int i = 0; i < indices.size(); i++) {
       indicesArray[i] = indices.get(i);
       valuesArray[i] = values.get(i);
@@ -262,8 +262,8 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray write(DataBuffer<Float> src) {
-    return write((FloatDataBuffer) src);
+  public ByteNdArray write(DataBuffer<Byte> src) {
+    return write((ByteDataBuffer) src);
   }
 
   /**
@@ -271,8 +271,8 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
    *
    * @return the dense array
    */
-  public FloatNdArray toDense() {
-    FloatDataBuffer dataBuffer = DataBuffers.ofFloats(shape().size());
+  public ByteNdArray toDense() {
+    ByteDataBuffer dataBuffer = DataBuffers.ofBytes(shape().size());
     read(dataBuffer);
     return NdArrays.wrap(shape(), dataBuffer);
   }
@@ -283,8 +283,8 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
    * @param src the dense array
    * @return this sparse array
    */
-  public FloatNdArray fromDense(FloatNdArray src) {
-    FloatDataBuffer buffer = DataBuffers.ofFloats(src.size());
+  public ByteNdArray fromDense(ByteNdArray src) {
+    ByteDataBuffer buffer = DataBuffers.ofBytes(src.size());
     src.read(buffer);
     write(buffer);
     return this;
@@ -292,31 +292,31 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray slice(Index... indices) {
-    return (FloatNdArray) super.slice(indices);
+  public ByteNdArray slice(Index... indices) {
+    return (ByteNdArray) super.slice(indices);
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray get(long... coordinates) {
-    return (FloatNdArray) super.get(coordinates);
+  public ByteNdArray get(long... coordinates) {
+    return (ByteNdArray) super.get(coordinates);
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray setObject(Float value, long... coordinates) {
+  public ByteNdArray setObject(Byte value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray set(NdArray<Float> src, long... coordinates) {
+  public ByteNdArray set(NdArray<Byte> src, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray copyTo(NdArray<Float> dst) {
-    return (FloatNdArray) super.copyTo(dst);
+  public ByteNdArray copyTo(NdArray<Byte> dst) {
+    return (ByteNdArray) super.copyTo(dst);
   }
 }

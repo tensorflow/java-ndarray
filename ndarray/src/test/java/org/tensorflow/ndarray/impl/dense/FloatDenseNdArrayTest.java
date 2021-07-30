@@ -16,12 +16,24 @@
  */
 package org.tensorflow.ndarray.impl.dense;
 
+import org.junit.jupiter.api.Test;
+import org.tensorflow.ndarray.NdArraySequence;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.FloatNdArray;
 import org.tensorflow.ndarray.FloatNdArrayTestBase;
 import org.tensorflow.ndarray.NdArrays;
+import org.tensorflow.ndarray.buffer.FloatDataBuffer;
+import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
+import org.tensorflow.ndarray.impl.sparse.FloatSparseNdArray;
+import org.tensorflow.ndarray.impl.sparse.window.SparseWindow;
+import org.tensorflow.ndarray.index.Indices;
+
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FloatDenseNdArrayTest extends FloatNdArrayTestBase {
 
@@ -31,5 +43,36 @@ public class FloatDenseNdArrayTest extends FloatNdArrayTestBase {
 
   @Override protected DataBuffer<Float> allocateBuffer(long size) {
     return DataBuffers.ofFloats(size);
+  }
+
+  @Test
+  public void testSlice() {
+    Shape shape = Shape.of(3, 4);
+    Float[] values = {
+            1f, 0f, 0f, 0f,
+            0f, 0f, 2f, 0f,
+            0f, 0f, 0f, 0f};
+
+    float[] expected = {0,0, 2, 0, 0, 0};
+
+    FloatDataBuffer buffer = (FloatDataBuffer) allocateBuffer(shape.size());
+    buffer.write(values);
+    FloatNdArray instance = FloatDenseNdArray.create(buffer, shape);
+
+
+
+    FloatNdArray sliceInstance = instance.slice(Indices.all(), Indices.sliceFrom(2));
+    // check the values of the slice against the  original  array
+    AtomicInteger i = new AtomicInteger();
+    sliceInstance.scalars().forEachIndexed((idx, f) ->  assertEquals(expected[i.getAndIncrement()], f.getFloat()));
+
+    // check values from elements(0) of a slice against the  original  array
+    i.set(0);
+    sliceInstance.elements(0).forEachIndexed((idx, l) -> {
+      l.scalars().forEachIndexed((lidx, f) -> assertEquals(expected[i.getAndIncrement()], f.getFloat()));
+    });
+
+
+
   }
 }

@@ -14,12 +14,12 @@ limitations under the License.
 =======================================================================*/
 package org.tensorflow.ndarray.impl.sparse.window;
 
-import org.tensorflow.ndarray.FloatNdArray;
+import org.tensorflow.ndarray.IntNdArray;
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
-import org.tensorflow.ndarray.buffer.FloatDataBuffer;
+import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.impl.dimension.RelativeDimensionalSpace;
 import org.tensorflow.ndarray.impl.sparse.AbstractSparseNdArray;
@@ -29,17 +29,17 @@ import java.nio.ReadOnlyBufferException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FloatSparseWindow extends SparseWindow<Float, FloatNdArray> implements FloatNdArray {
+public class IntSparseWindow extends SparseWindow<Integer, IntNdArray> implements IntNdArray {
 
   /**
-   * Creates a FloatSparseWindow
+   * Creates a IntSparseWindow
    *
    * @param source the source Sparse Array that this object windows.
    * @param sourcePosition the relative source position into the source
    * @param dimensions the dimensional space for the window
    */
-  public FloatSparseWindow(
-      AbstractSparseNdArray<Float, FloatNdArray> source,
+  public IntSparseWindow(
+      AbstractSparseNdArray<Integer, IntNdArray> source,
       long sourcePosition,
       DimensionalSpace dimensions) {
     super(source, sourcePosition, dimensions);
@@ -47,38 +47,38 @@ public class FloatSparseWindow extends SparseWindow<Float, FloatNdArray> impleme
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray toDense() {
-    FloatDataBuffer dataBuffer = DataBuffers.ofFloats(shape().size());
+  public IntNdArray toDense() {
+    IntDataBuffer dataBuffer = DataBuffers.ofInts(shape().size());
     read(dataBuffer);
     return NdArrays.wrap(shape(), dataBuffer);
   }
 
   @Override
-  public float getFloat(long... coordinates) {
+  public int getInt(long... coordinates) {
     return getObject(coordinates);
   }
 
   @Override
-  public FloatNdArray setFloat(float value, long... coordinates) {
+  public IntNdArray setInt(int value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public FloatNdArray setObject(Float value, long... coordinates) {
+  public IntNdArray setObject(Integer value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public FloatNdArray set(NdArray<Float> src, long... coordinates) {
+  public IntNdArray set(NdArray<Integer> src, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray read(DataBuffer<Float> dst) {
+  public IntNdArray read(DataBuffer<Integer> dst) {
     // zero out buf.
-    Float[] zeros = new Float[(int) shape().size()];
-    Arrays.fill(zeros, 0f);
+    Integer[] zeros = new Integer[(int) shape().size()];
+    Arrays.fill(zeros, 0);
     dst.write(zeros);
 
     AtomicInteger i = new AtomicInteger();
@@ -87,29 +87,29 @@ public class FloatSparseWindow extends SparseWindow<Float, FloatNdArray> impleme
         .forEachIndexed(
             (idx, l) -> {
               long[] coordinates = getIndicesCoordinates(l);
-              float value = getValues().getFloat(i.getAndIncrement());
+              int value = getValues().getInt(i.getAndIncrement());
               dst.setObject(value, dimensions.positionOf(coordinates));
             });
     return this;
   }
 
   @Override
-  public FloatNdArray read(FloatDataBuffer dst) {
-    return read((DataBuffer<Float>) dst);
+  public IntNdArray read(IntDataBuffer dst) {
+    return read((DataBuffer<Integer>) dst);
   }
 
   @Override
-  public FloatNdArray write(DataBuffer<Float> src) {
+  public IntNdArray write(DataBuffer<Integer> src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public FloatNdArray write(FloatDataBuffer src) {
+  public IntNdArray write(IntDataBuffer src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public FloatNdArray slice(Index... indices) {
+  public IntNdArray slice(Index... indices) {
     if (indices == null) {
       throw new IllegalArgumentException("Slicing requires at least one index");
     }
@@ -119,18 +119,18 @@ public class FloatSparseWindow extends SparseWindow<Float, FloatNdArray> impleme
 
   /** {@inheritDoc} */
   @Override
-  public FloatNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new FloatSparseWindow(this.source, position + sourcePosition, sliceDimensions);
+  public IntNdArray slice(long position, DimensionalSpace sliceDimensions) {
+    return new IntSparseWindow(this.source, position + sourcePosition, sliceDimensions);
   }
 
   @Override
-  public FloatNdArray get(long... coordinates) {
-    return (FloatNdArray) super.get(coordinates);
+  public IntNdArray get(long... coordinates) {
+    return (IntNdArray) super.get(coordinates);
   }
 
   @Override
-  public FloatNdArray copyTo(NdArray<Float> dst) {
-    return (FloatNdArray) super.copyTo(dst);
+  public IntNdArray copyTo(NdArray<Integer> dst) {
+    return (IntNdArray) super.copyTo(dst);
   }
 
   @Override

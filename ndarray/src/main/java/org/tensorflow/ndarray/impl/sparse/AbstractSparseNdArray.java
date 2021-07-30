@@ -20,6 +20,7 @@ import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArraySequence;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
+import org.tensorflow.ndarray.SparseNdArray;
 import org.tensorflow.ndarray.StdArrays;
 import org.tensorflow.ndarray.impl.AbstractNdArray;
 import org.tensorflow.ndarray.impl.dense.AbstractDenseNdArray;
@@ -42,6 +43,9 @@ import java.util.stream.LongStream;
  * <p>A sparse array as two separate dense arrays: indices, values, and a shape that represents the
  * dense shape.
  *
+ * <p><em>NOTE:</em> all Sparse Arrays are readonly for the {@link #set(NdArray, long...)} and
+ * {@link #setObject(Object, long...)} methods
+ *
  * <pre>{@code
  * FloatSparseNdArray st = new FloatSparseNdArray(
  *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
@@ -62,7 +66,8 @@ import java.util.stream.LongStream;
  * @param <T> the type that the array contains
  * @param <U> the type of dense NdArray
  */
-public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends AbstractNdArray<T, U> {
+public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends AbstractNdArray<T, U>
+    implements SparseNdArray<T, U> {
   /**
    * A 2-D long array of shape {@code [N, ndims]}, that specifies the indices of the elements in the
    * sparse array that contain nonzero values (elements are zero-indexed).
@@ -92,7 +97,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
    *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
    *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
-   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   * @param dimensions the dimensional space for the dense object represented by this sparse array.
    */
   protected AbstractSparseNdArray(LongNdArray indices, U values, DimensionalSpace dimensions) {
     super(dimensions);
@@ -148,7 +153,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   /**
    * Computes the coordinates based on a relative position to the beginning of the dimension space.
    *
-   * @param dimensions the dimension spacev
+   * @param dimensions the dimension space
    * @param position relative position to the beginning of the dimension space.
    * @return the coordinates
    */
@@ -194,11 +199,10 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
       throw new IllegalArgumentException("Slicing requires at least one index");
     }
     RelativeDimensionalSpace sliceDimensions = dimensions().mapTo(indices);
-    long a = sliceDimensions.get(0).positionOf(0);
     return slice(sliceDimensions.position(), sliceDimensions);
   }
 
-/** {@inheritDoc} */
+  /** {@inheritDoc} */
   @Override
   public NdArray<T> get(long... coordinates) {
     return slice(positionOf(coordinates, false), dimensions().from(coordinates.length));
@@ -221,8 +225,10 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   /** {@inheritDoc} */
   @Override
   public T getObject(long... coordinates) {
-    if(coordinates.length != shape().numDimensions()) {
-      throw new IllegalRankException(String.format("Length of coordinates (%s)%s does not match the rank %d",
+    if (coordinates.length != shape().numDimensions()) {
+      throw new IllegalRankException(
+          String.format(
+              "Length of coordinates (%s)%s does not match the rank %d",
               coordinates.length, Arrays.toString(coordinates), shape().numDimensions()));
     }
     long index = locateIndex(coordinates);
@@ -232,7 +238,6 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
       return zero();
     }
   }
-
 
   /** {@inheritDoc} */
   @Override
@@ -257,7 +262,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   @Override
   public NdArray<T> copyTo(NdArray<T> dst) {
     if (dst instanceof AbstractSparseNdArray) {
-      AbstractSparseNdArray<T,U> sparse = (AbstractSparseNdArray<T,U>) dst;
+      AbstractSparseNdArray<T, U> sparse = (AbstractSparseNdArray<T, U>) dst;
       LongNdArray indicesCopy = NdArrays.ofLongs(indices.shape());
       this.indices.copyTo(indicesCopy);
       U valuesCopy = createValues(values.shape());
@@ -354,7 +359,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   protected long locateIndex(long[] coordinates) {
     long size = indices.shape().get(0);
     LongNdArray coordArray = StdArrays.ndCopyOf(coordinates);
-    return binarySearch(0, size, coordArray);
+    return binarySearch(size, coordArray);
   }
 
   /** {@inheritDoc} */
@@ -394,7 +399,6 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    * Performs a binary search on the indices array to locate the the index of the specified
    * coordinates. The indices array must be sorted by coordinates, row major.
    *
-   * @param fromIndex the index of the first element (inclusive) to be searched
    * @param toIndex the index of the last element (exclusive) to be searched
    * @param coordinates the coordinates to locate
    * @return index of the coordinates, if the coordinates are contained in the {@code indices}
@@ -404,9 +408,9 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    *     all elements in the array are less than the specified key. Note that this guarantees that
    *     the return value will be @{code >= 0}, only if the coordinates are found.
    */
-  private long binarySearch(long fromIndex, long toIndex, LongNdArray coordinates) {
+  private long binarySearch(long toIndex, LongNdArray coordinates) {
 
-    long low = fromIndex;
+    long low = 0;
     long high = toIndex - 1;
 
     while (low <= high) {
@@ -424,9 +428,12 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
     return -(low + 1); // no match
   }
 
-  /** Sorts the indices and values in ascending row-major coordinates.
+  /**
+   * Sorts the indices and values in ascending row-major coordinates.
+   *
    * @return this instance
    */
+  @SuppressWarnings("UnusedReturnValue")
   public AbstractSparseNdArray<T, U> sortIndicesAndValues() {
 
     // indices will contain the indexes into the indices and values ndArrays, resorted.

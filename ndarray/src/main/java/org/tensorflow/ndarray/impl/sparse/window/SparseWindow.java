@@ -15,16 +15,25 @@ limitations under the License.
 package org.tensorflow.ndarray.impl.sparse.window;
 
 import org.tensorflow.ndarray.NdArray;
+import org.tensorflow.ndarray.NdArraySequence;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.impl.dimension.RelativeDimensionalSpace;
+import org.tensorflow.ndarray.impl.sequence.SingleElementSequence;
+import org.tensorflow.ndarray.impl.sequence.SlicingElementSequence;
 import org.tensorflow.ndarray.impl.sparse.AbstractSparseNdArray;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
-import java.util.Arrays;
 
+/**
+ * A sparse window is a view into an AbstractSparseNdArray. It is used internally by the slice
+ * methods.
+ *
+ * @param <T> the type that the array contains
+ * @param <U> the type of dense NdArray
+ */
 public abstract class SparseWindow<T, U extends NdArray<T>> extends AbstractSparseNdArray<T, U> {
   protected final AbstractSparseNdArray<T, U> source;
   protected final long sourcePosition;
@@ -33,7 +42,7 @@ public abstract class SparseWindow<T, U extends NdArray<T>> extends AbstractSpar
    * Creates a SparseWindow
    *
    * @param source the source Sparse Array that this object windows.
-   * @param sourcePosition the relative source position into the source
+   * @param sourcePosition the relative position into the source array
    * @param dimensions the dimensional space for the window
    */
   public SparseWindow(
@@ -72,7 +81,6 @@ public abstract class SparseWindow<T, U extends NdArray<T>> extends AbstractSpar
     return sourcePosition == other.sourcePosition;
   }
 
-
   /** {@inheritDoc} */
   @Override
   public T getObject(long... coordinates) {
@@ -99,20 +107,43 @@ public abstract class SparseWindow<T, U extends NdArray<T>> extends AbstractSpar
     return slice(sliceDimensions.position(), sliceDimensions);
   }
 
+  /** {@inheritDoc} */
+  @Override
+  public NdArraySequence<U> elements(int dimensionIdx) {
+    if (dimensionIdx >= shape().numDimensions()) {
+      throw new IllegalArgumentException(
+          "Cannot iterate elements in dimension '"
+              + dimensionIdx
+              + "' of array with shape "
+              + shape());
+    }
+    if (rank() == 0 && dimensionIdx < 0) {
+      return new SingleElementSequence<>(this);
+    }
+    DimensionalSpace elemDims = dimensions().from(dimensionIdx + 1);
+    return new SlicingElementSequence<>(this, dimensionIdx, elemDims);
+  }
 
-
+  /**
+   * Converts the sparse window to a dense NdArray
+   *
+   * @return the NdArray
+   */
   public abstract U toDense();
 
+  /** {@inheritDoc} */
   @Override
   public NdArray<T> write(DataBuffer<T> src) {
     throw new ReadOnlyBufferException();
   }
 
+  /** {@inheritDoc} */
   @Override
   public T zero() {
     return source.zero();
   }
 
+  /** {@inheritDoc} */
   @Override
   public U zeroArray() {
     return source.zeroArray();
