@@ -15,9 +15,23 @@ limitations under the License.
 package org.tensorflow.ndarray;
 
 /**
- * Marker class for Sparse Arrays
+ * Interface for Sparse Arrays
  *
  * @param <T> the type that the array contains
  * @param <U> the type of dense NdArray
  */
-public interface SparseNdArray<T, U extends NdArray<T>> extends NdArray<T> {}
+public interface SparseNdArray<T, U extends NdArray<T>> extends NdArray<T> {
+  /**
+   * Gets the Indices
+   *
+   * @return the Indices
+   */
+  LongNdArray getIndices();
+
+  /**
+   * Gets the values
+   *
+   * @return the values
+   */
+  U getValues();
+}
