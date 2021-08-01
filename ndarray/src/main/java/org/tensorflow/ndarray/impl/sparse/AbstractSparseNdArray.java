@@ -354,7 +354,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    *     point at which the {@code coordinates} would be inserted into the {@code indices} array:
    *     the index of the first element greater than the key, or {@code indices.shape().get(0)}; if
    *     all elements in the array are less than the specified key. Note that this guarantees that
-   *     the return value will be @{code >= 0}, only if the coordinates are found.
+   *     the return value will be {@code >= 0}, only if the coordinates are found.
    */
   protected long locateIndex(long[] coordinates) {
     long size = indices.shape().get(0);
