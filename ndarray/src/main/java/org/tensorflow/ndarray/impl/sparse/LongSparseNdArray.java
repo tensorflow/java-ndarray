@@ -43,8 +43,8 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * <pre>{@code
  * LongSparseNdArray st = new LongSparseNdArray(
- *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new long[] {1f, 2f},
+ *      StdArrays.of(new long[][] {{0, 0}, {1, 2}}),
+ *      NdArrays.vectorOf(1L, 256L),
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * <pre>{@code
  * [[1, 0, 0, 0]
- *  [0, 0, 2, 0]
+ *  [0, 0, 256, 0]
  *  [0, 0, 0, 0]]
  *
  * }</pre>
@@ -255,7 +255,7 @@ public class LongSparseNdArray extends AbstractSparseNdArray<Long, LongNdArray>
     }
 
     setIndices(StdArrays.ndCopyOf(indicesArray));
-    setValues(StdArrays.ndCopyOf(valuesArray));
+    setValues(NdArrays.vectorOf(valuesArray));
     return this;
   }
 

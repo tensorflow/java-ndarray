@@ -44,8 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <pre>{@code
  * DoubleSparseNdArray st = new DoubleSparseNdArray(
- *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new double[] {1, 2},
+ *      StdArrays.of(new long[][] {{0, 0}, {1, 2}}),
+ *      NdArrays.vectorsOf(new double[] {1, 2}),
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -257,7 +257,7 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
     }
 
     setIndices(StdArrays.ndCopyOf(indicesArray));
-    setValues(StdArrays.ndCopyOf(valuesArray));
+    setValues(NdArrays.vectorOf(valuesArray));
     return this;
   }
 

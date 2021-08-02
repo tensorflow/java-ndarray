@@ -36,7 +36,7 @@ public class SparseNdArrayTest {
   @Test
   public void testBoolean() {
     BooleanSparseNdArray instance =
-        NdArrays.sparseTensorOf(indices, NdArrays.vectorOf(true, true, true), shape);
+        NdArrays.sparseOf(indices, NdArrays.vectorOf(true, true, true), shape);
     assertEquals(6, instance.getIndices().size());
     assertEquals(3, instance.getValues().size());
     assertTrue(instance.getBoolean(0, 0));
@@ -58,7 +58,7 @@ public class SparseNdArrayTest {
   @Test
   public void testByte() {
     ByteSparseNdArray instance =
-        NdArrays.sparseTensorOf(
+        NdArrays.sparseOf(
             indices, NdArrays.vectorOf((byte) 1, (byte) 18, (byte) 0xff), shape);
     assertEquals(6, instance.getIndices().size());
     assertEquals(3, instance.getValues().size());
@@ -81,7 +81,7 @@ public class SparseNdArrayTest {
   @Test
   public void testDouble() {
     DoubleSparseNdArray instance =
-        NdArrays.sparseTensorOf(indices, NdArrays.vectorOf(1., 1.8, 3.14), shape);
+        NdArrays.sparseOf(indices, NdArrays.vectorOf(1., 1.8, 3.14), shape);
     assertEquals(6, instance.getIndices().size());
     assertEquals(3, instance.getValues().size());
     assertEquals(1., instance.getDouble(0, 0), epsilon);
@@ -103,7 +103,7 @@ public class SparseNdArrayTest {
   @Test
   public void testFloat() {
     FloatSparseNdArray instance =
-        NdArrays.sparseTensorOf(indices, NdArrays.vectorOf(1.f, 1.8f, 3.14f), shape);
+        NdArrays.sparseOf(indices, NdArrays.vectorOf(1.f, 1.8f, 3.14f), shape);
     assertEquals(6, instance.getIndices().size());
     assertEquals(3, instance.getValues().size());
     assertEquals(1.f, instance.getFloat(0, 0), epsilon);
@@ -125,7 +125,7 @@ public class SparseNdArrayTest {
   @Test
   public void testInt() {
     IntSparseNdArray instance =
-        NdArrays.sparseTensorOf(indices, NdArrays.vectorOf(1, 18, 256), shape);
+        NdArrays.sparseOf(indices, NdArrays.vectorOf(1, 18, 256), shape);
     assertEquals(6, instance.getIndices().size());
     assertEquals(3, instance.getValues().size());
     assertEquals(1, instance.getInt(0, 0));
@@ -147,7 +147,7 @@ public class SparseNdArrayTest {
   @Test
   public void testLong() {
     LongSparseNdArray instance =
-        NdArrays.sparseTensorOf(indices, NdArrays.vectorOf(1L, 18L, 256L), shape);
+        NdArrays.sparseOf(indices, NdArrays.vectorOf(1L, 18L, 256L), shape);
     assertEquals(6, instance.getIndices().size());
     assertEquals(3, instance.getValues().size());
     assertEquals(1L, instance.getLong(0, 0));
@@ -169,7 +169,7 @@ public class SparseNdArrayTest {
   @Test
   public void testShort() {
     ShortSparseNdArray instance =
-        NdArrays.sparseTensorOf(
+        NdArrays.sparseOf(
             indices, NdArrays.vectorOf((short) 1, (short) 18, (short) 0xff00), shape);
     assertEquals(6, instance.getIndices().size());
     assertEquals(3, instance.getValues().size());

@@ -44,8 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <pre>{@code
  * ShortSparseNdArray st = new ShortSparseNdArray(
- *      StdArrays.of(new short[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new short[] {1f, 2f},
+ *      StdArrays.of(new long[][] {{0, 0}, {1, 2}}),
+ *      NdArrays.vectorOf((short)1, (short)256}),
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <pre>{@code
  * [[1, 0, 0, 0]
- *  [0, 0, 2, 0]
+ *  [0, 0, 256, 0]
  *  [0, 0, 0, 0]]
  *
  * }</pre>
@@ -256,7 +256,7 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
     }
 
     setIndices(StdArrays.ndCopyOf(indicesArray));
-    setValues(StdArrays.ndCopyOf(valuesArray));
+    setValues(NdArrays.vectorOf(valuesArray));
     return this;
   }
 

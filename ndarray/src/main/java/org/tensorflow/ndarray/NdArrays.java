@@ -117,7 +117,7 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the byte sparse array.
    */
-  public static ByteSparseNdArray sparseTensorOf(
+  public static ByteSparseNdArray sparseOf(
       LongNdArray indices, ByteNdArray values, Shape shape) {
     return ByteSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
   }
@@ -191,7 +191,7 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the long sparse array.
    */
-  public static LongSparseNdArray sparseTensorOf(
+  public static LongSparseNdArray sparseOf(
       LongNdArray indices, LongNdArray values, Shape shape) {
     return LongSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
   }
@@ -265,7 +265,7 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the int sparse array.
    */
-  public static IntSparseNdArray sparseTensorOf(
+  public static IntSparseNdArray sparseOf(
       LongNdArray indices, IntNdArray values, Shape shape) {
     return IntSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
   }
@@ -339,7 +339,7 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the short sparse array.
    */
-  public static ShortSparseNdArray sparseTensorOf(
+  public static ShortSparseNdArray sparseOf(
       LongNdArray indices, ShortNdArray values, Shape shape) {
     return ShortSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
   }
@@ -413,7 +413,7 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the float sparse array.
    */
-  public static FloatSparseNdArray sparseTensorOf(
+  public static FloatSparseNdArray sparseOf(
       LongNdArray indices, FloatNdArray values, Shape shape) {
     return FloatSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
   }
@@ -487,7 +487,7 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the float sparse array.
    */
-  public static DoubleSparseNdArray sparseTensorOf(
+  public static DoubleSparseNdArray sparseOf(
       LongNdArray indices, DoubleNdArray values, Shape shape) {
     return DoubleSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
   }
@@ -562,7 +562,7 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the float sparse array.
    */
-  public static BooleanSparseNdArray sparseTensorOf(
+  public static BooleanSparseNdArray sparseOf(
       LongNdArray indices, BooleanNdArray values, Shape shape) {
     return BooleanSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
   }

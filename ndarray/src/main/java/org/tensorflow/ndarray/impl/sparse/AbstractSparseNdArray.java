@@ -21,7 +21,6 @@ import org.tensorflow.ndarray.NdArraySequence;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.SparseNdArray;
-import org.tensorflow.ndarray.StdArrays;
 import org.tensorflow.ndarray.impl.AbstractNdArray;
 import org.tensorflow.ndarray.impl.dense.AbstractDenseNdArray;
 import org.tensorflow.ndarray.impl.dimension.Dimension;
@@ -48,8 +47,8 @@ import java.util.stream.LongStream;
  *
  * <pre>{@code
  * FloatSparseNdArray st = new FloatSparseNdArray(
- *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new float[] {1f, 2f},
+ *      StdArrays.of(new long[][] {{0, 0}, {1, 2}}),
+ *      NdArrays.vectorOf(1f, 2f),
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -76,6 +75,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    * coordinates {@code [1,3]} and {@code [2,4]} have nonzero values.
    */
   private LongNdArray indices;
+
   /**
    * A 1-D array of any type and shape {@code [N]}, that supplies the values for each element in
    * indices.
@@ -157,6 +157,8 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    * @param position relative position to the beginning of the dimension space.
    * @return the coordinates
    */
+  // TODO should have automatical access to the coordinates from which this position is coming from.
+  //  But that will require some refactoring even at the dense level.
   protected long[] toCoordinates(DimensionalSpace dimensions, long position) {
     long[] result = new long[dimensions.numDimensions()];
     long p = position;
@@ -251,10 +253,10 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   }
 
   /**
-   * Creates a dense array of the the type that this sparse array represents.
+   * Creates a dense array of the type that this sparse array represents.
    *
    * @param shape the shape of the dense array.
-   * @return the dense of the the type that this sparse array represents.
+   * @return the dense of the type that this sparse array represents.
    */
   public abstract U createValues(Shape shape);
 
@@ -358,7 +360,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    */
   protected long locateIndex(long[] coordinates) {
     long size = indices.shape().get(0);
-    LongNdArray coordArray = StdArrays.ndCopyOf(coordinates);
+    LongNdArray coordArray = NdArrays.vectorOf(coordinates);
     return binarySearch(size, coordArray);
   }
 
@@ -396,7 +398,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   }
 
   /**
-   * Performs a binary search on the indices array to locate the the index of the specified
+   * Performs a binary search on the indices array to locate the index of the specified
    * coordinates. The indices array must be sorted by coordinates, row major.
    *
    * @param toIndex the index of the last element (exclusive) to be searched

@@ -44,8 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <pre>{@code
  * ByteSparseNdArray st = new ByteSparseNdArray(
- *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new float[] {true, true},
+ *      StdArrays.of(new long[][] {{0, 0}, {1, 2}}),
+ *      NdArrays.vectorOf((byte)1, (byte)255),
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -53,9 +53,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>represents the dense array:
  *
  * <pre>{@code
- * [[true, false, false, false]
- *  [false, false, true, false]
- *  [false, false, false, false]]
+ * [[(byte)1, (byte)0, (byte)0, (byte)0]
+ *  [(byte)0, (byte)0, (byte)1, (byte)0]
+ *  [(byte)0, (byte)0, (byte)0, (byte)0]]
  *
  * }</pre>
  */
@@ -256,7 +256,7 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
     }
 
     setIndices(StdArrays.ndCopyOf(indicesArray));
-    setValues(StdArrays.ndCopyOf(valuesArray));
+    setValues(NdArrays.vectorOf(valuesArray));
     return this;
   }
 

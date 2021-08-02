@@ -24,12 +24,25 @@ public interface SparseNdArray<T, U extends NdArray<T>> extends NdArray<T> {
   /**
    * Gets the Indices
    *
+   * <p>Indices are a A 2-D long array of shape {@code [N, ndims]}, that specifies the indices of
+   * the elements in the sparse array that contain nonzero values (elements are zero-indexed).
+   *
+   * <p>For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   * coordinates {@code [1,3]} and {@code [2,4]} have nonzero values.
+   *
    * @return the Indices
    */
   LongNdArray getIndices();
 
   /**
-   * Gets the values
+   * Gets the values.
+   *
+   * <p>Values are a 1-D array of any type and shape {@code [N]}, that supplies the values for each
+   * element in indices.
+   *
+   * <p>For example, given {@code indices=[[1,3], [2,4]]}, and {@code values=[18, 3.6]} specifies
+   * that element {@code [1,3]} of the sparse array has a value of {@code 18}, and element {@code
+   * [2,4]} of the sparse array has a value of {@code 3.6}.
    *
    * @return the values
    */

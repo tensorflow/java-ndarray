@@ -44,8 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <pre>{@code
  * FloatSparseNdArray st = new FloatSparseNdArray(
- *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new float[] {1f, 2f},
+ *      StdArrays.of(new long[][] {{0, 0}, {1, 2}}),
+ *      NdArrays.vectorOf(1f, 3.14f}),
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <pre>{@code
  * [[1, 0, 0, 0]
- *  [0, 0, 2, 0]
+ *  [0, 0, 3.14, 0]
  *  [0, 0, 0, 0]]
  *
  * }</pre>
@@ -256,7 +256,7 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
     }
 
     setIndices(StdArrays.ndCopyOf(indicesArray));
-    setValues(StdArrays.ndCopyOf(valuesArray));
+    setValues(NdArrays.vectorOf(valuesArray));
     return this;
   }
 

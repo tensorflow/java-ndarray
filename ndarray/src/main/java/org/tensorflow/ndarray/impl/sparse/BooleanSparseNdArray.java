@@ -43,9 +43,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * {@link #setObject(Boolean, long...)} methods
  *
  * <pre>{@code
- * FloatSparseNdArray st = new FloatSparseNdArray(
- *      StdArrays.of(new long[][] {{0, 0}, {1, 2}},
- *      StdArrays.of(new float[] {true, true},
+ * FloatSparseNdArray st = new BooleanSparseNdArray(
+ *      StdArrays.of(new long[][] {{0, 0}, {1, 2}}),
+ *      NdArrays.vectorOf(true, true),
  *      Shape.of(3, 4));
  *
  * }</pre>
@@ -258,7 +258,7 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
     }
 
     setIndices(StdArrays.ndCopyOf(indicesArray));
-    setValues(StdArrays.ndCopyOf(valuesArray));
+    setValues(NdArrays.vectorOf(valuesArray));
     return this;
   }
 
