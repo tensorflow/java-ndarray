@@ -12,14 +12,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 =======================================================================*/
-package org.tensorflow.ndarray.impl.sparse.window;
+package org.tensorflow.ndarray.impl.sparse.slice;
 
-import org.tensorflow.ndarray.DoubleNdArray;
+import org.tensorflow.ndarray.IntNdArray;
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
-import org.tensorflow.ndarray.buffer.DoubleDataBuffer;
+import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.impl.dimension.RelativeDimensionalSpace;
 import org.tensorflow.ndarray.impl.sparse.AbstractSparseNdArray;
@@ -29,18 +29,17 @@ import java.nio.ReadOnlyBufferException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DoubleSparseWindow extends SparseWindow<Double, DoubleNdArray>
-    implements DoubleNdArray {
+public class IntSparseSlice extends SparseSlice<Integer, IntNdArray> implements IntNdArray {
 
   /**
-   * Creates a DoubleSparseWindow
+   * Creates a IntSparseSlice
    *
-   * @param source the source Sparse Array that this object windows.
+   * @param source the source Sparse Array that this object slices.
    * @param sourcePosition the relative source position into the source
    * @param dimensions the dimensional space for the window
    */
-  public DoubleSparseWindow(
-      AbstractSparseNdArray<Double, DoubleNdArray> source,
+  public IntSparseSlice(
+      AbstractSparseNdArray<Integer, IntNdArray> source,
       long sourcePosition,
       DimensionalSpace dimensions) {
     super(source, sourcePosition, dimensions);
@@ -48,38 +47,38 @@ public class DoubleSparseWindow extends SparseWindow<Double, DoubleNdArray>
 
   /** {@inheritDoc} */
   @Override
-  public DoubleNdArray toDense() {
-    DoubleDataBuffer dataBuffer = DataBuffers.ofDoubles(shape().size());
+  public IntNdArray toDense() {
+    IntDataBuffer dataBuffer = DataBuffers.ofInts(shape().size());
     read(dataBuffer);
     return NdArrays.wrap(shape(), dataBuffer);
   }
 
   @Override
-  public double getDouble(long... coordinates) {
+  public int getInt(long... coordinates) {
     return getObject(coordinates);
   }
 
   @Override
-  public DoubleNdArray setDouble(double value, long... coordinates) {
+  public IntNdArray setInt(int value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public DoubleNdArray setObject(Double value, long... coordinates) {
+  public IntNdArray setObject(Integer value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public DoubleNdArray set(NdArray<Double> src, long... coordinates) {
+  public IntNdArray set(NdArray<Integer> src, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public DoubleNdArray read(DataBuffer<Double> dst) {
+  public IntNdArray read(DataBuffer<Integer> dst) {
     // zero out buf.
-    Double[] zeros = new Double[(int) shape().size()];
-    Arrays.fill(zeros, 0d);
+    Integer[] zeros = new Integer[(int) shape().size()];
+    Arrays.fill(zeros, 0);
     dst.write(zeros);
 
     AtomicInteger i = new AtomicInteger();
@@ -88,29 +87,29 @@ public class DoubleSparseWindow extends SparseWindow<Double, DoubleNdArray>
         .forEachIndexed(
             (idx, l) -> {
               long[] coordinates = getIndicesCoordinates(l);
-              double value = getValues().getDouble(i.getAndIncrement());
+              int value = getValues().getInt(i.getAndIncrement());
               dst.setObject(value, dimensions.positionOf(coordinates));
             });
     return this;
   }
 
   @Override
-  public DoubleNdArray read(DoubleDataBuffer dst) {
-    return read((DataBuffer<Double>) dst);
+  public IntNdArray read(IntDataBuffer dst) {
+    return read((DataBuffer<Integer>) dst);
   }
 
   @Override
-  public DoubleNdArray write(DataBuffer<Double> src) {
+  public IntNdArray write(DataBuffer<Integer> src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public DoubleNdArray write(DoubleDataBuffer src) {
+  public IntNdArray write(IntDataBuffer src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public DoubleNdArray slice(Index... indices) {
+  public IntNdArray slice(Index... indices) {
     if (indices == null) {
       throw new IllegalArgumentException("Slicing requires at least one index");
     }
@@ -120,18 +119,18 @@ public class DoubleSparseWindow extends SparseWindow<Double, DoubleNdArray>
 
   /** {@inheritDoc} */
   @Override
-  public DoubleNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new DoubleSparseWindow(this.source, position + sourcePosition, sliceDimensions);
+  public IntNdArray slice(long position, DimensionalSpace sliceDimensions) {
+    return new IntSparseSlice(this.source, position + sourcePosition, sliceDimensions);
   }
 
   @Override
-  public DoubleNdArray get(long... coordinates) {
-    return (DoubleNdArray) super.get(coordinates);
+  public IntNdArray get(long... coordinates) {
+    return (IntNdArray) super.get(coordinates);
   }
 
   @Override
-  public DoubleNdArray copyTo(NdArray<Double> dst) {
-    return (DoubleNdArray) super.copyTo(dst);
+  public IntNdArray copyTo(NdArray<Integer> dst) {
+    return (IntNdArray) super.copyTo(dst);
   }
 
   @Override

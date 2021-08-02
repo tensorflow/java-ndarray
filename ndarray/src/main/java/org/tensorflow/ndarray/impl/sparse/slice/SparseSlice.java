@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 =======================================================================*/
-package org.tensorflow.ndarray.impl.sparse.window;
+package org.tensorflow.ndarray.impl.sparse.slice;
 
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArraySequence;
@@ -34,18 +34,18 @@ import java.nio.ReadOnlyBufferException;
  * @param <T> the type that the array contains
  * @param <U> the type of dense NdArray
  */
-public abstract class SparseWindow<T, U extends NdArray<T>> extends AbstractSparseNdArray<T, U> {
+public abstract class SparseSlice<T, U extends NdArray<T>> extends AbstractSparseNdArray<T, U> {
   protected final AbstractSparseNdArray<T, U> source;
   protected final long sourcePosition;
 
   /**
-   * Creates a SparseWindow
+   * Creates a SparseSlice
    *
-   * @param source the source Sparse Array that this object windows.
+   * @param source the source Sparse Array that this object slices.
    * @param sourcePosition the relative position into the source array
    * @param dimensions the dimensional space for the window
    */
-  public SparseWindow(
+  public SparseSlice(
       AbstractSparseNdArray<T, U> source, long sourcePosition, DimensionalSpace dimensions) {
     super(dimensions);
     this.source = source;
@@ -68,10 +68,10 @@ public abstract class SparseWindow<T, U extends NdArray<T>> extends AbstractSpar
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof SparseWindow)) {
+    if (!(obj instanceof SparseSlice)) {
       return super.equals(obj);
     }
-    SparseWindow<?, ?> other = (SparseWindow<?, ?>) obj;
+    SparseSlice<?, ?> other = (SparseSlice<?, ?>) obj;
     if (!source.equals(other.source)) {
       return false;
     }

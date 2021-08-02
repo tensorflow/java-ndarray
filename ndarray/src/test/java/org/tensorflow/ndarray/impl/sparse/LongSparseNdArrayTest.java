@@ -182,8 +182,7 @@ class LongSparseNdArrayTest {
   public void testFromDense() {
     long[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     LongNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
-    LongSparseNdArray instance =
-        LongSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
+    LongSparseNdArray instance = LongSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
     instance.fromDense(ndArray);
     assertNotNull(instance.getIndices());
     assertEquals(2, instance.getIndices().shape().get(0));

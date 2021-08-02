@@ -23,7 +23,7 @@ import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.buffer.LongDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
-import org.tensorflow.ndarray.impl.sparse.window.LongSparseWindow;
+import org.tensorflow.ndarray.impl.sparse.slice.LongSparseSlice;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
@@ -194,7 +194,7 @@ public class LongSparseNdArray extends AbstractSparseNdArray<Long, LongNdArray>
   /** {@inheritDoc} */
   @Override
   public LongNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new LongSparseWindow(this, position, sliceDimensions);
+    return new LongSparseSlice(this, position, sliceDimensions);
   }
 
   /** {@inheritDoc} */

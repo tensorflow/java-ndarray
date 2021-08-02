@@ -12,14 +12,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 =======================================================================*/
-package org.tensorflow.ndarray.impl.sparse.window;
+package org.tensorflow.ndarray.impl.sparse.slice;
 
+import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArrays;
-import org.tensorflow.ndarray.ShortNdArray;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
-import org.tensorflow.ndarray.buffer.ShortDataBuffer;
+import org.tensorflow.ndarray.buffer.LongDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.impl.dimension.RelativeDimensionalSpace;
 import org.tensorflow.ndarray.impl.sparse.AbstractSparseNdArray;
@@ -29,17 +29,17 @@ import java.nio.ReadOnlyBufferException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class ShortSparseWindow extends SparseWindow<Short, ShortNdArray> implements ShortNdArray {
+public class LongSparseSlice extends SparseSlice<Long, LongNdArray> implements LongNdArray {
 
   /**
-   * Creates a LongSparseWindow
+   * Creates a LongSparseSlice
    *
-   * @param source the source Sparse Array that this object windows.
+   * @param source the source Sparse Array that this object slices.
    * @param sourcePosition the relative source position into the source
    * @param dimensions the dimensional space for the window
    */
-  public ShortSparseWindow(
-      AbstractSparseNdArray<Short, ShortNdArray> source,
+  public LongSparseSlice(
+      AbstractSparseNdArray<Long, LongNdArray> source,
       long sourcePosition,
       DimensionalSpace dimensions) {
     super(source, sourcePosition, dimensions);
@@ -47,38 +47,38 @@ public class ShortSparseWindow extends SparseWindow<Short, ShortNdArray> impleme
 
   /** {@inheritDoc} */
   @Override
-  public ShortNdArray toDense() {
-    ShortDataBuffer dataBuffer = DataBuffers.ofShorts(shape().size());
+  public LongNdArray toDense() {
+    LongDataBuffer dataBuffer = DataBuffers.ofLongs(shape().size());
     read(dataBuffer);
     return NdArrays.wrap(shape(), dataBuffer);
   }
 
   @Override
-  public short getShort(long... coordinates) {
+  public long getLong(long... coordinates) {
     return getObject(coordinates);
   }
 
   @Override
-  public ShortNdArray setShort(short value, long... coordinates) {
+  public LongNdArray setLong(long value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ShortNdArray setObject(Short value, long... coordinates) {
+  public LongNdArray setObject(Long value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ShortNdArray set(NdArray<Short> src, long... coordinates) {
+  public LongNdArray set(NdArray<Long> src, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public ShortNdArray read(DataBuffer<Short> dst) {
+  public LongNdArray read(DataBuffer<Long> dst) {
     // zero out buf.
-    Short[] zeros = new Short[(int) shape().size()];
-    Arrays.fill(zeros, (short) 0);
+    Long[] zeros = new Long[(int) shape().size()];
+    Arrays.fill(zeros, 0L);
     dst.write(zeros);
 
     AtomicLong i = new AtomicLong();
@@ -87,29 +87,29 @@ public class ShortSparseWindow extends SparseWindow<Short, ShortNdArray> impleme
         .forEachIndexed(
             (idx, l) -> {
               long[] coordinates = getIndicesCoordinates(l);
-              short value = getValues().getShort(i.getAndIncrement());
+              long value = getValues().getLong(i.getAndIncrement());
               dst.setObject(value, dimensions.positionOf(coordinates));
             });
     return this;
   }
 
   @Override
-  public ShortNdArray read(ShortDataBuffer dst) {
-    return read((DataBuffer<Short>) dst);
+  public LongNdArray read(LongDataBuffer dst) {
+    return read((DataBuffer<Long>) dst);
   }
 
   @Override
-  public ShortNdArray write(DataBuffer<Short> src) {
+  public LongNdArray write(DataBuffer<Long> src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ShortNdArray write(ShortDataBuffer src) {
+  public LongNdArray write(LongDataBuffer src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ShortNdArray slice(Index... indices) {
+  public LongNdArray slice(Index... indices) {
     if (indices == null) {
       throw new IllegalArgumentException("Slicing requires at least one index");
     }
@@ -119,18 +119,18 @@ public class ShortSparseWindow extends SparseWindow<Short, ShortNdArray> impleme
 
   /** {@inheritDoc} */
   @Override
-  public ShortNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new ShortSparseWindow(this.source, position + sourcePosition, sliceDimensions);
+  public LongNdArray slice(long position, DimensionalSpace sliceDimensions) {
+    return new LongSparseSlice(this.source, position + sourcePosition, sliceDimensions);
   }
 
   @Override
-  public ShortNdArray get(long... coordinates) {
-    return (ShortNdArray) super.get(coordinates);
+  public LongNdArray get(long... coordinates) {
+    return (LongNdArray) super.get(coordinates);
   }
 
   @Override
-  public ShortNdArray copyTo(NdArray<Short> dst) {
-    return (ShortNdArray) super.copyTo(dst);
+  public LongNdArray copyTo(NdArray<Long> dst) {
+    return (LongNdArray) super.copyTo(dst);
   }
 
   @Override

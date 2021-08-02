@@ -21,15 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ByteSparseNdArrayTest {
   long[][] indicesArray = {{0, 0}, {1, 2}};
-  byte[] valuesArray = { 1, 16};
+  byte[] valuesArray = {1, 16};
   byte[] denseArray = {
-          1, 0, 0, 0,
-          0, 0, 16, 0,
-          0, 0, 0, 0
+    1, 0, 0, 0,
+    0, 0, 16, 0,
+    0, 0, 0, 0
   };
-  byte[][] dense2DArray = {
-    {1, 0, 0, 0}, {0, 0, 16, 0}, {0, 0, 0, 0}
-  };
+  byte[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 16, 0}, {0, 0, 0, 0}};
 
   Shape shape = Shape.of(3, 4);
   LongNdArray indices = StdArrays.ndCopyOf(indicesArray);
@@ -114,7 +112,7 @@ class ByteSparseNdArrayTest {
     ByteSparseNdArray instance =
         new ByteSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
-    assertThrows(java.nio.ReadOnlyBufferException.class, () -> instance.setObject((byte)0, 0, 0));
+    assertThrows(java.nio.ReadOnlyBufferException.class, () -> instance.setObject((byte) 0, 0, 0));
   }
 
   @Test
@@ -178,8 +176,7 @@ class ByteSparseNdArrayTest {
   @Test
   public void testFromDense() {
     ByteNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
-    ByteSparseNdArray instance =
-        ByteSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
+    ByteSparseNdArray instance = ByteSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
     instance.fromDense(ndArray);
     assertNotNull(instance.getIndices());
     assertEquals(2, instance.getIndices().shape().get(0));

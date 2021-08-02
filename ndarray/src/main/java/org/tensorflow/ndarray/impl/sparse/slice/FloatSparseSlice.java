@@ -12,33 +12,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 =======================================================================*/
-package org.tensorflow.ndarray.impl.sparse.window;
+package org.tensorflow.ndarray.impl.sparse.slice;
 
-import org.tensorflow.ndarray.ByteNdArray;
+import org.tensorflow.ndarray.FloatNdArray;
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArrays;
-import org.tensorflow.ndarray.buffer.ByteDataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
+import org.tensorflow.ndarray.buffer.FloatDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.impl.dimension.RelativeDimensionalSpace;
 import org.tensorflow.ndarray.impl.sparse.AbstractSparseNdArray;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ByteSparseWindow extends SparseWindow<Byte, ByteNdArray> implements ByteNdArray {
+public class FloatSparseSlice extends SparseSlice<Float, FloatNdArray> implements FloatNdArray {
 
   /**
-   * Creates a ByteSparseWindow
+   * Creates a FloatSparseSlice
    *
-   * @param source the source Sparse Array that this object windows.
+   * @param source the source Sparse Array that this object slices.
    * @param sourcePosition the relative source position into the source
    * @param dimensions the dimensional space for the window
    */
-  public ByteSparseWindow(
-      AbstractSparseNdArray<Byte, ByteNdArray> source,
+  public FloatSparseSlice(
+      AbstractSparseNdArray<Float, FloatNdArray> source,
       long sourcePosition,
       DimensionalSpace dimensions) {
     super(source, sourcePosition, dimensions);
@@ -46,37 +47,38 @@ public class ByteSparseWindow extends SparseWindow<Byte, ByteNdArray> implements
 
   /** {@inheritDoc} */
   @Override
-  public ByteNdArray toDense() {
-    ByteDataBuffer dataBuffer = DataBuffers.ofBytes(shape().size());
+  public FloatNdArray toDense() {
+    FloatDataBuffer dataBuffer = DataBuffers.ofFloats(shape().size());
     read(dataBuffer);
     return NdArrays.wrap(shape(), dataBuffer);
   }
 
   @Override
-  public byte getByte(long... coordinates) {
+  public float getFloat(long... coordinates) {
     return getObject(coordinates);
   }
 
   @Override
-  public ByteNdArray setByte(byte value, long... coordinates) {
+  public FloatNdArray setFloat(float value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ByteNdArray setObject(Byte value, long... coordinates) {
+  public FloatNdArray setObject(Float value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ByteNdArray set(NdArray<Byte> src, long... coordinates) {
+  public FloatNdArray set(NdArray<Float> src, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public ByteNdArray read(DataBuffer<Byte> dst) {
+  public FloatNdArray read(DataBuffer<Float> dst) {
     // zero out buf.
-    Byte[] zeros = new Byte[(int) shape().size()];
+    Float[] zeros = new Float[(int) shape().size()];
+    Arrays.fill(zeros, 0f);
     dst.write(zeros);
 
     AtomicInteger i = new AtomicInteger();
@@ -85,29 +87,29 @@ public class ByteSparseWindow extends SparseWindow<Byte, ByteNdArray> implements
         .forEachIndexed(
             (idx, l) -> {
               long[] coordinates = getIndicesCoordinates(l);
-              byte value = getValues().getByte(i.getAndIncrement());
+              float value = getValues().getFloat(i.getAndIncrement());
               dst.setObject(value, dimensions.positionOf(coordinates));
             });
     return this;
   }
 
   @Override
-  public ByteNdArray read(ByteDataBuffer dst) {
-    return read((DataBuffer<Byte>) dst);
+  public FloatNdArray read(FloatDataBuffer dst) {
+    return read((DataBuffer<Float>) dst);
   }
 
   @Override
-  public ByteNdArray write(DataBuffer<Byte> src) {
+  public FloatNdArray write(DataBuffer<Float> src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ByteNdArray write(ByteDataBuffer src) {
+  public FloatNdArray write(FloatDataBuffer src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public ByteNdArray slice(Index... indices) {
+  public FloatNdArray slice(Index... indices) {
     if (indices == null) {
       throw new IllegalArgumentException("Slicing requires at least one index");
     }
@@ -117,18 +119,18 @@ public class ByteSparseWindow extends SparseWindow<Byte, ByteNdArray> implements
 
   /** {@inheritDoc} */
   @Override
-  public ByteNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new ByteSparseWindow(this.source, position + sourcePosition, sliceDimensions);
+  public FloatNdArray slice(long position, DimensionalSpace sliceDimensions) {
+    return new FloatSparseSlice(this.source, position + sourcePosition, sliceDimensions);
   }
 
   @Override
-  public ByteNdArray get(long... coordinates) {
-    return (ByteNdArray) super.get(coordinates);
+  public FloatNdArray get(long... coordinates) {
+    return (FloatNdArray) super.get(coordinates);
   }
 
   @Override
-  public ByteNdArray copyTo(NdArray<Byte> dst) {
-    return (ByteNdArray) super.copyTo(dst);
+  public FloatNdArray copyTo(NdArray<Float> dst) {
+    return (FloatNdArray) super.copyTo(dst);
   }
 
   @Override

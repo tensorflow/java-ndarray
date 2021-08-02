@@ -12,34 +12,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 =======================================================================*/
-package org.tensorflow.ndarray.impl.sparse.window;
+package org.tensorflow.ndarray.impl.sparse.slice;
 
-import org.tensorflow.ndarray.BooleanNdArray;
+import org.tensorflow.ndarray.DoubleNdArray;
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.NdArrays;
-import org.tensorflow.ndarray.buffer.BooleanDataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
+import org.tensorflow.ndarray.buffer.DoubleDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.impl.dimension.RelativeDimensionalSpace;
 import org.tensorflow.ndarray.impl.sparse.AbstractSparseNdArray;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BooleanSparseWindow extends SparseWindow<Boolean, BooleanNdArray>
-    implements BooleanNdArray {
+public class DoubleSparseSlice extends SparseSlice<Double, DoubleNdArray> implements DoubleNdArray {
 
   /**
-   * Creates a BooleanSparseWindow
+   * Creates a DoubleSparseSlice
    *
-   * @param source the source Sparse Array that this object windows.
+   * @param source the source Sparse Array that this object slices.
    * @param sourcePosition the relative source position into the source
    * @param dimensions the dimensional space for the window
    */
-  public BooleanSparseWindow(
-      AbstractSparseNdArray<Boolean, BooleanNdArray> source,
+  public DoubleSparseSlice(
+      AbstractSparseNdArray<Double, DoubleNdArray> source,
       long sourcePosition,
       DimensionalSpace dimensions) {
     super(source, sourcePosition, dimensions);
@@ -47,37 +47,38 @@ public class BooleanSparseWindow extends SparseWindow<Boolean, BooleanNdArray>
 
   /** {@inheritDoc} */
   @Override
-  public BooleanNdArray toDense() {
-    BooleanDataBuffer dataBuffer = DataBuffers.ofBooleans(shape().size());
+  public DoubleNdArray toDense() {
+    DoubleDataBuffer dataBuffer = DataBuffers.ofDoubles(shape().size());
     read(dataBuffer);
     return NdArrays.wrap(shape(), dataBuffer);
   }
 
   @Override
-  public boolean getBoolean(long... coordinates) {
+  public double getDouble(long... coordinates) {
     return getObject(coordinates);
   }
 
   @Override
-  public BooleanNdArray setBoolean(boolean value, long... coordinates) {
+  public DoubleNdArray setDouble(double value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public BooleanNdArray setObject(Boolean value, long... coordinates) {
+  public DoubleNdArray setObject(Double value, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public BooleanNdArray set(NdArray<Boolean> src, long... coordinates) {
+  public DoubleNdArray set(NdArray<Double> src, long... coordinates) {
     throw new ReadOnlyBufferException();
   }
 
   /** {@inheritDoc} */
   @Override
-  public BooleanNdArray read(DataBuffer<Boolean> dst) {
+  public DoubleNdArray read(DataBuffer<Double> dst) {
     // zero out buf.
-    Boolean[] zeros = new Boolean[(int) shape().size()];
+    Double[] zeros = new Double[(int) shape().size()];
+    Arrays.fill(zeros, 0d);
     dst.write(zeros);
 
     AtomicInteger i = new AtomicInteger();
@@ -86,29 +87,29 @@ public class BooleanSparseWindow extends SparseWindow<Boolean, BooleanNdArray>
         .forEachIndexed(
             (idx, l) -> {
               long[] coordinates = getIndicesCoordinates(l);
-              boolean value = getValues().getBoolean(i.getAndIncrement());
+              double value = getValues().getDouble(i.getAndIncrement());
               dst.setObject(value, dimensions.positionOf(coordinates));
             });
     return this;
   }
 
   @Override
-  public BooleanNdArray read(BooleanDataBuffer dst) {
-    return read((DataBuffer<Boolean>) dst);
+  public DoubleNdArray read(DoubleDataBuffer dst) {
+    return read((DataBuffer<Double>) dst);
   }
 
   @Override
-  public BooleanNdArray write(DataBuffer<Boolean> src) {
+  public DoubleNdArray write(DataBuffer<Double> src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public BooleanNdArray write(BooleanDataBuffer src) {
+  public DoubleNdArray write(DoubleDataBuffer src) {
     throw new ReadOnlyBufferException();
   }
 
   @Override
-  public BooleanNdArray slice(Index... indices) {
+  public DoubleNdArray slice(Index... indices) {
     if (indices == null) {
       throw new IllegalArgumentException("Slicing requires at least one index");
     }
@@ -118,18 +119,18 @@ public class BooleanSparseWindow extends SparseWindow<Boolean, BooleanNdArray>
 
   /** {@inheritDoc} */
   @Override
-  public BooleanNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new BooleanSparseWindow(this.source, position + sourcePosition, sliceDimensions);
+  public DoubleNdArray slice(long position, DimensionalSpace sliceDimensions) {
+    return new DoubleSparseSlice(this.source, position + sourcePosition, sliceDimensions);
   }
 
   @Override
-  public BooleanNdArray get(long... coordinates) {
-    return (BooleanNdArray) super.get(coordinates);
+  public DoubleNdArray get(long... coordinates) {
+    return (DoubleNdArray) super.get(coordinates);
   }
 
   @Override
-  public BooleanNdArray copyTo(NdArray<Boolean> dst) {
-    return (BooleanNdArray) super.copyTo(dst);
+  public DoubleNdArray copyTo(NdArray<Double> dst) {
+    return (DoubleNdArray) super.copyTo(dst);
   }
 
   @Override

@@ -398,8 +398,8 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   }
 
   /**
-   * Performs a binary search on the indices array to locate the index of the specified
-   * coordinates. The indices array must be sorted by coordinates, row major.
+   * Performs a binary search on the indices array to locate the index of the specified coordinates.
+   * The indices array must be sorted by coordinates, row major.
    *
    * @param toIndex the index of the last element (exclusive) to be searched
    * @param coordinates the coordinates to locate

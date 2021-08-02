@@ -24,7 +24,7 @@ import org.tensorflow.ndarray.buffer.BooleanDataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
-import org.tensorflow.ndarray.impl.sparse.window.BooleanSparseWindow;
+import org.tensorflow.ndarray.impl.sparse.slice.BooleanSparseSlice;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
@@ -197,7 +197,7 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
   /** {@inheritDoc} */
   @Override
   public BooleanNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new BooleanSparseWindow(this, position, sliceDimensions);
+    return new BooleanSparseSlice(this, position, sliceDimensions);
   }
 
   /** {@inheritDoc} */

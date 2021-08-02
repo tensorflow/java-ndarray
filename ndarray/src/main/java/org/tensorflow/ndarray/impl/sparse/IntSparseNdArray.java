@@ -24,7 +24,7 @@ import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
-import org.tensorflow.ndarray.impl.sparse.window.IntSparseWindow;
+import org.tensorflow.ndarray.impl.sparse.slice.IntSparseSlice;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
@@ -205,7 +205,7 @@ public class IntSparseNdArray extends AbstractSparseNdArray<Integer, IntNdArray>
   /** {@inheritDoc} */
   @Override
   public IntNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new IntSparseWindow(this, position, sliceDimensions);
+    return new IntSparseSlice(this, position, sliceDimensions);
   }
 
   /** {@inheritDoc} */

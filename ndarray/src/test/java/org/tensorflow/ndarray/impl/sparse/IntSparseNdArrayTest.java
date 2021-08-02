@@ -183,8 +183,7 @@ class IntSparseNdArrayTest {
   public void testFromDense() {
     int[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     IntNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
-    IntSparseNdArray instance =
-        IntSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
+    IntSparseNdArray instance = IntSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
     instance.fromDense(ndArray);
     assertNotNull(instance.getIndices());
     assertEquals(2, instance.getIndices().shape().get(0));

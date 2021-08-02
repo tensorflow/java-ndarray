@@ -24,7 +24,7 @@ import org.tensorflow.ndarray.buffer.ByteDataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
-import org.tensorflow.ndarray.impl.sparse.window.ByteSparseWindow;
+import org.tensorflow.ndarray.impl.sparse.slice.ByteSparseSlice;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
@@ -195,7 +195,7 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
   /** {@inheritDoc} */
   @Override
   public ByteNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new ByteSparseWindow(this, position, sliceDimensions);
+    return new ByteSparseSlice(this, position, sliceDimensions);
   }
 
   /** {@inheritDoc} */

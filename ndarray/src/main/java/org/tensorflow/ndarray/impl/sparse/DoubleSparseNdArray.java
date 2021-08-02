@@ -24,7 +24,7 @@ import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.buffer.DoubleDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
-import org.tensorflow.ndarray.impl.sparse.window.DoubleSparseWindow;
+import org.tensorflow.ndarray.impl.sparse.slice.DoubleSparseSlice;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
@@ -196,7 +196,7 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
   /** {@inheritDoc} */
   @Override
   public DoubleNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new DoubleSparseWindow(this, position, sliceDimensions);
+    return new DoubleSparseSlice(this, position, sliceDimensions);
   }
 
   /** {@inheritDoc} */

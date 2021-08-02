@@ -1,10 +1,10 @@
 package org.tensorflow.ndarray.impl.sparse;
 
 import org.junit.jupiter.api.Test;
-import org.tensorflow.ndarray.ShortNdArray;
 import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
+import org.tensorflow.ndarray.ShortNdArray;
 import org.tensorflow.ndarray.StdArrays;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.buffer.ShortDataBuffer;
@@ -116,7 +116,7 @@ class ShortSparseNdArrayTest {
     ShortSparseNdArray instance =
         new ShortSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
-    assertThrows(java.nio.ReadOnlyBufferException.class, () -> instance.setObject((short)2, 0, 0));
+    assertThrows(java.nio.ReadOnlyBufferException.class, () -> instance.setObject((short) 2, 0, 0));
   }
 
   @Test

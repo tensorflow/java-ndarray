@@ -24,7 +24,7 @@ import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.buffer.ShortDataBuffer;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
-import org.tensorflow.ndarray.impl.sparse.window.ShortSparseWindow;
+import org.tensorflow.ndarray.impl.sparse.slice.ShortSparseSlice;
 import org.tensorflow.ndarray.index.Index;
 
 import java.nio.ReadOnlyBufferException;
@@ -195,7 +195,7 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
   /** {@inheritDoc} */
   @Override
   public ShortNdArray slice(long position, DimensionalSpace sliceDimensions) {
-    return new ShortSparseWindow(this, position, sliceDimensions);
+    return new ShortSparseSlice(this, position, sliceDimensions);
   }
 
   /** {@inheritDoc} */
