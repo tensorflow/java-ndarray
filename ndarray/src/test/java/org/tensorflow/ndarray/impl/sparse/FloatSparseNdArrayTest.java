@@ -1,14 +1,12 @@
 package org.tensorflow.ndarray.impl.sparse;
 
 import org.junit.jupiter.api.Test;
-import org.tensorflow.ndarray.DoubleNdArray;
 import org.tensorflow.ndarray.FloatNdArray;
 import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.StdArrays;
 import org.tensorflow.ndarray.buffer.DataBuffers;
-import org.tensorflow.ndarray.buffer.DoubleDataBuffer;
 import org.tensorflow.ndarray.buffer.FloatDataBuffer;
 import org.tensorflow.ndarray.impl.buffer.nio.NioDataBufferFactory;
 import org.tensorflow.ndarray.impl.buffer.raw.RawDataBufferFactory;
@@ -16,7 +14,6 @@ import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.index.Indices;
 
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -77,13 +74,12 @@ class FloatSparseNdArrayTest {
   public void testWriteDefaultValue() {
     // change 0 to -1
     float[] denseArrayDefaultValue = new float[denseArray.length];
-    for(int i = 0; i < denseArrayDefaultValue.length; i++) {
+    for (int i = 0; i < denseArrayDefaultValue.length; i++) {
       denseArrayDefaultValue[i] = denseArray[i] == 0f ? -1f : denseArray[i];
     }
     FloatDataBuffer dataBuffer = RawDataBufferFactory.create(denseArrayDefaultValue, false);
     // use a zero buffer
-    FloatSparseNdArray instance =
-            FloatSparseNdArray.create( -1f, DimensionalSpace.create(shape));
+    FloatSparseNdArray instance = FloatSparseNdArray.create(-1f, DimensionalSpace.create(shape));
     instance.write(dataBuffer);
 
     assertEquals(indices, instance.getIndices());
@@ -123,7 +119,7 @@ class FloatSparseNdArrayTest {
   public void testGetFloatDefaultValue() {
     FloatNdArray ndArray = StdArrays.ndCopyOf(dense2DArrayDefaultValue);
     FloatSparseNdArray instance =
-            new FloatSparseNdArray(indices, values, -1, DimensionalSpace.create(shape));
+        new FloatSparseNdArray(indices, values, -1, DimensionalSpace.create(shape));
 
     for (int n = 0; n < ndArray.shape().get(0); n++) {
       for (int m = 0; m < ndArray.shape().get(1); m++) {
@@ -161,7 +157,8 @@ class FloatSparseNdArrayTest {
         new FloatSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
     assertThrows(
-        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.getDefaultArray(), 0, 0));
+        java.nio.ReadOnlyBufferException.class,
+        () -> instance.set(instance.getDefaultArray(), 0, 0));
   }
 
   @Test

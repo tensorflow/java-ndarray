@@ -78,8 +78,7 @@ class DoubleSparseNdArrayTest {
     double[] denseArrayDefaultValue = Arrays.stream(denseArray).map(x -> x == 0 ? -1 : x).toArray();
     DoubleDataBuffer dataBuffer = RawDataBufferFactory.create(denseArrayDefaultValue, false);
     // use a zero buffer
-    DoubleSparseNdArray instance =
-        DoubleSparseNdArray.create(-1d, DimensionalSpace.create(shape));
+    DoubleSparseNdArray instance = DoubleSparseNdArray.create(-1d, DimensionalSpace.create(shape));
     instance.write(dataBuffer);
 
     assertEquals(indices, instance.getIndices());

@@ -1,14 +1,12 @@
 package org.tensorflow.ndarray.impl.sparse;
 
 import org.junit.jupiter.api.Test;
-import org.tensorflow.ndarray.FloatNdArray;
 import org.tensorflow.ndarray.IntNdArray;
 import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.StdArrays;
 import org.tensorflow.ndarray.buffer.DataBuffers;
-import org.tensorflow.ndarray.buffer.FloatDataBuffer;
 import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.impl.buffer.nio.NioDataBufferFactory;
 import org.tensorflow.ndarray.impl.buffer.raw.RawDataBufferFactory;
@@ -80,8 +78,7 @@ class IntSparseNdArrayTest {
 
     IntDataBuffer dataBuffer = RawDataBufferFactory.create(denseArrayDefaultValue, false);
     // use a zero buffer
-    IntSparseNdArray instance =
-            IntSparseNdArray.create( -1, DimensionalSpace.create(shape));
+    IntSparseNdArray instance = IntSparseNdArray.create(-1, DimensionalSpace.create(shape));
     instance.write(dataBuffer);
 
     assertEquals(indices, instance.getIndices());
@@ -121,7 +118,7 @@ class IntSparseNdArrayTest {
   public void testGetIntDefaultValue() {
     IntNdArray ndArray = StdArrays.ndCopyOf(dense2DArrayDefaultValue);
     IntSparseNdArray instance =
-            new IntSparseNdArray(indices, values, -1, DimensionalSpace.create(shape));
+        new IntSparseNdArray(indices, values, -1, DimensionalSpace.create(shape));
 
     for (int n = 0; n < ndArray.shape().get(0); n++) {
       for (int m = 0; m < ndArray.shape().get(1); m++) {
@@ -159,7 +156,8 @@ class IntSparseNdArrayTest {
         new IntSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
     assertThrows(
-        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.getDefaultArray(), 0, 0));
+        java.nio.ReadOnlyBufferException.class,
+        () -> instance.set(instance.getDefaultArray(), 0, 0));
   }
 
   @Test
