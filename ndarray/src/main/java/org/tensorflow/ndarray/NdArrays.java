@@ -104,12 +104,12 @@ public final class NdArrays {
   }
 
   /**
-   * Creates a Sparse array of byte values
+   * Creates a Sparse array of byte values with a default value of zero
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D ByteNdArray of shape {@code [N]}, which supplies the values for each
    *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
    *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
@@ -117,9 +117,28 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the byte sparse array.
    */
-  public static ByteSparseNdArray sparseOf(
-      LongNdArray indices, ByteNdArray values, Shape shape) {
+  public static ByteSparseNdArray sparseOf(LongNdArray indices, ByteNdArray values, Shape shape) {
     return ByteSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of byte values
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non default values.
+   * @param values A 1-D ByteNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3}.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the byte sparse array.
+   */
+  public static ByteSparseNdArray sparseOf(
+      LongNdArray indices, ByteNdArray values, byte defaultValue, Shape shape) {
+    return ByteSparseNdArray.create(indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 
   // LONG ARRAYS
@@ -178,12 +197,12 @@ public final class NdArrays {
   }
 
   /**
-   * Creates a Sparse array of long values
+   * Creates a Sparse array of long values with a default value of zero
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D LongNdArray of shape {@code [N]}, which supplies the values for each
    *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
    *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
@@ -191,9 +210,28 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the long sparse array.
    */
-  public static LongSparseNdArray sparseOf(
-      LongNdArray indices, LongNdArray values, Shape shape) {
+  public static LongSparseNdArray sparseOf(LongNdArray indices, LongNdArray values, Shape shape) {
     return LongSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of long values with a default value of zero
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D LongNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3}.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the long sparse array.
+   */
+  public static LongSparseNdArray sparseOf(
+      LongNdArray indices, LongNdArray values, long defaultValue, Shape shape) {
+    return LongSparseNdArray.create(indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 
   // INT ARRAYS
@@ -252,12 +290,12 @@ public final class NdArrays {
   }
 
   /**
-   * Creates a Sparse array of int values
+   * Creates a Sparse array of int values with a default value of zero.
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D IntNdArray of shape {@code [N]}, which supplies the values for each element
    *     in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
    *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
@@ -265,9 +303,28 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the int sparse array.
    */
-  public static IntSparseNdArray sparseOf(
-      LongNdArray indices, IntNdArray values, Shape shape) {
+  public static IntSparseNdArray sparseOf(LongNdArray indices, IntNdArray values, Shape shape) {
     return IntSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of int values
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D IntNdArray of shape {@code [N]}, which supplies the values for each element
+   *     in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3}.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the int sparse array.
+   */
+  public static IntSparseNdArray sparseOf(
+      LongNdArray indices, IntNdArray values, int defaultValue, Shape shape) {
+    return IntSparseNdArray.create(indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 
   // SHORT ARRAYS
@@ -326,12 +383,12 @@ public final class NdArrays {
   }
 
   /**
-   * Creates a Sparse array of short values
+   * Creates a Sparse array of short values with a default value of zero
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D ShortNdArray of shape {@code [N]}, which supplies the values for each
    *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
    *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
@@ -339,9 +396,28 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the short sparse array.
    */
-  public static ShortSparseNdArray sparseOf(
-      LongNdArray indices, ShortNdArray values, Shape shape) {
+  public static ShortSparseNdArray sparseOf(LongNdArray indices, ShortNdArray values, Shape shape) {
     return ShortSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of short values
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D ShortNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3}.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the short sparse array.
+   */
+  public static ShortSparseNdArray sparseOf(
+      LongNdArray indices, ShortNdArray values, short defaultValue, Shape shape) {
+    return ShortSparseNdArray.create(indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 
   // FLOAT ARRAYS
@@ -400,12 +476,12 @@ public final class NdArrays {
   }
 
   /**
-   * Creates a Sparse array of float values
+   * Creates a Sparse array of float values with a default value of zero
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D FloatNdArray of shape {@code [N]}, which supplies the values for each
    *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
    *     values=[18, 3.8]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
@@ -413,9 +489,28 @@ public final class NdArrays {
    * @param shape the shape of the dense array represented by this sparse array.
    * @return the float sparse array.
    */
-  public static FloatSparseNdArray sparseOf(
-      LongNdArray indices, FloatNdArray values, Shape shape) {
+  public static FloatSparseNdArray sparseOf(LongNdArray indices, FloatNdArray values, Shape shape) {
     return FloatSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of float values
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D FloatNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3.8]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.8}.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the float sparse array.
+   */
+  public static FloatSparseNdArray sparseOf(
+      LongNdArray indices, FloatNdArray values, float defaultValue, Shape shape) {
+    return FloatSparseNdArray.create(indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 
   // DOUBLE ARRAYS
@@ -474,12 +569,12 @@ public final class NdArrays {
   }
 
   /**
-   * Creates a Sparse array of double values
+   * Creates a Sparse array of double values with a default value of zero
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D DoubleNdArray of shape {@code [N]}, which supplies the values for each
    *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
    *     values=[18, 3.8]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
@@ -490,6 +585,27 @@ public final class NdArrays {
   public static DoubleSparseNdArray sparseOf(
       LongNdArray indices, DoubleNdArray values, Shape shape) {
     return DoubleSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of double values
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D DoubleNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3.8]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.8}.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the float sparse array.
+   */
+  public static DoubleSparseNdArray sparseOf(
+      LongNdArray indices, DoubleNdArray values, double defaultValue, Shape shape) {
+    return DoubleSparseNdArray.create(
+        indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 
   // BOOLEAN ARRAYS
@@ -548,12 +664,12 @@ public final class NdArrays {
   }
 
   /**
-   * Creates a Sparse array of boolean values
+   * Creates a Sparse array of boolean values with a default value of 'false'
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D BooleanNdArray of shape {@code [N]}, which supplies the values for each
    *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
    *     values=[true, true]} specifies that element {@code [1,3]} of the sparse NdArray has a value
@@ -565,6 +681,28 @@ public final class NdArrays {
   public static BooleanSparseNdArray sparseOf(
       LongNdArray indices, BooleanNdArray values, Shape shape) {
     return BooleanSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of boolean values
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D BooleanNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[true, true]} specifies that element {@code [1,3]} of the sparse NdArray has a value
+   *     of true, and element {@code [2,4]} of the NdArray has a value of true. All other values are
+   *     false.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the float sparse array.
+   */
+  public static BooleanSparseNdArray sparseOf(
+      LongNdArray indices, BooleanNdArray values, boolean defaultValue, Shape shape) {
+    return BooleanSparseNdArray.create(
+        indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 
   // OBJECT ARRAYS
@@ -630,5 +768,50 @@ public final class NdArrays {
    */
   public static <T> NdArray<T> wrap(Shape shape, DataBuffer<T> buffer) {
     return DenseNdArray.wrap(buffer, shape);
+  }
+
+  /**
+   * Creates a Sparse array of values with a null default value
+   *
+   * @param type the class type represented by this sparse array.
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D NdArray of shape {@code [N]}, which supplies the values for each element in
+   *     indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=["one", "two"]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of "one", and element {@code [2,4]} of the NdArray has a value of "two"". All other
+   *     values are null.
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the float sparse array.
+   */
+  public static <T> NdArray<T> sparseOfObjects(
+      Class<T> type, LongNdArray indices, NdArray<T> values, Shape shape) {
+    return org.tensorflow.ndarray.impl.sparse.SparseNdArray.create(
+        type, indices, values, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a Sparse array of values
+   *
+   * @param type the class type represented by this sparse array.
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
+   * @param values A 1-D NdArray of shape {@code [N]}, which supplies the values for each element in
+   *     indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=["one", "two"]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of "one", and element {@code [2,4]} of the NdArray has a value of "two"". All other
+   *     values are null.
+   * @param defaultValue Scalar value to set for indices not specified in 'indices'
+   * @param shape the shape of the dense array represented by this sparse array.
+   * @return the float sparse array.
+   */
+  public static <T> NdArray<T> sparseOfObjects(
+      Class<T> type, LongNdArray indices, NdArray<T> values, T defaultValue, Shape shape) {
+    return org.tensorflow.ndarray.impl.sparse.SparseNdArray.create(
+        type, indices, values, defaultValue, DimensionalSpace.create(shape));
   }
 }

@@ -66,9 +66,9 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    * Creates a BooleanSparseNdArray with a default value of false.
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D NdArray of Boolean type and shape {@code [N]}, which supplies the values
    *     for each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the
    *     parameter {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse
@@ -84,9 +84,9 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    * Creates a BooleanSparseNdArray
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D NdArray of Boolean type and shape {@code [N]}, which supplies the values
    *     for each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the
    *     parameter {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse
@@ -150,9 +150,9 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    * Creates a new BooleanSparseNdArray
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D NdArray of any type and shape {@code [N]}, which supplies the values for
    *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
    *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
@@ -169,9 +169,9 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    * Creates a new BooleanSparseNdArray
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
-   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
-   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
-   *     [1,3]} and {@code [2,4]} have nonzero values.
+   *     elements in the sparse array that contain non-default values (elements are zero-indexed).
+   *     For example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of
+   *     {@code [1,3]} and {@code [2,4]} have non-default values.
    * @param values A 1-D NdArray of any type and shape {@code [N]}, which supplies the values for
    *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
    *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
