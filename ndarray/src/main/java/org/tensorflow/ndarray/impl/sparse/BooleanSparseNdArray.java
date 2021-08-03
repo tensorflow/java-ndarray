@@ -61,10 +61,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, BooleanNdArray>
     implements BooleanNdArray {
-  private static final BooleanNdArray zeroArray = NdArrays.scalarOf(false);
 
   /**
-   * Creates a BooleanSparseNdArray
+   * Creates a BooleanSparseNdArray with a default value of false.
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
    *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
@@ -78,7 +77,30 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   BooleanSparseNdArray(LongNdArray indices, BooleanNdArray values, DimensionalSpace dimensions) {
-    super(indices, values, dimensions);
+    this(indices, values, false, dimensions);
+  }
+
+  /**
+   * Creates a BooleanSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D NdArray of Boolean type and shape {@code [N]}, which supplies the values
+   *     for each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the
+   *     parameter {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse
+   *     NdArray has a value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of
+   *     {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  BooleanSparseNdArray(
+      LongNdArray indices,
+      BooleanNdArray values,
+      boolean defaultValue,
+      DimensionalSpace dimensions) {
+    super(indices, values, defaultValue, dimensions);
   }
 
   /**
@@ -88,7 +110,19 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   BooleanSparseNdArray(BooleanDataBuffer dataBuffer, DimensionalSpace dimensions) {
-    super(dimensions);
+    this(dataBuffer, false, dimensions);
+  }
+
+  /**
+   * Creates a BooleanSparseNdArray
+   *
+   * @param dataBuffer a dense dataBuffer used to create the spars array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  BooleanSparseNdArray(
+      BooleanDataBuffer dataBuffer, boolean defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
     // use write to set up the indices and values
     write(dataBuffer);
   }
@@ -99,7 +133,17 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   BooleanSparseNdArray(DimensionalSpace dimensions) {
-    super(dimensions);
+    this(false, dimensions);
+  }
+
+  /**
+   * Creates a zero-filled BooleanSparseNdArray
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  BooleanSparseNdArray(boolean defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
   }
 
   /**
@@ -122,6 +166,29 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
   }
 
   /**
+   * Creates a new BooleanSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D NdArray of any type and shape {@code [N]}, which supplies the values for
+   *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
+   *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array.
+   * @return the new Sparse Array
+   */
+  public static BooleanSparseNdArray create(
+      LongNdArray indices,
+      BooleanNdArray values,
+      boolean defaultValue,
+      DimensionalSpace dimensions) {
+    return new BooleanSparseNdArray(indices, values, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new BooleanSparseNdArray from a data buffer
    *
    * @param dataBuffer the databuffer containing the dense array
@@ -134,6 +201,19 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
   }
 
   /**
+   * Creates a new BooleanSparseNdArray from a data buffer
+   *
+   * @param dataBuffer the databuffer containing the dense array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the sparse array
+   * @return the new Sparse Array
+   */
+  public static BooleanSparseNdArray create(
+      BooleanDataBuffer dataBuffer, boolean defaultValue, DimensionalSpace dimensions) {
+    return new BooleanSparseNdArray(dataBuffer, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new empty BooleanSparseNdArray from a data buffer
    *
    * @param dimensions the dimensions array
@@ -141,6 +221,17 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
    */
   public static BooleanSparseNdArray create(DimensionalSpace dimensions) {
     return new BooleanSparseNdArray(dimensions);
+  }
+
+  /**
+   * Creates a new empty BooleanSparseNdArray from a data buffer
+   *
+   * @param dimensions the dimensions array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @return the new Sparse Array
+   */
+  public static BooleanSparseNdArray create(boolean defaultValue, DimensionalSpace dimensions) {
+    return new BooleanSparseNdArray(defaultValue, dimensions);
   }
 
   /**
@@ -155,6 +246,19 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
   }
 
   /**
+   * Creates a new empty BooleanSparseNdArray from a float data buffer
+   *
+   * @param buffer the data buffer
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param shape the shape of the sparse array.
+   * @return the new Sparse Array
+   */
+  public static BooleanSparseNdArray create(
+      BooleanDataBuffer buffer, boolean defaultValue, Shape shape) {
+    return new BooleanSparseNdArray(buffer, defaultValue, DimensionalSpace.create(shape));
+  }
+
+  /**
    * Creates a new BooleanSparseNdArray from a BooleanNdArray
    *
    * @param src the BooleanNdArray
@@ -165,23 +269,23 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
     src.read(buffer);
     return new BooleanSparseNdArray(buffer, DimensionalSpace.create(src.shape()));
   }
-
   /**
-   * Gets zero as a Boolean
+   * Creates a new BooleanSparseNdArray from a BooleanNdArray
    *
-   * @return zero as a Boolean
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param src the BooleanNdArray
+   * @return the new Sparse Array
    */
-  public Boolean zero() {
-    return false;
+  public static BooleanSparseNdArray create(BooleanNdArray src, boolean defaultValue) {
+    BooleanDataBuffer buffer = DataBuffers.ofBooleans(src.size());
+    src.read(buffer);
+    return new BooleanSparseNdArray(buffer, defaultValue, DimensionalSpace.create(src.shape()));
   }
 
-  /**
-   * Gets a BooleanNdArray containing a zero scalar value
-   *
-   * @return a BooleanNdArray containing a zero scalar value
-   */
-  public BooleanNdArray zeroArray() {
-    return zeroArray;
+  /** {@inheritDoc} */
+  @Override
+  public BooleanNdArray createDefaultArray() {
+    return NdArrays.scalarOf(getDefaultValue());
   }
 
   /**
@@ -221,10 +325,10 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
   /** {@inheritDoc} */
   @Override
   public BooleanNdArray read(BooleanDataBuffer dst) {
-    // zero out buf.
-    Boolean[] zeros = new Boolean[(int) shape().size()];
-    Arrays.fill(zeros, false);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Boolean[] defaults = new Boolean[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -245,7 +349,7 @@ public class BooleanSparseNdArray extends AbstractSparseNdArray<Boolean, Boolean
     List<Boolean> values = new ArrayList<>();
 
     for (long i = 0; i < src.size(); i++) {
-      if (src.getObject(i)) {
+      if (!src.getObject(i).equals(getDefaultValue())) {
         indices.add(toCoordinates(dimensions, i));
         values.add(src.getObject(i));
       }

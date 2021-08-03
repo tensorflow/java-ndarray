@@ -2,6 +2,7 @@ package org.tensorflow.ndarray.impl.sparse;
 
 import org.junit.jupiter.api.Test;
 import org.tensorflow.ndarray.BooleanNdArray;
+import org.tensorflow.ndarray.ByteNdArray;
 import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
@@ -12,16 +13,19 @@ import org.tensorflow.ndarray.impl.buffer.raw.RawDataBufferFactory;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.index.Indices;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BooleanSparseNdArrayTest {
   long[][] indicesArray = {{0, 0}, {1, 2}};
   boolean[] valuesArray = {true, true};
+  boolean[] valuesArrayDefaultValue = {false, false};
   boolean[] denseArray = {
     true, false, false, false,
     false, false, true, false,
@@ -30,6 +34,7 @@ class BooleanSparseNdArrayTest {
   boolean[][] dense2DArray = {
     {true, false, false, false}, {false, false, true, false}, {false, false, false, false}
   };
+
 
   Shape shape = Shape.of(3, 4);
   LongNdArray indices = StdArrays.ndCopyOf(indicesArray);
@@ -70,6 +75,24 @@ class BooleanSparseNdArrayTest {
   }
 
   @Test
+  public void testWriteDefaultValue() {
+    // invert true/false
+    boolean[] denseArrayDefaultValue = new boolean[denseArray.length];
+    for(int i = 0; i < denseArrayDefaultValue.length; i++) {
+      denseArrayDefaultValue[i] = !denseArray[i];
+    }
+
+    BooleanNdArray valuesDefault = StdArrays.ndCopyOf(new boolean[]{false, false});
+    BooleanDataBuffer dataBuffer = RawDataBufferFactory.create(denseArrayDefaultValue, false);
+    // use a zero buffer
+    BooleanSparseNdArray instance = BooleanSparseNdArray.create(true, DimensionalSpace.create(shape));
+    instance.write(dataBuffer);
+
+    assertEquals(indices, instance.getIndices());
+    assertEquals(valuesDefault, instance.getValues());
+  }
+
+  @Test
   public void testGetObject() {
     BooleanNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     BooleanSparseNdArray instance =
@@ -91,6 +114,19 @@ class BooleanSparseNdArrayTest {
     for (int n = 0; n < ndArray.shape().get(0); n++) {
       for (int m = 0; m < ndArray.shape().get(1); m++) {
         assertEquals(ndArray.getBoolean(n, m), instance.getBoolean(n, m));
+      }
+    }
+  }
+  @Test
+  public void testGetBooleanDefaultValue() {
+    // flip the truth table
+    BooleanNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
+    BooleanSparseNdArray instance =
+            new BooleanSparseNdArray(indices, NdArrays.vectorOf(valuesArrayDefaultValue), true, DimensionalSpace.create(shape));
+
+    for (int n = 0; n < ndArray.shape().get(0); n++) {
+      for (int m = 0; m < ndArray.shape().get(1); m++) {
+        assertNotEquals(ndArray.getBoolean(n, m), instance.getBoolean(n, m));
       }
     }
   }
@@ -123,7 +159,7 @@ class BooleanSparseNdArrayTest {
         new BooleanSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
     assertThrows(
-        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.zeroArray(), 0, 0));
+        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.getDefaultArray(), 0, 0));
   }
 
   @Test

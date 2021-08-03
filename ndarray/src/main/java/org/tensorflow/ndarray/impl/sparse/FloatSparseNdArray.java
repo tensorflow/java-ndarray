@@ -61,10 +61,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArray>
     implements FloatNdArray {
-  private static final FloatNdArray zeroArray = NdArrays.scalarOf(0f);
 
   /**
-   * Creates a FloatSparseNdArray
+   * Creates a FloatSparseNdArray with a default value of zero.
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
    *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
@@ -77,7 +76,26 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   FloatSparseNdArray(LongNdArray indices, FloatNdArray values, DimensionalSpace dimensions) {
-    super(indices, values, dimensions);
+    this(indices, values, 0f, dimensions);
+  }
+
+  /**
+   * Creates a FloatSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D FloatNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  FloatSparseNdArray(
+      LongNdArray indices, FloatNdArray values, float defaultValue, DimensionalSpace dimensions) {
+    super(indices, values, defaultValue, dimensions);
   }
 
   /**
@@ -87,7 +105,18 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   FloatSparseNdArray(FloatDataBuffer dataBuffer, DimensionalSpace dimensions) {
-    super(dimensions);
+    this(dataBuffer, 0f, dimensions);
+  }
+
+  /**
+   * Creates a FloatSparseNdArray
+   *
+   * @param dataBuffer a dense dataBuffer used to create the spars array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  FloatSparseNdArray(FloatDataBuffer dataBuffer, float defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
     // use write to set up the indices and values
     write(dataBuffer);
   }
@@ -98,7 +127,17 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   FloatSparseNdArray(DimensionalSpace dimensions) {
-    super(dimensions);
+    this(0f, dimensions);
+  }
+
+  /**
+   * Creates a zero-filled FloatSparseNdArray
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  FloatSparseNdArray(float defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
   }
 
   /**
@@ -121,6 +160,26 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
   }
 
   /**
+   * Creates a new FloatSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D NdArray of any type and shape {@code [N]}, which supplies the values for
+   *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
+   *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array.
+   * @return the new Sparse Array
+   */
+  public static FloatSparseNdArray create(
+      LongNdArray indices, FloatNdArray values, float defaultValue, DimensionalSpace dimensions) {
+    return new FloatSparseNdArray(indices, values, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new FloatSparseNdArray from a data buffer
    *
    * @param dataBuffer the databuffer containing the dense array
@@ -132,6 +191,19 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
   }
 
   /**
+   * Creates a new FloatSparseNdArray from a data buffer
+   *
+   * @param dataBuffer the databuffer containing the dense array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the sparse array
+   * @return the new Sparse Array
+   */
+  public static FloatSparseNdArray create(
+      FloatDataBuffer dataBuffer, float defaultValue, DimensionalSpace dimensions) {
+    return new FloatSparseNdArray(dataBuffer, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new empty FloatSparseNdArray from a data buffer
    *
    * @param dimensions the dimensions array
@@ -139,6 +211,17 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
    */
   public static FloatSparseNdArray create(DimensionalSpace dimensions) {
     return new FloatSparseNdArray(dimensions);
+  }
+
+  /**
+   * Creates a new empty FloatSparseNdArray from a data buffer
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensions array
+   * @return the new Sparse Array
+   */
+  public static FloatSparseNdArray create(float defaultValue, DimensionalSpace dimensions) {
+    return new FloatSparseNdArray(defaultValue, dimensions);
   }
 
   /**
@@ -153,6 +236,18 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
   }
 
   /**
+   * Creates a new empty FloatSparseNdArray from a float data buffer
+   *
+   * @param buffer the data buffer
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param shape the shape of the sparse array.
+   * @return the new Sparse Array
+   */
+  public static FloatSparseNdArray create(FloatDataBuffer buffer, float defaultValue, Shape shape) {
+    return new FloatSparseNdArray(buffer, defaultValue, DimensionalSpace.create(shape));
+  }
+
+  /**
    * Creates a new FloatSparseNdArray from a FloatNdArray
    *
    * @param src the FloatNdArray
@@ -163,23 +258,17 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
     src.read(buffer);
     return new FloatSparseNdArray(buffer, DimensionalSpace.create(src.shape()));
   }
-
   /**
-   * Gets zero as a Float
+   * Creates a new FloatSparseNdArray from a FloatNdArray
    *
-   * @return zero as a Float
+   * @param src the FloatNdArray
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @return the new Sparse Array
    */
-  public Float zero() {
-    return 0f;
-  }
-
-  /**
-   * Gets a FloatNdArray containing a zero scalar value
-   *
-   * @return a FloatNdArray containing a zero scalar value
-   */
-  public FloatNdArray zeroArray() {
-    return zeroArray;
+  public static FloatSparseNdArray create(FloatNdArray src, float defaultValue) {
+    FloatDataBuffer buffer = DataBuffers.ofFloats(src.size());
+    src.read(buffer);
+    return new FloatSparseNdArray(buffer, defaultValue, DimensionalSpace.create(src.shape()));
   }
 
   /**
@@ -219,10 +308,10 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
   /** {@inheritDoc} */
   @Override
   public FloatNdArray read(FloatDataBuffer dst) {
-    // zero out buf.
-    Float[] zeros = new Float[(int) shape().size()];
-    Arrays.fill(zeros, 0f);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Float[] defaults = new Float[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -243,7 +332,7 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
     List<Float> values = new ArrayList<>();
 
     for (long i = 0; i < src.size(); i++) {
-      if (src.getObject(i) != 0) {
+      if (!src.getObject(i).equals(getDefaultValue())) {
         indices.add(toCoordinates(dimensions, i));
         values.add(src.getObject(i));
       }
@@ -318,5 +407,11 @@ public class FloatSparseNdArray extends AbstractSparseNdArray<Float, FloatNdArra
   @Override
   public FloatNdArray copyTo(NdArray<Float> dst) {
     return (FloatNdArray) super.copyTo(dst);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public FloatNdArray createDefaultArray() {
+    return NdArrays.scalarOf(getDefaultValue());
   }
 }

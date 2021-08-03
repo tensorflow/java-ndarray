@@ -14,6 +14,7 @@ import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.index.Indices;
 
 import java.nio.DoubleBuffer;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -23,12 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DoubleSparseNdArrayTest {
   long[][] indicesArray = {{0, 0}, {1, 2}};
-  double[] valuesArray = {1, 2};
+  double[] valuesArray = {1, 256};
   double[] denseArray = {
     1, 0, 0, 0,
-    0, 0, 2, 0,
+    0, 0, 256, 0,
     0, 0, 0, 0
   };
+  double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 256, 0}, {0, 0, 0, 0}};
+
+  double[][] dense2DArrayDefaultValue = {{1, -1, -1, -1}, {-1, -1, 256, -1}, {-1, -1, -1, -1}};
 
   Shape shape = Shape.of(3, 4);
   LongNdArray indices = StdArrays.ndCopyOf(indicesArray);
@@ -69,8 +73,23 @@ class DoubleSparseNdArrayTest {
   }
 
   @Test
+  public void testWriteDefaultValue() {
+    // change 0 to -1
+    double[] denseArrayDefaultValue = Arrays.stream(denseArray).map(x -> x == 0 ? -1 : x).toArray();
+    DoubleDataBuffer dataBuffer = RawDataBufferFactory.create(denseArrayDefaultValue, false);
+    // use a zero buffer
+    DoubleSparseNdArray instance =
+        DoubleSparseNdArray.create(-1d, DimensionalSpace.create(shape));
+    instance.write(dataBuffer);
+
+    assertEquals(indices, instance.getIndices());
+    assertEquals(values, instance.getValues());
+    assertEquals(-1d, instance.getDouble(2, 0));
+  }
+
+  @Test
   public void testGetObject() {
-    double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
+
     DoubleNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
@@ -84,7 +103,6 @@ class DoubleSparseNdArrayTest {
 
   @Test
   public void testGetDouble() {
-    double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     DoubleNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
@@ -97,8 +115,20 @@ class DoubleSparseNdArrayTest {
   }
 
   @Test
+  public void testGetDoubleDefaultValue() {
+    DoubleNdArray ndArray = StdArrays.ndCopyOf(dense2DArrayDefaultValue);
+    DoubleSparseNdArray instance =
+        new DoubleSparseNdArray(indices, values, -1d, DimensionalSpace.create(shape));
+
+    for (int n = 0; n < ndArray.shape().get(0); n++) {
+      for (int m = 0; m < ndArray.shape().get(1); m++) {
+        assertEquals(ndArray.getDouble(n, m), instance.getDouble(n, m));
+      }
+    }
+  }
+
+  @Test
   public void testGet() {
-    double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     DoubleNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
@@ -125,7 +155,8 @@ class DoubleSparseNdArrayTest {
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
     assertThrows(
-        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.zeroArray(), 0, 0));
+        java.nio.ReadOnlyBufferException.class,
+        () -> instance.set(instance.getDefaultArray(), 0, 0));
   }
 
   @Test
@@ -157,7 +188,6 @@ class DoubleSparseNdArrayTest {
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
-    double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     instance
         .elements(0)
         .forEachIndexed(
@@ -170,7 +200,6 @@ class DoubleSparseNdArrayTest {
 
   @Test
   public void testDense() {
-    double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
 
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
@@ -181,7 +210,6 @@ class DoubleSparseNdArrayTest {
 
   @Test
   public void testFromDense() {
-    double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     DoubleNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     DoubleSparseNdArray instance =
         DoubleSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
@@ -202,7 +230,6 @@ class DoubleSparseNdArrayTest {
   @Test
   public void testElements1() {
     double[] expected = {1, 0, 0};
-    double[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
 
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
@@ -230,8 +257,6 @@ class DoubleSparseNdArrayTest {
 
   @Test
   public void testCreate() {
-    double[] denseArray = {1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0};
-    double[][] dense2Array = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
     DoubleSparseNdArray instanceA =
@@ -251,14 +276,14 @@ class DoubleSparseNdArrayTest {
     DoubleSparseNdArray instanceD = DoubleSparseNdArray.create(dataBuffer, shape);
     assertEquals(instanceB, instanceD);
 
-    DoubleNdArray ndArray = StdArrays.ndCopyOf(dense2Array);
+    DoubleNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     DoubleSparseNdArray instanceE = DoubleSparseNdArray.create(ndArray);
     assertEquals(instance, instanceE);
   }
 
   @Test
   public void testSlice() {
-    double[] expected = {0, 0, 2, 0, 0, 0};
+    double[] expected = {0, 0, 256, 0, 0, 0};
     DoubleSparseNdArray instance =
         new DoubleSparseNdArray(indices, values, DimensionalSpace.create(shape));
 

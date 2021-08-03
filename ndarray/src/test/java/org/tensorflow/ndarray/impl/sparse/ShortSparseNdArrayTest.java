@@ -1,12 +1,14 @@
 package org.tensorflow.ndarray.impl.sparse;
 
 import org.junit.jupiter.api.Test;
+import org.tensorflow.ndarray.IntNdArray;
 import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.ShortNdArray;
 import org.tensorflow.ndarray.StdArrays;
 import org.tensorflow.ndarray.buffer.DataBuffers;
+import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.buffer.ShortDataBuffer;
 import org.tensorflow.ndarray.impl.buffer.nio.NioDataBufferFactory;
 import org.tensorflow.ndarray.impl.buffer.raw.RawDataBufferFactory;
@@ -14,6 +16,7 @@ import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.index.Indices;
 
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -29,6 +32,7 @@ class ShortSparseNdArrayTest {
     0, 0, 2, 0,
     0, 0, 0, 0
   };
+  short[][] dense2DArrayDefaultValue = {{1, -1, -1, -1}, {-1, -1, 2, -1}, {-1, -1, -1, -1}};
 
   Shape shape = Shape.of(3, 4);
   LongNdArray indices = StdArrays.ndCopyOf(indicesArray);
@@ -69,6 +73,25 @@ class ShortSparseNdArrayTest {
   }
 
   @Test
+  public void testWriteDefaultValue() {
+    // change 0 to -1
+    short[] denseArrayDefaultValue = new short[denseArray.length];
+    for(int i = 0; i < denseArrayDefaultValue.length; i++) {
+      denseArrayDefaultValue[i] = denseArray[i] == 0 ? (short)-1 : denseArray[i];
+    }
+
+    ShortDataBuffer dataBuffer = RawDataBufferFactory.create(denseArrayDefaultValue, false);
+    // use a zero buffer
+    ShortSparseNdArray instance =
+            ShortSparseNdArray.create( (short)-1, DimensionalSpace.create(shape));
+    instance.write(dataBuffer);
+
+    assertEquals(indices, instance.getIndices());
+    assertEquals(values, instance.getValues());
+    assertEquals((short)-1, instance.getShort(2, 0));
+  }
+
+  @Test
   public void testGetObject() {
     short[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     ShortNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
@@ -88,6 +111,19 @@ class ShortSparseNdArrayTest {
     ShortNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     ShortSparseNdArray instance =
         new ShortSparseNdArray(indices, values, DimensionalSpace.create(shape));
+
+    for (int n = 0; n < ndArray.shape().get(0); n++) {
+      for (int m = 0; m < ndArray.shape().get(1); m++) {
+        assertEquals(ndArray.getShort(n, m), instance.getShort(n, m));
+      }
+    }
+  }
+
+  @Test
+  public void testGetShortDefaultValue() {
+    ShortNdArray ndArray = StdArrays.ndCopyOf(dense2DArrayDefaultValue);
+    ShortSparseNdArray instance =
+            new ShortSparseNdArray(indices, values, (short)-1, DimensionalSpace.create(shape));
 
     for (int n = 0; n < ndArray.shape().get(0); n++) {
       for (int m = 0; m < ndArray.shape().get(1); m++) {
@@ -125,7 +161,7 @@ class ShortSparseNdArrayTest {
         new ShortSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
     assertThrows(
-        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.zeroArray(), 0, 0));
+        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.getDefaultArray(), 0, 0));
   }
 
   @Test

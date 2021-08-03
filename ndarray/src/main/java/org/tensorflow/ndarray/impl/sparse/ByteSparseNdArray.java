@@ -61,7 +61,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
     implements ByteNdArray {
-  private static final ByteNdArray zeroArray = NdArrays.scalarOf((byte) 0);
 
   /**
    * Creates a ByteSparseNdArray
@@ -77,7 +76,26 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   ByteSparseNdArray(LongNdArray indices, ByteNdArray values, DimensionalSpace dimensions) {
-    super(indices, values, dimensions);
+    this(indices, values, (byte) 0, dimensions);
+  }
+
+  /**
+   * Creates a ByteSparseNdArray with a default value of zero.
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D NdArray of Byte type and shape {@code [N]}, which supplies the values for
+   *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
+   *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  ByteSparseNdArray(
+      LongNdArray indices, ByteNdArray values, byte defaultValue, DimensionalSpace dimensions) {
+    super(indices, values, defaultValue, dimensions);
   }
 
   /**
@@ -87,7 +105,18 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   ByteSparseNdArray(ByteDataBuffer dataBuffer, DimensionalSpace dimensions) {
-    super(dimensions);
+    this(dataBuffer, (byte) 0, dimensions);
+  }
+
+  /**
+   * Creates a ByteSparseNdArray
+   *
+   * @param dataBuffer a dense dataBuffer used to create the spars array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  ByteSparseNdArray(ByteDataBuffer dataBuffer, byte defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
     // use write to set up the indices and values
     write(dataBuffer);
   }
@@ -98,7 +127,17 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   ByteSparseNdArray(DimensionalSpace dimensions) {
-    super(dimensions);
+    this((byte) 0, dimensions);
+  }
+
+  /**
+   * Creates a zero-filled ByteSparseNdArray
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  ByteSparseNdArray(byte defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
   }
 
   /**
@@ -121,6 +160,26 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
   }
 
   /**
+   * Creates a new ByteSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D NdArray of any type and shape {@code [N]}, which supplies the values for
+   *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
+   *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array.
+   * @return the new Sparse Array
+   */
+  public static ByteSparseNdArray create(
+      LongNdArray indices, ByteNdArray values, byte defaultValue, DimensionalSpace dimensions) {
+    return new ByteSparseNdArray(indices, values, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new ByteSparseNdArray from a data buffer
    *
    * @param dataBuffer the databuffer containing the dense array
@@ -129,6 +188,19 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
    */
   public static ByteSparseNdArray create(ByteDataBuffer dataBuffer, DimensionalSpace dimensions) {
     return new ByteSparseNdArray(dataBuffer, dimensions);
+  }
+
+  /**
+   * Creates a new ByteSparseNdArray from a data buffer
+   *
+   * @param dataBuffer the databuffer containing the dense array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the sparse array
+   * @return the new Sparse Array
+   */
+  public static ByteSparseNdArray create(
+      ByteDataBuffer dataBuffer, byte defaultValue, DimensionalSpace dimensions) {
+    return new ByteSparseNdArray(dataBuffer, defaultValue, dimensions);
   }
 
   /**
@@ -142,6 +214,17 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
   }
 
   /**
+   * Creates a new empty ByteSparseNdArray from a data buffer
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensions array
+   * @return the new Sparse Array
+   */
+  public static ByteSparseNdArray create(byte defaultValue, DimensionalSpace dimensions) {
+    return new ByteSparseNdArray(defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new empty ByteSparseNdArray from a float data buffer
    *
    * @param buffer the data buffer
@@ -150,6 +233,18 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
    */
   public static ByteSparseNdArray create(ByteDataBuffer buffer, Shape shape) {
     return new ByteSparseNdArray(buffer, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a new empty ByteSparseNdArray from a float data buffer
+   *
+   * @param buffer the data buffer
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param shape the shape of the sparse array.
+   * @return the new Sparse Array
+   */
+  public static ByteSparseNdArray create(ByteDataBuffer buffer, byte defaultValue, Shape shape) {
+    return new ByteSparseNdArray(buffer, defaultValue, DimensionalSpace.create(shape));
   }
 
   /**
@@ -165,21 +260,16 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
   }
 
   /**
-   * Gets zero as a Byte
+   * Creates a new ByteSparseNdArray from a ByteNdArray
    *
-   * @return zero as a Byte
+   * @param src the ByteNdArray
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @return the new Sparse Array
    */
-  public Byte zero() {
-    return (byte) 0;
-  }
-
-  /**
-   * Gets a ByteNdArray containing a zero scalar value
-   *
-   * @return a ByteNdArray containing a zero scalar value
-   */
-  public ByteNdArray zeroArray() {
-    return zeroArray;
+  public static ByteSparseNdArray create(ByteNdArray src, byte defaultValue) {
+    ByteDataBuffer buffer = DataBuffers.ofBytes(src.size());
+    src.read(buffer);
+    return new ByteSparseNdArray(buffer, defaultValue, DimensionalSpace.create(src.shape()));
   }
 
   /**
@@ -219,10 +309,10 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
   /** {@inheritDoc} */
   @Override
   public ByteNdArray read(ByteDataBuffer dst) {
-    // zero out buf.
-    Byte[] zeros = new Byte[(int) shape().size()];
-    Arrays.fill(zeros, (byte) 0);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Byte[] defaults = new Byte[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -243,7 +333,7 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
     List<Byte> values = new ArrayList<>();
 
     for (long i = 0; i < src.size(); i++) {
-      if (src.getObject(i) != (byte) 0) {
+      if (!src.getObject(i).equals(getDefaultValue())) {
         indices.add(toCoordinates(dimensions, i));
         values.add(src.getObject(i));
       }
@@ -318,5 +408,11 @@ public class ByteSparseNdArray extends AbstractSparseNdArray<Byte, ByteNdArray>
   @Override
   public ByteNdArray copyTo(NdArray<Byte> dst) {
     return (ByteNdArray) super.copyTo(dst);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public ByteNdArray createDefaultArray() {
+    return NdArrays.scalarOf(getDefaultValue());
   }
 }

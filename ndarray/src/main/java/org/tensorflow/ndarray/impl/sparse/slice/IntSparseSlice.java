@@ -76,10 +76,10 @@ public class IntSparseSlice extends SparseSlice<Integer, IntNdArray> implements 
   /** {@inheritDoc} */
   @Override
   public IntNdArray read(DataBuffer<Integer> dst) {
-    // zero out buf.
-    Integer[] zeros = new Integer[(int) shape().size()];
-    Arrays.fill(zeros, 0);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Integer[] defaults = new Integer[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -134,7 +134,7 @@ public class IntSparseSlice extends SparseSlice<Integer, IntNdArray> implements 
   }
 
   @Override
-  public int rank() {
-    return super.rank();
+  public IntNdArray createDefaultArray() {
+    return source.getDefaultArray();
   }
 }

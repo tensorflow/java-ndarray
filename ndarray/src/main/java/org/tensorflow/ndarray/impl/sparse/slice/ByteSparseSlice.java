@@ -76,8 +76,8 @@ public class ByteSparseSlice extends SparseSlice<Byte, ByteNdArray> implements B
   @Override
   public ByteNdArray read(DataBuffer<Byte> dst) {
     // zero out buf.
-    Byte[] zeros = new Byte[(int) shape().size()];
-    dst.write(zeros);
+    Byte[] defaults = new Byte[(int) shape().size()];
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -132,7 +132,7 @@ public class ByteSparseSlice extends SparseSlice<Byte, ByteNdArray> implements B
   }
 
   @Override
-  public int rank() {
-    return super.rank();
+  public ByteNdArray createDefaultArray() {
+    return source.getDefaultArray();
   }
 }

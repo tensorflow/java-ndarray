@@ -61,10 +61,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdArray>
     implements DoubleNdArray {
-  private static final DoubleNdArray zeroArray = NdArrays.scalarOf(0d);
 
   /**
-   * Creates a DoubleSparseNdArray
+   * Creates a DoubleSparseNdArray with a default value of zero.
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
    *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
@@ -77,7 +76,26 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   DoubleSparseNdArray(LongNdArray indices, DoubleNdArray values, DimensionalSpace dimensions) {
-    super(indices, values, dimensions);
+    this(indices, values, 0d, dimensions);
+  }
+
+  /**
+   * Creates a DoubleSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D DoubleNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  DoubleSparseNdArray(
+      LongNdArray indices, DoubleNdArray values, double defaultValue, DimensionalSpace dimensions) {
+    super(indices, values, defaultValue, dimensions);
   }
 
   /**
@@ -87,7 +105,18 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   DoubleSparseNdArray(DoubleDataBuffer dataBuffer, DimensionalSpace dimensions) {
-    super(dimensions);
+    this(dataBuffer, 0d, dimensions);
+  }
+  /**
+   * Creates a DoubleSparseNdArray
+   *
+   * @param dataBuffer a dense dataBuffer used to create the spars array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  DoubleSparseNdArray(
+      DoubleDataBuffer dataBuffer, double defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
     // use write to set up the indices and values
     write(dataBuffer);
   }
@@ -98,7 +127,17 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   DoubleSparseNdArray(DimensionalSpace dimensions) {
-    super(dimensions);
+    this(0d, dimensions);
+  }
+
+  /**
+   * Creates a zero-filled DoubleSparseNdArray
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  DoubleSparseNdArray(double defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
   }
 
   /**
@@ -121,6 +160,26 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
   }
 
   /**
+   * Creates a new DoubleSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D NdArray of any type and shape {@code [N]}, which supplies the values for
+   *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
+   *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array.
+   * @return the new Sparse Array
+   */
+  public static DoubleSparseNdArray create(
+      LongNdArray indices, DoubleNdArray values, double defaultValue, DimensionalSpace dimensions) {
+    return new DoubleSparseNdArray(indices, values, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new DoubleSparseNdArray from a data buffer
    *
    * @param dataBuffer the databuffer containing the dense array
@@ -133,6 +192,19 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
   }
 
   /**
+   * Creates a new DoubleSparseNdArray from a data buffer
+   *
+   * @param dataBuffer the databuffer containing the dense array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the sparse array
+   * @return the new Sparse Array
+   */
+  public static DoubleSparseNdArray create(
+      DoubleDataBuffer dataBuffer, double defaultValue, DimensionalSpace dimensions) {
+    return new DoubleSparseNdArray(dataBuffer, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new empty DoubleSparseNdArray from a data buffer
    *
    * @param dimensions the dimensions array
@@ -140,6 +212,17 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
    */
   public static DoubleSparseNdArray create(DimensionalSpace dimensions) {
     return new DoubleSparseNdArray(dimensions);
+  }
+
+  /**
+   * Creates a new empty DoubleSparseNdArray from a data buffer
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensions array
+   * @return the new Sparse Array
+   */
+  public static DoubleSparseNdArray create(double defaultValue, DimensionalSpace dimensions) {
+    return new DoubleSparseNdArray(defaultValue, dimensions);
   }
 
   /**
@@ -154,6 +237,19 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
   }
 
   /**
+   * Creates a new empty DoubleSparseNdArray from a double data buffer
+   *
+   * @param buffer the data buffer
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param shape the shape of the sparse array.
+   * @return the new Sparse Array
+   */
+  public static DoubleSparseNdArray create(
+      DoubleDataBuffer buffer, double defaultValue, Shape shape) {
+    return new DoubleSparseNdArray(buffer, defaultValue, DimensionalSpace.create(shape));
+  }
+
+  /**
    * Creates a new DoubleSparseNdArray from a DoubleNdArray
    *
    * @param src the DoubleNdArray
@@ -164,23 +260,17 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
     src.read(buffer);
     return new DoubleSparseNdArray(buffer, DimensionalSpace.create(src.shape()));
   }
-
   /**
-   * Gets zero as a Double
+   * Creates a new DoubleSparseNdArray from a DoubleNdArray
    *
-   * @return zero as a Double
+   * @param src the DoubleNdArray
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @return the new Sparse Array
    */
-  public Double zero() {
-    return 0d;
-  }
-
-  /**
-   * Gets a DoubleNdArray containing a zero scalar value
-   *
-   * @return a DoubleNdArray containing a zero scalar value
-   */
-  public DoubleNdArray zeroArray() {
-    return zeroArray;
+  public static DoubleSparseNdArray create(DoubleNdArray src, double defaultValue) {
+    DoubleDataBuffer buffer = DataBuffers.ofDoubles(src.size());
+    src.read(buffer);
+    return new DoubleSparseNdArray(buffer, defaultValue, DimensionalSpace.create(src.shape()));
   }
 
   /**
@@ -220,10 +310,10 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
   /** {@inheritDoc} */
   @Override
   public DoubleNdArray read(DoubleDataBuffer dst) {
-    // zero out buf.
-    Double[] zeros = new Double[(int) shape().size()];
-    Arrays.fill(zeros, 0d);
-    dst.write(zeros);
+    // set buf to the default values, then overwrite with the indices/values.
+    Double[] defaults = new Double[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -244,7 +334,7 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
     List<Double> values = new ArrayList<>();
 
     for (long i = 0; i < src.size(); i++) {
-      if (src.getObject(i) != 0) {
+      if (!src.getObject(i).equals(getDefaultValue())) {
         indices.add(toCoordinates(dimensions, i));
         values.add(src.getObject(i));
       }
@@ -319,5 +409,11 @@ public class DoubleSparseNdArray extends AbstractSparseNdArray<Double, DoubleNdA
   @Override
   public DoubleNdArray copyTo(NdArray<Double> dst) {
     return (DoubleNdArray) super.copyTo(dst);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public DoubleNdArray createDefaultArray() {
+    return NdArrays.scalarOf(getDefaultValue());
   }
 }

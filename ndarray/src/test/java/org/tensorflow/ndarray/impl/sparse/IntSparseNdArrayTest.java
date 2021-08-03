@@ -1,12 +1,14 @@
 package org.tensorflow.ndarray.impl.sparse;
 
 import org.junit.jupiter.api.Test;
+import org.tensorflow.ndarray.FloatNdArray;
 import org.tensorflow.ndarray.IntNdArray;
 import org.tensorflow.ndarray.LongNdArray;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.StdArrays;
 import org.tensorflow.ndarray.buffer.DataBuffers;
+import org.tensorflow.ndarray.buffer.FloatDataBuffer;
 import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.impl.buffer.nio.NioDataBufferFactory;
 import org.tensorflow.ndarray.impl.buffer.raw.RawDataBufferFactory;
@@ -14,6 +16,7 @@ import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.index.Indices;
 
 import java.nio.IntBuffer;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -29,6 +32,8 @@ class IntSparseNdArrayTest {
     0, 0, 2, 0,
     0, 0, 0, 0
   };
+
+  int[][] dense2DArrayDefaultValue = {{1, -1, -1, -1}, {-1, -1, 2, -1}, {-1, -1, -1, -1}};
 
   Shape shape = Shape.of(3, 4);
   LongNdArray indices = StdArrays.ndCopyOf(indicesArray);
@@ -69,6 +74,22 @@ class IntSparseNdArrayTest {
   }
 
   @Test
+  public void testWriteDefaultValue() {
+    // change 0 to -1
+    int[] denseArrayDefaultValue = Arrays.stream(denseArray).map(x -> x == 0 ? -1 : x).toArray();
+
+    IntDataBuffer dataBuffer = RawDataBufferFactory.create(denseArrayDefaultValue, false);
+    // use a zero buffer
+    IntSparseNdArray instance =
+            IntSparseNdArray.create( -1, DimensionalSpace.create(shape));
+    instance.write(dataBuffer);
+
+    assertEquals(indices, instance.getIndices());
+    assertEquals(values, instance.getValues());
+    assertEquals(-1, instance.getInt(2, 0));
+  }
+
+  @Test
   public void testGetObject() {
     int[][] dense2DArray = {{1, 0, 0, 0}, {0, 0, 2, 0}, {0, 0, 0, 0}};
     IntNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
@@ -88,6 +109,19 @@ class IntSparseNdArrayTest {
     IntNdArray ndArray = StdArrays.ndCopyOf(dense2DArray);
     IntSparseNdArray instance =
         new IntSparseNdArray(indices, values, DimensionalSpace.create(shape));
+
+    for (int n = 0; n < ndArray.shape().get(0); n++) {
+      for (int m = 0; m < ndArray.shape().get(1); m++) {
+        assertEquals(ndArray.getInt(n, m), instance.getInt(n, m));
+      }
+    }
+  }
+
+  @Test
+  public void testGetIntDefaultValue() {
+    IntNdArray ndArray = StdArrays.ndCopyOf(dense2DArrayDefaultValue);
+    IntSparseNdArray instance =
+            new IntSparseNdArray(indices, values, -1, DimensionalSpace.create(shape));
 
     for (int n = 0; n < ndArray.shape().get(0); n++) {
       for (int m = 0; m < ndArray.shape().get(1); m++) {
@@ -125,7 +159,7 @@ class IntSparseNdArrayTest {
         new IntSparseNdArray(indices, values, DimensionalSpace.create(shape));
 
     assertThrows(
-        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.zeroArray(), 0, 0));
+        java.nio.ReadOnlyBufferException.class, () -> instance.set(instance.getDefaultArray(), 0, 0));
   }
 
   @Test

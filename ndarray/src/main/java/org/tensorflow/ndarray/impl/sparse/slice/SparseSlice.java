@@ -47,7 +47,7 @@ public abstract class SparseSlice<T, U extends NdArray<T>> extends AbstractSpars
    */
   public SparseSlice(
       AbstractSparseNdArray<T, U> source, long sourcePosition, DimensionalSpace dimensions) {
-    super(dimensions);
+    super(source.getDefaultValue(), dimensions);
     this.source = source;
     this.sourcePosition = sourcePosition;
   }
@@ -135,18 +135,6 @@ public abstract class SparseSlice<T, U extends NdArray<T>> extends AbstractSpars
   @Override
   public NdArray<T> write(DataBuffer<T> src) {
     throw new ReadOnlyBufferException();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public T zero() {
-    return source.zero();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public U zeroArray() {
-    return source.zeroArray();
   }
 
   /** {@inheritDoc} */

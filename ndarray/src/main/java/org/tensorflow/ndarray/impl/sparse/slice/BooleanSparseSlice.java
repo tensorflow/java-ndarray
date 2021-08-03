@@ -77,8 +77,8 @@ public class BooleanSparseSlice extends SparseSlice<Boolean, BooleanNdArray>
   @Override
   public BooleanNdArray read(DataBuffer<Boolean> dst) {
     // zero out buf.
-    Boolean[] zeros = new Boolean[(int) shape().size()];
-    dst.write(zeros);
+    Boolean[] defaults = new Boolean[(int) shape().size()];
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -133,7 +133,7 @@ public class BooleanSparseSlice extends SparseSlice<Boolean, BooleanNdArray>
   }
 
   @Override
-  public int rank() {
-    return super.rank();
+  public BooleanNdArray createDefaultArray() {
+    return source.getDefaultArray();
   }
 }

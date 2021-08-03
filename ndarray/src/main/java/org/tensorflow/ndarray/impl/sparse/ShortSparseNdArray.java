@@ -61,10 +61,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArray>
     implements ShortNdArray {
-  private static final ShortNdArray zeroArray = NdArrays.scalarOf((short) 0);
 
   /**
-   * Creates a ShortSparseNdArray
+   * Creates a ShortSparseNdArray with a default value of zero.
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
    *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
@@ -77,7 +76,26 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   ShortSparseNdArray(LongNdArray indices, ShortNdArray values, DimensionalSpace dimensions) {
-    super(indices, values, dimensions);
+    this(indices, values, (short) 0, dimensions);
+  }
+
+  /**
+   * Creates a ShortSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D ShortNdArray of shape {@code [N]}, which supplies the values for each
+   *     element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter {@code
+   *     values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a value of
+   *     {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  ShortSparseNdArray(
+      LongNdArray indices, ShortNdArray values, short defaultValue, DimensionalSpace dimensions) {
+    super(indices, values, defaultValue, dimensions);
   }
 
   /**
@@ -87,7 +105,18 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   ShortSparseNdArray(ShortDataBuffer dataBuffer, DimensionalSpace dimensions) {
-    super(dimensions);
+    this(dataBuffer, (short) 0, dimensions);
+  }
+
+  /**
+   * Creates a ShortSparseNdArray
+   *
+   * @param dataBuffer a dense dataBuffer used to create the spars array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  ShortSparseNdArray(ShortDataBuffer dataBuffer, short defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
     // use write to set up the indices and values
     write(dataBuffer);
   }
@@ -98,7 +127,17 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
   ShortSparseNdArray(DimensionalSpace dimensions) {
-    super(dimensions);
+    this((short) 0, dimensions);
+  }
+
+  /**
+   * Creates a zero-filled ShortSparseNdArray
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array,
+   */
+  ShortSparseNdArray(short defaultValue, DimensionalSpace dimensions) {
+    super(defaultValue, dimensions);
   }
 
   /**
@@ -121,6 +160,26 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
   }
 
   /**
+   * Creates a new ShortSparseNdArray
+   *
+   * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
+   *     elements in the sparse array that contain nonzero values (elements are zero-indexed). For
+   *     example, {@code indices=[[1,3], [2,4]]} specifies that the elements with indexes of {@code
+   *     [1,3]} and {@code [2,4]} have nonzero values.
+   * @param values A 1-D NdArray of any type and shape {@code [N]}, which supplies the values for
+   *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
+   *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
+   *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the dense object represented by this sparse array.
+   * @return the new Sparse Array
+   */
+  public static ShortSparseNdArray create(
+      LongNdArray indices, ShortNdArray values, short defaultValue, DimensionalSpace dimensions) {
+    return new ShortSparseNdArray(indices, values, defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new ShortSparseNdArray from a data buffer
    *
    * @param dataBuffer the databuffer containing the dense array
@@ -129,6 +188,19 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
    */
   public static ShortSparseNdArray create(ShortDataBuffer dataBuffer, DimensionalSpace dimensions) {
     return new ShortSparseNdArray(dataBuffer, dimensions);
+  }
+
+  /**
+   * Creates a new ShortSparseNdArray from a data buffer
+   *
+   * @param dataBuffer the databuffer containing the dense array
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensional space for the sparse array
+   * @return the new Sparse Array
+   */
+  public static ShortSparseNdArray create(
+      ShortDataBuffer dataBuffer, short defaultValue, DimensionalSpace dimensions) {
+    return new ShortSparseNdArray(dataBuffer, defaultValue, dimensions);
   }
 
   /**
@@ -142,6 +214,17 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
   }
 
   /**
+   * Creates a new empty ShortSparseNdArray from a data buffer
+   *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param dimensions the dimensions array
+   * @return the new Sparse Array
+   */
+  public static ShortSparseNdArray create(short defaultValue, DimensionalSpace dimensions) {
+    return new ShortSparseNdArray(defaultValue, dimensions);
+  }
+
+  /**
    * Creates a new empty ShortSparseNdArray from a short data buffer
    *
    * @param buffer the data buffer
@@ -150,6 +233,18 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
    */
   public static ShortSparseNdArray create(ShortDataBuffer buffer, Shape shape) {
     return new ShortSparseNdArray(buffer, DimensionalSpace.create(shape));
+  }
+
+  /**
+   * Creates a new empty ShortSparseNdArray from a short data buffer
+   *
+   * @param buffer the data buffer
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @param shape the shape of the sparse array.
+   * @return the new Sparse Array
+   */
+  public static ShortSparseNdArray create(ShortDataBuffer buffer, short defaultValue, Shape shape) {
+    return new ShortSparseNdArray(buffer, defaultValue, DimensionalSpace.create(shape));
   }
 
   /**
@@ -165,21 +260,16 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
   }
 
   /**
-   * Gets zero as a Short
+   * Creates a new ShortSparseNdArray from a ShortNdArray
    *
-   * @return zero as a Short
+   * @param src the ShortNdArray
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
+   * @return the new Sparse Array
    */
-  public Short zero() {
-    return (short) 0;
-  }
-
-  /**
-   * Gets a ShortNdArray containing a zero scalar value
-   *
-   * @return a ShortNdArray containing a zero scalar value
-   */
-  public ShortNdArray zeroArray() {
-    return zeroArray;
+  public static ShortSparseNdArray create(ShortNdArray src, short defaultValue) {
+    ShortDataBuffer buffer = DataBuffers.ofShorts(src.size());
+    src.read(buffer);
+    return new ShortSparseNdArray(buffer, defaultValue, DimensionalSpace.create(src.shape()));
   }
 
   /**
@@ -219,10 +309,10 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
   /** {@inheritDoc} */
   @Override
   public ShortNdArray read(ShortDataBuffer dst) {
-    // zero out buf.
-    Short[] zeros = new Short[(int) shape().size()];
-    Arrays.fill(zeros, (short) 0);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Short[] defaults = new Short[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -243,7 +333,7 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
     List<Short> values = new ArrayList<>();
 
     for (short i = 0; i < src.size(); i++) {
-      if (src.getObject(i) != 0) {
+      if (!src.getObject(i).equals(getDefaultValue())) {
         indices.add(toCoordinates(dimensions, i));
         values.add(src.getObject(i));
       }
@@ -318,5 +408,11 @@ public class ShortSparseNdArray extends AbstractSparseNdArray<Short, ShortNdArra
   @Override
   public ShortNdArray copyTo(NdArray<Short> dst) {
     return (ShortNdArray) super.copyTo(dst);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public ShortNdArray createDefaultArray() {
+    return NdArrays.scalarOf(getDefaultValue());
   }
 }

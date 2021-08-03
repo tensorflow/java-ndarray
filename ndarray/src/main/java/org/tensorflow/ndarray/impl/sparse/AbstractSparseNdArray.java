@@ -87,6 +87,19 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   private U values;
 
   /**
+   * Scalar value to set for indices not specified in {@link #getIndices()} This will default to
+   * zero, false, or the empty string depending on the data type of the values.
+   */
+  private T defaultValue;
+
+  /**
+   * Scalar NdArray to use for indices not specified in {@link #getIndices()} This will default to
+   * zero, false, or the empty string depending on the data type of the values, otherwise it will
+   * contain the defaultValue.
+   */
+  private U defaultArray;
+
+  /**
    * Creates an abstract SparseNdArray
    *
    * @param indices A 2-D LongNdArray of shape {@code [N, ndims]}, that specifies the indices of the
@@ -97,12 +110,15 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
    *     each element in indices. For example, given {@code indices=[[1,3], [2,4]]}, the parameter
    *     {@code values=[18, 3.6]} specifies that element {@code [1,3]} of the sparse NdArray has a
    *     value of {@code 18}, and element {@code [2,4]} of the NdArray has a value of {@code 3.6}.
+   * @param defaultValue Scalar value to set for indices not specified in {@link #indices}
    * @param dimensions the dimensional space for the dense object represented by this sparse array.
    */
-  protected AbstractSparseNdArray(LongNdArray indices, U values, DimensionalSpace dimensions) {
+  protected AbstractSparseNdArray(
+      LongNdArray indices, U values, T defaultValue, DimensionalSpace dimensions) {
     super(dimensions);
     this.indices = indices;
     this.values = values;
+    setDefaultValue(defaultValue);
 
     // sanity checks on shapes, indices (shape = {@code [N, ndims]}, where N is the number of values
     // (shape = {@code [N]}}.
@@ -126,10 +142,12 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
   /**
    * Creates an abstract SparseNdArray
    *
+   * @param defaultValue Scalar value to set for indices not specified in {@link #getIndices()}
    * @param dimensions the dimensional space for the dense object represented by this sparse array,
    */
-  protected AbstractSparseNdArray(DimensionalSpace dimensions) {
+  protected AbstractSparseNdArray(T defaultValue, DimensionalSpace dimensions) {
     super(dimensions);
+    setDefaultValue(defaultValue);
   }
 
   /** {@inheritDoc} */
@@ -210,20 +228,6 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
     return slice(positionOf(coordinates, false), dimensions().from(coordinates.length));
   }
 
-  /**
-   * Gets the value of zero for the type that the array contains
-   *
-   * @return the value of zero for the type that the array contains
-   */
-  public abstract T zero();
-
-  /**
-   * Gets an array of the type that the sparse array contains,, with a scalar zero value.
-   *
-   * @return the array of the type that the sparse array contains,, with a scalar zero value.
-   */
-  public abstract U zeroArray();
-
   /** {@inheritDoc} */
   @Override
   public T getObject(long... coordinates) {
@@ -237,7 +241,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
     if (index >= 0) {
       return getValues().getObject(index);
     } else {
-      return zero();
+      return defaultValue;
     }
   }
 
@@ -247,6 +251,7 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
     throw new ReadOnlyBufferException();
   }
 
+  /** {@inheritDoc} */
   @Override
   public NdArray<T> set(NdArray<T> src, long... coordinates) {
     throw new ReadOnlyBufferException();
@@ -479,5 +484,42 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
       }
     }
     return 0;
+  }
+
+  /**
+   * Scalar value to set for indices not specified in {@link #indices}, defaults to zero, false, or
+   * the empty String depending on the data type.
+   */
+  public T getDefaultValue() {
+    return defaultValue;
+  }
+
+  /**
+   * Sets the defaultValue
+   *
+   * @param defaultValue the default value
+   */
+  public void setDefaultValue(T defaultValue) {
+    this.defaultValue = defaultValue;
+    defaultArray = null;
+  }
+
+  /**
+   * Creates the NdArray with the default value as a scalar
+   *
+   * @return the default NdArray of the default value as a scalar
+   */
+  public abstract U createDefaultArray();
+
+  /**
+   * Scalar NdArray to use for indices not specified in {@link #getIndices()} This will default to
+   * zero, false, or the empty string depending on the data type of the values, otherwise it will
+   * contain the {@link #defaultValue}.
+   */
+  public U getDefaultArray() {
+    if (defaultArray == null) {
+      defaultArray = createDefaultArray();
+    }
+    return defaultArray;
   }
 }

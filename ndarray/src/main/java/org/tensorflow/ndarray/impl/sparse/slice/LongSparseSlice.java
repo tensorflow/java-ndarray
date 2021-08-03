@@ -76,10 +76,10 @@ public class LongSparseSlice extends SparseSlice<Long, LongNdArray> implements L
   /** {@inheritDoc} */
   @Override
   public LongNdArray read(DataBuffer<Long> dst) {
-    // zero out buf.
-    Long[] zeros = new Long[(int) shape().size()];
-    Arrays.fill(zeros, 0L);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Long[] defaults = new Long[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicLong i = new AtomicLong();
     getIndices()
@@ -134,7 +134,7 @@ public class LongSparseSlice extends SparseSlice<Long, LongNdArray> implements L
   }
 
   @Override
-  public int rank() {
-    return super.rank();
+  public LongNdArray createDefaultArray() {
+    return source.getDefaultArray();
   }
 }

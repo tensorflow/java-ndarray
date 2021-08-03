@@ -76,10 +76,10 @@ public class DoubleSparseSlice extends SparseSlice<Double, DoubleNdArray> implem
   /** {@inheritDoc} */
   @Override
   public DoubleNdArray read(DataBuffer<Double> dst) {
-    // zero out buf.
-    Double[] zeros = new Double[(int) shape().size()];
-    Arrays.fill(zeros, 0d);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Double[] defaults = new Double[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -134,7 +134,7 @@ public class DoubleSparseSlice extends SparseSlice<Double, DoubleNdArray> implem
   }
 
   @Override
-  public int rank() {
-    return super.rank();
+  public DoubleNdArray createDefaultArray() {
+    return source.getDefaultArray();
   }
 }

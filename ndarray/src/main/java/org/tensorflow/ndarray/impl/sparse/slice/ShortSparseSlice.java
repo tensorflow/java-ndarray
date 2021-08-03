@@ -76,10 +76,10 @@ public class ShortSparseSlice extends SparseSlice<Short, ShortNdArray> implement
   /** {@inheritDoc} */
   @Override
   public ShortNdArray read(DataBuffer<Short> dst) {
-    // zero out buf.
-    Short[] zeros = new Short[(int) shape().size()];
-    Arrays.fill(zeros, (short) 0);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Short[] defaults = new Short[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicLong i = new AtomicLong();
     getIndices()
@@ -134,7 +134,7 @@ public class ShortSparseSlice extends SparseSlice<Short, ShortNdArray> implement
   }
 
   @Override
-  public int rank() {
-    return super.rank();
+  public ShortNdArray createDefaultArray() {
+    return source.getDefaultArray();
   }
 }

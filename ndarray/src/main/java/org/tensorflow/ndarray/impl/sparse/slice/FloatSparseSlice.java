@@ -76,10 +76,10 @@ public class FloatSparseSlice extends SparseSlice<Float, FloatNdArray> implement
   /** {@inheritDoc} */
   @Override
   public FloatNdArray read(DataBuffer<Float> dst) {
-    // zero out buf.
-    Float[] zeros = new Float[(int) shape().size()];
-    Arrays.fill(zeros, 0f);
-    dst.write(zeros);
+    // set the values in buf to the default, then overwrite with indices/values
+    Float[] defaults = new Float[(int) shape().size()];
+    Arrays.fill(defaults, getDefaultValue());
+    dst.write(defaults);
 
     AtomicInteger i = new AtomicInteger();
     getIndices()
@@ -134,7 +134,7 @@ public class FloatSparseSlice extends SparseSlice<Float, FloatNdArray> implement
   }
 
   @Override
-  public int rank() {
-    return super.rank();
+  public FloatNdArray createDefaultArray() {
+    return source.getDefaultArray();
   }
 }
