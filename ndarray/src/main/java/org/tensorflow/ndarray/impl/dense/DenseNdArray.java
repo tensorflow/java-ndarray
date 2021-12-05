@@ -50,7 +50,7 @@ public class DenseNdArray<T> extends AbstractDenseNdArray<T, NdArray<T>> {
   }
 
   @Override
-  protected DataBuffer<T> buffer() {
+  public DataBuffer<T> buffer() {
     return buffer;
   }
 

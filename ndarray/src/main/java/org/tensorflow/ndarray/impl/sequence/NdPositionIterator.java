@@ -65,6 +65,11 @@ class NdPositionIterator implements IndexedPositionIterator {
     this.coords = new long[dimensionIdx + 1];
   }
 
+  NdPositionIterator(DimensionalSpace dimensions, long[] coords) {
+    this.dimensions = dimensions;
+    this.coords = coords;
+  }
+
   private final DimensionalSpace dimensions;
   private long[] coords;
 }

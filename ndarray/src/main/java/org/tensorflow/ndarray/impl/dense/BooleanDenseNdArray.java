@@ -32,6 +32,11 @@ public class BooleanDenseNdArray extends AbstractDenseNdArray<Boolean, BooleanNd
   }
 
   @Override
+  public BooleanDataBuffer buffer() {
+    return buffer;
+  }
+
+  @Override
   public boolean getBoolean(long... indices) {
     return buffer.getBoolean(positionOf(indices, true));
   }
@@ -75,11 +80,6 @@ public class BooleanDenseNdArray extends AbstractDenseNdArray<Boolean, BooleanNd
   @Override
   BooleanDenseNdArray instantiate(DataBuffer<Boolean> buffer, DimensionalSpace dimensions) {
     return new BooleanDenseNdArray((BooleanDataBuffer)buffer, dimensions);
-  }
-
-  @Override
-  protected BooleanDataBuffer buffer() {
-    return buffer;
   }
 
   private final BooleanDataBuffer buffer;

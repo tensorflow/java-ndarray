@@ -32,6 +32,11 @@ public class ByteDenseNdArray extends AbstractDenseNdArray<Byte, ByteNdArray>
   }
 
   @Override
+  public ByteDataBuffer buffer() {
+    return buffer;
+  }
+
+  @Override
   public byte getByte(long... indices) {
     return buffer.getByte(positionOf(indices, true));
   }
@@ -75,11 +80,6 @@ public class ByteDenseNdArray extends AbstractDenseNdArray<Byte, ByteNdArray>
   @Override
   ByteDenseNdArray instantiate(DataBuffer<Byte> buffer, DimensionalSpace dimensions) {
     return new ByteDenseNdArray((ByteDataBuffer)buffer, dimensions);
-  }
-
-  @Override
-  protected ByteDataBuffer buffer() {
-    return buffer;
   }
 
   private final ByteDataBuffer buffer;

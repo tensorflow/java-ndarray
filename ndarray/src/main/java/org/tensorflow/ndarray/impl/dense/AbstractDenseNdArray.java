@@ -31,6 +31,8 @@ import org.tensorflow.ndarray.impl.sequence.SingleElementSequence;
 @SuppressWarnings("unchecked")
 public abstract class AbstractDenseNdArray<T, U extends NdArray<T>> extends AbstractNdArray<T, U> {
 
+  abstract public DataBuffer<T> buffer();
+
   @Override
   public NdArraySequence<U> elements(int dimensionIdx) {
     if (dimensionIdx >= shape().numDimensions()) {
@@ -135,8 +137,6 @@ public abstract class AbstractDenseNdArray<T, U extends NdArray<T>> extends Abst
   protected AbstractDenseNdArray(DimensionalSpace dimensions) {
     super(dimensions);
   }
-
-  abstract protected DataBuffer<T> buffer();
 
   abstract U instantiate(DataBuffer<T> buffer, DimensionalSpace dimensions);
 

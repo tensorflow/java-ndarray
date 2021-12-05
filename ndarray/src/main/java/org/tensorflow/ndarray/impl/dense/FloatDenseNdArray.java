@@ -32,6 +32,11 @@ public class FloatDenseNdArray extends AbstractDenseNdArray<Float, FloatNdArray>
   }
 
   @Override
+  public FloatDataBuffer buffer() {
+    return buffer;
+  }
+
+  @Override
   public float getFloat(long... indices) {
     return buffer.getFloat(positionOf(indices, true));
   }
@@ -75,11 +80,6 @@ public class FloatDenseNdArray extends AbstractDenseNdArray<Float, FloatNdArray>
   @Override
   FloatDenseNdArray instantiate(DataBuffer<Float> buffer, DimensionalSpace dimensions) {
     return new FloatDenseNdArray((FloatDataBuffer) buffer, dimensions);
-  }
-
-  @Override
-  public FloatDataBuffer buffer() {
-    return buffer;
   }
 
   private final FloatDataBuffer buffer;

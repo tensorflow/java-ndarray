@@ -17,6 +17,7 @@
 
 package org.tensorflow.ndarray.impl.sequence;
 
+import java.util.Arrays;
 import java.util.PrimitiveIterator;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 
@@ -27,6 +28,16 @@ public interface PositionIterator extends PrimitiveIterator.OfLong {
       return new NdPositionIterator(dimensions, dimensionIdx);
     }
     return new SequentialPositionIterator(dimensions, dimensionIdx);
+  }
+
+  static PositionIterator create(DimensionalSpace dimensions, long... startCoords) {
+    if (startCoords == null) {
+      throw new IllegalArgumentException();
+    }
+    if (dimensions.isSegmented()) {
+      return new NdPositionIterator(dimensions, startCoords);
+    }
+    return new SequentialPositionIterator(dimensions, startCoords);
   }
 
   static IndexedPositionIterator createIndexed(DimensionalSpace dimensions, int dimensionIdx) {
