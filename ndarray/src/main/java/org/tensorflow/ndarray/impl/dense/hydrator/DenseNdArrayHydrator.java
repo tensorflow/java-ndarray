@@ -1,17 +1,16 @@
 package org.tensorflow.ndarray.impl.dense.hydrator;
 
-import java.util.Arrays;
+import java.util.Iterator;
+
 import org.tensorflow.ndarray.NdArray;
-import org.tensorflow.ndarray.buffer.DataBuffer;
 import org.tensorflow.ndarray.hydrator.NdArrayHydrator;
 import org.tensorflow.ndarray.impl.dense.AbstractDenseNdArray;
-import org.tensorflow.ndarray.impl.sequence.CoordinatesIncrementor;
 import org.tensorflow.ndarray.impl.sequence.PositionIterator;
 
-class DenseNdArrayHydrator<T> implements NdArrayHydrator<T> {
+public class DenseNdArrayHydrator<T> implements NdArrayHydrator<T> {
 
-  public DenseNdArrayHydrator(AbstractDenseNdArray<T, ?> array) {
-    this.denseArray = array;
+  public DenseNdArrayHydrator(AbstractDenseNdArray<T, ? extends NdArray<T>> array) {
+    this.array = array;
   }
 
   @Override
@@ -29,102 +28,74 @@ class DenseNdArrayHydrator<T> implements NdArrayHydrator<T> {
     return new ElementsImpl(coordinates);
   }
 
-  protected class ScalarsImpl implements Scalars<T> {
+  class ScalarsImpl implements Scalars<T> {
 
-    @Override
-    public <U extends Scalars<T>> U at(long... coordinates) {
-      if (coordinates == null || coordinates.length != denseArray.shape().numDimensions()) {
-        throw new IllegalArgumentException(Arrays.toString(coordinates) + " are not valid scalar coordinates for an array of shape " + denseArray
-            .shape());
-      }
-      positionIterator = PositionIterator.create(denseArray.dimensions(), coordinates);
-      return (U) this;
+    public Scalars<T> at(long... coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 0, coordinates);
+      return this;
     }
 
     @Override
-    public <U extends Scalars<T>> U putObject(T scalar) {
-      buffer().setObject(scalar, positionIterator.next());
-      return (U) this;
-    }
-
-    protected ScalarsImpl(long[] coords) {
-      if (coords == null || coords.length == 0) {
-        positionIterator = PositionIterator.create(denseArray.dimensions(), denseArray.shape().numDimensions() - 1);
-      } else {
-        at(coords);
+    public Scalars<T> put(T scalar) {
+      if (scalar == null) {
+        throw new IllegalArgumentException("Scalar value cannot be null");
       }
+      array.buffer().setObject(scalar, positionIterator.nextLong());
+      return this;
     }
 
-    protected PositionIterator positionIterator;
+    ScalarsImpl(long[] coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 0, coordinates);
+    }
+
+    private PositionIterator positionIterator;
   }
 
-  protected class VectorsImpl implements Vectors<T> {
+  class VectorsImpl implements Vectors<T> {
 
     @Override
-    public <U extends Vectors<T>> U at(long... coordinates) {
-      if (coordinates == null || coordinates.length != denseArray.shape().numDimensions() - 1) {
-        throw new IllegalArgumentException(Arrays.toString(coordinates) + " are not valid vector coordinates for an array of shape " + denseArray
-            .shape());
-      }
-      positionIterator = PositionIterator.create(denseArray.dimensions(), coordinates);
-      return (U) this;
+    public Vectors<T> at(long... coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 1, coordinates);
+      return this;
     }
 
     @Override
-    public <U extends Vectors<T>> U putObjects(T... vector) {
-      if (vector == null || vector.length > denseArray.shape().get(-1)) {
-        throw new IllegalArgumentException("Vector should not be null nor exceed " + denseArray.shape().get(-1) + " elements");
-      }
-      buffer().offset(positionIterator.next()).write(vector);
-      return (U) this;
+    public Vectors<T> put(T... vector) {
+      Helpers.validateVectorLength(vector.length, array.shape());
+      array.buffer().offset(positionIterator.nextLong()).write(vector);
+      return this;
     }
 
-    protected VectorsImpl(long[] coords) {
-      if (denseArray.shape().numDimensions() < 1) {
-        throw new IllegalArgumentException("Cannot hydrate a scalar with vectors");
-      }
-      if (coords == null || coords.length == 0) {
-        positionIterator = PositionIterator.create(denseArray.dimensions(), denseArray.shape().numDimensions() - 2);
-      } else {
-        at(coords);
-      }
+    VectorsImpl(long[] coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 1, coordinates);
     }
 
-    protected PositionIterator positionIterator;
+    private PositionIterator positionIterator;
   }
 
-  protected class ElementsImpl implements Elements<T> {
+  class ElementsImpl implements Elements<T> {
 
     @Override
-    public <U extends Elements<T>> U at(long... coordinates) {
-      if (coordinates == null || coordinates.length == 0 || coordinates.length > denseArray.shape().numDimensions()) {
-        throw new IllegalArgumentException(Arrays.toString(coordinates) + " are not valid coordinates for an array of shape " + denseArray
-            .shape());
-      }
-      this.coordinates = new CoordinatesIncrementor(denseArray.shape().asArray(), coordinates);
-      return (U) this;
+    public Elements<T> at(long... coordinates) {
+      this.elementIterator = Helpers.iterateByElement(array, coordinates);
+      return this;
     }
 
     @Override
-    public <U extends Elements<T>> U put(NdArray<T> array) {
-      array.copyTo(denseArray.get(coordinates.coords)); // FIXME use sequence instead?
-      return (U) this;
-    }
-
-    protected ElementsImpl(long[] coords) {
-      if (coords == null || coords.length == 0) {
-        this.coordinates = new CoordinatesIncrementor(denseArray.shape().asArray(), 0);
-      } else {
-        at(coords);
+    public Elements<T> put(NdArray<T> element) {
+      if (element == null) {
+        throw new IllegalArgumentException("Element cannot be null");
       }
+      element.copyTo(elementIterator.next());
+      return this;
     }
 
-    protected CoordinatesIncrementor coordinates;
+    ElementsImpl(long[] coordinates) {
+      this.elementIterator = Helpers.iterateByElement(array, coordinates);
+    }
+
+    private Iterator<? extends NdArray<T>> elementIterator;
   }
 
-  protected final AbstractDenseNdArray<T, ?> denseArray;
-
-  protected <U extends DataBuffer<T>> U buffer() {
-    return (U) denseArray.buffer();
-  }
+  private final AbstractDenseNdArray<T, ? extends NdArray<T>> array;
 }

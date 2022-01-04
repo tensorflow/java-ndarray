@@ -27,6 +27,8 @@ import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.buffer.LongDataBuffer;
 import org.tensorflow.ndarray.buffer.ShortDataBuffer;
 import org.tensorflow.ndarray.hydrator.DoubleNdArrayHydrator;
+import org.tensorflow.ndarray.hydrator.NdArrayHydrator;
+import org.tensorflow.ndarray.impl.dense.AbstractDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.BooleanDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.ByteDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.DenseNdArray;
@@ -35,8 +37,10 @@ import org.tensorflow.ndarray.impl.dense.FloatDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.IntDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.LongDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.ShortDenseNdArray;
+import org.tensorflow.ndarray.impl.dense.hydrator.DenseNdArrayHydrator;
 import org.tensorflow.ndarray.impl.dense.hydrator.DoubleDenseNdArrayHydrator;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
+import org.tensorflow.ndarray.impl.sparse.AbstractSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.BooleanSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.ByteSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.DoubleSparseNdArray;
@@ -45,6 +49,7 @@ import org.tensorflow.ndarray.impl.sparse.IntSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.LongSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.ShortSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.hydrator.DoubleSparseNdArrayHydrator;
+import org.tensorflow.ndarray.impl.sparse.hydrator.SparseNdArrayHydrator;
 
 /** Utility class for instantiating {@link NdArray} objects. */
 public final class NdArrays {
@@ -560,7 +565,7 @@ public final class NdArrays {
   }
 
   /**
-   * Creates an N-dimensional array of doubles of the given shape, with data hydration
+   * Creates an N-dimensional array of doubles of the given shape, hydrating it with data after its allocation
    *
    * @param shape shape of the array
    * @param hydrate initialize the data of the created array, using a hydrator
@@ -586,7 +591,16 @@ public final class NdArrays {
     return DoubleDenseNdArray.create(buffer, shape);
   }
 
-  public static DoubleSparseNdArray sparseOfDoubles(long numValues, Shape shape, Consumer<DoubleNdArrayHydrator> hydrate) {
+  /**
+   * Creates an Sparse array of doubles of the given shape, hydrating it with data after its allocation
+   *
+   * @param shape shape of the array
+   * @param numValues number of double value actually set in the array, others defaulting to the zero value
+   * @param hydrate initialize the data of the created array, using a hydrator
+   * @return new double N-dimensional array
+   * @throws IllegalArgumentException if shape is null or has unknown dimensions
+   */
+  public static DoubleSparseNdArray sparseOfDoubles(Shape shape, long numValues, Consumer<DoubleNdArrayHydrator> hydrate) {
     LongNdArray indices = ofLongs(Shape.of(numValues, shape.numDimensions()));
     DoubleNdArray values = ofDoubles(Shape.of(numValues));
     DoubleSparseNdArray array = DoubleSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
@@ -783,6 +797,21 @@ public final class NdArrays {
   }
 
   /**
+   * Creates an N-dimensional array of objects of the given shape, hydrating it with data after its allocation
+   *
+   * @param clazz class of the data to be stored in this array
+   * @param shape shape of the array
+   * @param hydrate initialize the data of the created array, using a hydrator
+   * @return new N-dimensional array
+   * @throws IllegalArgumentException if shape is null or has unknown dimensions
+   */
+  public static <T> NdArray<T> ofObjects(Class<T> clazz, Shape shape, Consumer<NdArrayHydrator<T>> hydrate) {
+    AbstractDenseNdArray<T, ?> array = (AbstractDenseNdArray<T, ?>)ofObjects(clazz, shape);
+    hydrate.accept(new DenseNdArrayHydrator<T>(array));
+    return array;
+  }
+
+  /**
    * Wraps a buffer in an N-dimensional array of a given shape.
    *
    * @param shape shape of the array
@@ -794,6 +823,24 @@ public final class NdArrays {
    */
   public static <T> NdArray<T> wrap(Shape shape, DataBuffer<T> buffer) {
     return DenseNdArray.wrap(buffer, shape);
+  }
+
+  /**
+   * Creates an Sparse array of objects of the given shape, hydrating it with data after its allocation
+   *
+   * @param type the class type represented by this sparse array.
+   * @param shape shape of the array
+   * @param numValues number of values actually set in the array, others defaulting to the zero value
+   * @param hydrate initialize the data of the created array, using a hydrator
+   * @return new N-dimensional array
+   * @throws IllegalArgumentException if shape is null or has unknown dimensions
+   */
+  public static <T> NdArray<T> sparseOfObjects(Class<T> type, Shape shape, long numValues, Consumer<NdArrayHydrator<T>> hydrate) {
+    LongNdArray indices = ofLongs(Shape.of(numValues, shape.numDimensions()));
+    NdArray<T> values = ofObjects(type, Shape.of(numValues));
+    AbstractSparseNdArray<T, ?> array = (AbstractSparseNdArray<T, ?>)sparseOfObjects(type, indices, values, shape);
+    hydrate.accept(new SparseNdArrayHydrator<T>(array));
+    return array;
   }
 
   /**

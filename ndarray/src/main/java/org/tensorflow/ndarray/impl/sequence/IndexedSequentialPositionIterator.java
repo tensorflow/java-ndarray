@@ -17,6 +17,8 @@
 
 package org.tensorflow.ndarray.impl.sequence;
 
+import java.util.Arrays;
+
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 
 class IndexedSequentialPositionIterator extends SequentialPositionIterator implements IndexedPositionIterator {
@@ -24,27 +26,28 @@ class IndexedSequentialPositionIterator extends SequentialPositionIterator imple
   @Override
   public void forEachIndexed(CoordsLongConsumer consumer) {
     while (hasNext()) {
-      consumer.consume(coords, nextLong());
-      incrementCoords();
+      consumer.consume(coords, super.nextLong());
+      dimensions.incrementCoordinates(coords);
     }
   }
 
-  private void incrementCoords() {
-    for (int i = coords.length - 1; i >= 0; --i) {
-      if (coords[i] < shape[i] - 1) {
-        coords[i] += 1L;
-        return;
-      }
-      coords[i] = 0L;
-    }
+  @Override
+  public long nextLong() {
+    long tmp = super.nextLong();
+    dimensions.incrementCoordinates(coords);
+    return tmp;
   }
 
   IndexedSequentialPositionIterator(DimensionalSpace dimensions, int dimensionIdx) {
-    super(dimensions, dimensionIdx);
-    this.shape = dimensions.shape().asArray();
-    this.coords = new long[dimensionIdx + 1];
+    this(dimensions, new long[dimensionIdx + 1]);
   }
 
-  private final long[] shape;
-  private long[] coords;
+  IndexedSequentialPositionIterator(DimensionalSpace dimensions, long[] coords) {
+    super(dimensions, coords);
+    this.dimensions = dimensions;
+    this.coords = Arrays.copyOf(coords, coords.length);
+  }
+
+  private final DimensionalSpace dimensions;
+  private final long[] coords;
 }

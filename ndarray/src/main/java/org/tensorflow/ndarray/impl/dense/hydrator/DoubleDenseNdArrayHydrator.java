@@ -1,66 +1,104 @@
 package org.tensorflow.ndarray.impl.dense.hydrator;
 
-import org.tensorflow.ndarray.buffer.DoubleDataBuffer;
-import org.tensorflow.ndarray.hydrator.DoubleNdArrayHydrator;
-import org.tensorflow.ndarray.impl.dense.DoubleDenseNdArray;
+import java.util.Iterator;
 
-public class DoubleDenseNdArrayHydrator extends DenseNdArrayHydrator<Double> implements DoubleNdArrayHydrator {
+import org.tensorflow.ndarray.DoubleNdArray;
+import org.tensorflow.ndarray.hydrator.DoubleNdArrayHydrator;
+import org.tensorflow.ndarray.hydrator.NdArrayHydrator;
+import org.tensorflow.ndarray.impl.dense.DoubleDenseNdArray;
+import org.tensorflow.ndarray.impl.sequence.PositionIterator;
+
+public class DoubleDenseNdArrayHydrator implements DoubleNdArrayHydrator {
 
   public DoubleDenseNdArrayHydrator(DoubleDenseNdArray array) {
-    super(array);
+    this.array = array;
   }
 
   @Override
-  public DoubleNdArrayHydrator.Scalars byScalars(long... coordinates) {
+  public Scalars byScalars(long... coordinates) {
     return new ScalarsImpl(coordinates);
   }
 
   @Override
-  public DoubleNdArrayHydrator.Vectors byVectors(long... coordinates) {
+  public Vectors byVectors(long... coordinates) {
     return new VectorsImpl(coordinates);
   }
 
   @Override
-  protected DoubleDataBuffer buffer() {
-    return super.buffer();
+  public Elements byElements(long... coordinates) {
+    return new ElementsImpl(coordinates);
   }
 
-  private class ScalarsImpl extends DenseNdArrayHydrator<Double>.ScalarsImpl implements DoubleNdArrayHydrator.Scalars {
+  @Override
+  public NdArrayHydrator<Double> boxed() {
+    return new DenseNdArrayHydrator<Double>(array);
+  }
 
-    @Override
-    public DoubleNdArrayHydrator.Scalars at(long... coordinates) {
-      return super.at(coordinates);
-    }
+  class ScalarsImpl implements Scalars {
 
-    @Override
-    public DoubleNdArrayHydrator.Scalars put(double scalar) {
-      buffer().setDouble(scalar, positionIterator.next());
+    public Scalars at(long... coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 0, coordinates);
       return this;
     }
 
-    private ScalarsImpl(long[] coords) {
-      super(coords);
+    @Override
+    public Scalars put(double scalar) {
+      array.buffer().setObject(scalar, positionIterator.nextLong());
+      return this;
     }
+
+    ScalarsImpl(long[] coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 0, coordinates);
+    }
+
+    private PositionIterator positionIterator;
   }
 
-  private class VectorsImpl extends DenseNdArrayHydrator<Double>.VectorsImpl implements DoubleNdArrayHydrator.Vectors {
+  class VectorsImpl implements Vectors {
 
     @Override
-    public DoubleNdArrayHydrator.Vectors at(long... coordinates) {
-      return super.at(coordinates);
+    public Vectors at(long... coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 1, coordinates);
+      return this;
     }
 
     @Override
-    public DoubleNdArrayHydrator.Vectors put(double... vector) {
-      if (vector == null || vector.length > denseArray.shape().get(-1)) {
-        throw new IllegalArgumentException("Vector should not be null nor exceed " + denseArray.shape().get(-1) + " elements");
+    public Vectors put(double... vector) {
+      Helpers.validateVectorLength(vector.length, array.shape());
+      array.buffer().offset(positionIterator.nextLong()).write(vector);
+      return this;
+    }
+
+    VectorsImpl(long[] coordinates) {
+      positionIterator = Helpers.iterateByPosition(array, 1, coordinates);
+    }
+
+    private PositionIterator positionIterator;
+  }
+
+  class ElementsImpl implements Elements {
+
+    @Override
+    public Elements at(long... coordinates) {
+      this.elementIterator = Helpers.iterateByElement(array, coordinates);
+      return this;
+    }
+
+    @Override
+    public Elements put(DoubleNdArray element) {
+      if (element == null) {
+        throw new IllegalArgumentException("Element cannot be null");
       }
-      buffer().offset(positionIterator.next()).write(vector);
+      element.copyTo(elementIterator.next());
       return this;
     }
 
-    private VectorsImpl(long[] coords) {
-      super(coords);
+    ElementsImpl(long[] coordinates) {
+      this.elementIterator = Helpers.iterateByElement(array, coordinates);
     }
+
+    private Iterator<DoubleNdArray> elementIterator;
   }
+
+  private final DoubleDenseNdArray array;
 }

@@ -31,9 +31,6 @@ public interface PositionIterator extends PrimitiveIterator.OfLong {
   }
 
   static PositionIterator create(DimensionalSpace dimensions, long... startCoords) {
-    if (startCoords == null) {
-      throw new IllegalArgumentException();
-    }
     if (dimensions.isSegmented()) {
       return new NdPositionIterator(dimensions, startCoords);
     }
@@ -45,6 +42,13 @@ public interface PositionIterator extends PrimitiveIterator.OfLong {
       return new NdPositionIterator(dimensions, dimensionIdx);
     }
     return new IndexedSequentialPositionIterator(dimensions, dimensionIdx);
+  }
+
+  static IndexedPositionIterator createIndexed(DimensionalSpace dimensions, long... startCoords) {
+    if (dimensions.isSegmented()) {
+      return new NdPositionIterator(dimensions, startCoords);
+    }
+    return new IndexedSequentialPositionIterator(dimensions, startCoords);
   }
 
   static PositionIterator sequence(long stride, long end) {
