@@ -167,7 +167,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.0</version>
+            <version>3.9.0</version>
             <configuration>
               <showWarnings>true</showWarnings>
               <fork>true</fork> <!-- Required for JDK16+ -->
