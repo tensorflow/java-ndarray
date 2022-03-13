@@ -344,9 +344,9 @@ public class StringSparseNdArrayTest {
   public void testToString() {
     SparseNdArray<String, NdArray<String>> instance =
             new SparseNdArray<>(String.class, indices, values, DimensionalSpace.create(shape));
-    Assertions.assertEquals("SparseNdArray(defaultValue=<null>,numElements=2,shape=[3, 4])",instance.toString());
+    Assertions.assertEquals("SparseNdArray(type=String,defaultValue=<null>,numElements=2,shape=[3, 4])",instance.toString());
     instance = new SparseNdArray<>(
                     String.class, indices, values, "a default", DimensionalSpace.create(shape));
-    Assertions.assertEquals("SparseNdArray(defaultValue='a default',numElements=2,shape=[3, 4])",instance.toString());
+    Assertions.assertEquals("SparseNdArray(type=String,defaultValue='a default',numElements=2,shape=[3, 4])",instance.toString());
   }
 }
