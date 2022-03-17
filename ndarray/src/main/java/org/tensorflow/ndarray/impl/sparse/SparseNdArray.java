@@ -407,12 +407,12 @@ public class SparseNdArray<T, U extends NdArray<T>> extends AbstractSparseNdArra
     T defaultVal = getDefaultValue();
     if (defaultVal == null) {
       strDefault = "<null>";
-    } else if (defaultVal instanceof Number){
+    } else if (defaultVal instanceof Number) {
       strDefault = defaultVal.toString();
     } else {
       strDefault = "'" + defaultVal + "'";
     }
-    return this.getClass().getSimpleName() + "(type="+type.getSimpleName()+",defaultValue=" + strDefault
-            + ",numElements=" + numElements + ",shape=" + this.shape() + ")";
+    return this.getClass().getSimpleName() + "(type="+type.getSimpleName()+", defaultValue=" + strDefault
+            + ", numElements=" + numElements + ", shape=" + this.shape() + ")";
   }
 }

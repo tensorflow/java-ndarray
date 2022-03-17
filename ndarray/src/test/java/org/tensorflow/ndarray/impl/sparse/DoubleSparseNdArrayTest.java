@@ -310,8 +310,8 @@ class DoubleSparseNdArrayTest {
     DoubleSparseNdArray instance =
             DoubleSparseNdArray.create(DimensionalSpace.create(ndArray.shape()));
     instance.fromDense(ndArray);
-    Assertions.assertEquals("DoubleSparseNdArray(defaultValue=0.0,numElements=2,shape=[3, 4])",instance.toString());
+    Assertions.assertEquals("DoubleSparseNdArray(defaultValue=0.0, numElements=2, shape=[3, 4])",instance.toString());
     DoubleSparseNdArray empty = DoubleSparseNdArray.create(DimensionalSpace.create(Shape.of(5)));
-    Assertions.assertEquals("DoubleSparseNdArray(defaultValue=0.0,numElements=0,shape=[5])",empty.toString());
+    Assertions.assertEquals("DoubleSparseNdArray(defaultValue=0.0, numElements=0, shape=[5])",empty.toString());
   }
 }

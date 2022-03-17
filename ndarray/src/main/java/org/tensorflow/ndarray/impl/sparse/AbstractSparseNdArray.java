@@ -413,13 +413,13 @@ public abstract class AbstractSparseNdArray<T, U extends NdArray<T>> extends Abs
     String strDefault;
     if (defaultValue == null) {
       strDefault = "<null>";
-    } else if (defaultValue instanceof Number){
+    } else if (defaultValue instanceof Number) {
       strDefault = defaultValue.toString();
     } else {
       strDefault = "'" + defaultValue + "'";
     }
     return this.getClass().getSimpleName() + "(defaultValue=" + strDefault
-            + ",numElements=" + numElements + ",shape=" + this.shape() + ")";
+            + ", numElements=" + numElements + ", shape=" + this.shape() + ")";
   }
 
   /**
