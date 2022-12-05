@@ -17,6 +17,7 @@
 
 package org.tensorflow.ndarray.impl.sequence;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 
@@ -33,7 +34,7 @@ class NdPositionIterator implements IndexedPositionIterator {
       throw new NoSuchElementException();
     }
     long position = dimensions.positionOf(coords);
-    increment();
+    incrementCoords();
     return position;
   }
 
@@ -41,33 +42,23 @@ class NdPositionIterator implements IndexedPositionIterator {
   public void forEachIndexed(CoordsLongConsumer consumer) {
     while (hasNext()) {
       consumer.consume(coords, dimensions.positionOf(coords));
-      increment();
+      incrementCoords();
     }
   }
 
-  private void increment() {
-    if (!increment(coords, dimensions)) {
+  private void incrementCoords() {
+    if (!dimensions.incrementCoordinates(coords)) {
       coords = null;
     }
   }
 
-  static boolean increment(long[] coords, DimensionalSpace dimensions) {
-    for (int i = coords.length - 1; i >= 0; --i) {
-      if ((coords[i] = (coords[i] + 1) % dimensions.get(i).numElements()) > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   NdPositionIterator(DimensionalSpace dimensions, int dimensionIdx) {
-    this.dimensions = dimensions;
-    this.coords = new long[dimensionIdx + 1];
+    this(dimensions, new long[dimensionIdx + 1]);
   }
 
   NdPositionIterator(DimensionalSpace dimensions, long[] coords) {
     this.dimensions = dimensions;
-    this.coords = coords;
+    this.coords = Arrays.copyOf(coords, coords.length);
   }
 
   private final DimensionalSpace dimensions;

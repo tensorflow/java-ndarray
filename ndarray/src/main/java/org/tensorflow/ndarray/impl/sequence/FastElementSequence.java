@@ -34,8 +34,12 @@ import org.tensorflow.ndarray.impl.AbstractNdArray;
 public final class FastElementSequence<T, U extends NdArray<T>> implements NdArraySequence<U> {
 
   public FastElementSequence(AbstractNdArray<T, U> ndArray, int dimensionIdx, U element, DataBufferWindow<?> elementWindow) {
+    this(ndArray, new long[dimensionIdx + 1], element, elementWindow);
+  }
+
+  public FastElementSequence(AbstractNdArray<T, U> ndArray, long[] startCoords, U element, DataBufferWindow<?> elementWindow) {
     this.ndArray = ndArray;
-    this.dimensionIdx = dimensionIdx;
+    this.startCoords = startCoords;
     this.element = element;
     this.elementWindow = elementWindow;
   }
@@ -47,7 +51,7 @@ public final class FastElementSequence<T, U extends NdArray<T>> implements NdArr
 
   @Override
   public void forEachIndexed(BiConsumer<long[], U> consumer) {
-    PositionIterator.createIndexed(ndArray.dimensions(), dimensionIdx).forEachIndexed((long[] coords, long position) -> {
+    PositionIterator.createIndexed(ndArray.dimensions(), startCoords).forEachIndexed((long[] coords, long position) -> {
       elementWindow.slideTo(position);
       consumer.accept(coords, element);
     });
@@ -55,7 +59,7 @@ public final class FastElementSequence<T, U extends NdArray<T>> implements NdArr
 
   @Override
   public NdArraySequence<U> asSlices() {
-    return new SlicingElementSequence<T, U>(ndArray, dimensionIdx);
+    return new SlicingElementSequence<T, U>(ndArray, startCoords);
   }
 
   private class SequenceIterator implements Iterator<U> {
@@ -71,11 +75,11 @@ public final class FastElementSequence<T, U extends NdArray<T>> implements NdArr
         return element;
       }
 
-      private final PositionIterator positionIterator = PositionIterator.create(ndArray.dimensions(), dimensionIdx);
+      private final PositionIterator positionIterator = PositionIterator.create(ndArray.dimensions(), startCoords);
   }
 
   private final AbstractNdArray<T, U> ndArray;
-  private final int dimensionIdx;
+  private final long[] startCoords;
   private final U element;
   private final DataBufferWindow<?> elementWindow;
 }

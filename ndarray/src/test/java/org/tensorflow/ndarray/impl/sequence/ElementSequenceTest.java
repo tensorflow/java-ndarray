@@ -98,7 +98,7 @@ public class ElementSequenceTest {
   public void fastElementSequenceReturnsSameInstance() {
     IntNdArray array = NdArrays.ofInts(Shape.of(2, 3, 2));
     IntNdArray element = array.get(0);
-    NdArraySequence<IntNdArray> sequence = new FastElementSequence(
+    NdArraySequence<IntNdArray> sequence = new FastElementSequence<Integer, IntNdArray>(
         (AbstractNdArray<Integer, IntNdArray>) array, 1, element, mockDataBufferWindow(2));
     sequence.forEach(e -> {
       if (e != element) {
