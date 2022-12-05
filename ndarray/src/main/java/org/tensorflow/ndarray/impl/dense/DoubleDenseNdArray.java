@@ -32,6 +32,11 @@ public class DoubleDenseNdArray extends AbstractDenseNdArray<Double, DoubleNdArr
   }
 
   @Override
+  public DoubleDataBuffer buffer() {
+    return buffer;
+  }
+
+  @Override
   public double getDouble(long... indices) {
     return buffer.getDouble(positionOf(indices, true));
   }
@@ -75,11 +80,6 @@ public class DoubleDenseNdArray extends AbstractDenseNdArray<Double, DoubleNdArr
   @Override
   DoubleDenseNdArray instantiate(DataBuffer<Double> buffer, DimensionalSpace dimensions) {
     return new DoubleDenseNdArray((DoubleDataBuffer)buffer, dimensions);
-  }
-
-  @Override
-  protected DoubleDataBuffer buffer() {
-    return buffer;
   }
 
   private final DoubleDataBuffer buffer;

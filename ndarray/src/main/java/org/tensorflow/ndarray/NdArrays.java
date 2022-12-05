@@ -16,6 +16,7 @@ limitations under the License.
 */
 package org.tensorflow.ndarray;
 
+import java.util.function.Consumer;
 import org.tensorflow.ndarray.buffer.BooleanDataBuffer;
 import org.tensorflow.ndarray.buffer.ByteDataBuffer;
 import org.tensorflow.ndarray.buffer.DataBuffer;
@@ -25,6 +26,7 @@ import org.tensorflow.ndarray.buffer.FloatDataBuffer;
 import org.tensorflow.ndarray.buffer.IntDataBuffer;
 import org.tensorflow.ndarray.buffer.LongDataBuffer;
 import org.tensorflow.ndarray.buffer.ShortDataBuffer;
+import org.tensorflow.ndarray.hydrator.DoubleNdArrayHydrator;
 import org.tensorflow.ndarray.impl.dense.BooleanDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.ByteDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.DenseNdArray;
@@ -33,6 +35,7 @@ import org.tensorflow.ndarray.impl.dense.FloatDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.IntDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.LongDenseNdArray;
 import org.tensorflow.ndarray.impl.dense.ShortDenseNdArray;
+import org.tensorflow.ndarray.impl.dense.hydrator.DoubleDenseNdArrayHydrator;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 import org.tensorflow.ndarray.impl.sparse.BooleanSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.ByteSparseNdArray;
@@ -41,6 +44,7 @@ import org.tensorflow.ndarray.impl.sparse.FloatSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.IntSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.LongSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.ShortSparseNdArray;
+import org.tensorflow.ndarray.impl.sparse.hydrator.DoubleSparseNdArrayHydrator;
 
 /** Utility class for instantiating {@link NdArray} objects. */
 public final class NdArrays {
@@ -556,6 +560,20 @@ public final class NdArrays {
   }
 
   /**
+   * Creates an N-dimensional array of doubles of the given shape, with data hydration
+   *
+   * @param shape shape of the array
+   * @param hydrate initialize the data of the created array, using a hydrator
+   * @return new double N-dimensional array
+   * @throws IllegalArgumentException if shape is null or has unknown dimensions
+   */
+  public static DoubleNdArray ofDoubles(Shape shape, Consumer<DoubleNdArrayHydrator> hydrate) {
+    DoubleDenseNdArray array = (DoubleDenseNdArray)ofDoubles(shape);
+    hydrate.accept(new DoubleDenseNdArrayHydrator(array));
+    return array;
+  }
+
+  /**
    * Wraps a buffer in a double N-dimensional array of a given shape.
    *
    * @param shape shape of the array
@@ -566,6 +584,14 @@ public final class NdArrays {
    */
   public static DoubleNdArray wrap(Shape shape, DoubleDataBuffer buffer) {
     return DoubleDenseNdArray.create(buffer, shape);
+  }
+
+  public static DoubleSparseNdArray sparseOfDoubles(long numValues, Shape shape, Consumer<DoubleNdArrayHydrator> hydrate) {
+    LongNdArray indices = ofLongs(Shape.of(numValues, shape.numDimensions()));
+    DoubleNdArray values = ofDoubles(Shape.of(numValues));
+    DoubleSparseNdArray array = DoubleSparseNdArray.create(indices, values, DimensionalSpace.create(shape));
+    hydrate.accept(new DoubleSparseNdArrayHydrator(array));
+    return array;
   }
 
   /**

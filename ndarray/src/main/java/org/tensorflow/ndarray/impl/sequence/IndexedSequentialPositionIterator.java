@@ -43,9 +43,8 @@ class IndexedSequentialPositionIterator extends SequentialPositionIterator imple
     super(dimensions, dimensionIdx);
     this.shape = dimensions.shape().asArray();
     this.coords = new long[dimensionIdx + 1];
-    //this.coordsIncrementor = new CoordinatesIncrementor(dimensions.shape().asArray(), dimensionIdx);
   }
 
   private final long[] shape;
-  private final long[] coords;
+  private long[] coords;
 }

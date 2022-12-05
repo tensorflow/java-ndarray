@@ -17,6 +17,7 @@
 
 package org.tensorflow.ndarray.impl.sequence;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 
@@ -24,7 +25,7 @@ class SequentialPositionIterator implements PositionIterator {
 
   @Override
   public boolean hasNext() {
-    return index < end;
+    return pos < end;
   }
 
   @Override
@@ -32,7 +33,7 @@ class SequentialPositionIterator implements PositionIterator {
     if (!hasNext()) {
       throw new NoSuchElementException();
     }
-    return stride * index++;
+    return stride * pos++;
   }
 
   SequentialPositionIterator(DimensionalSpace dimensions, int dimensionIdx) {
@@ -42,6 +43,12 @@ class SequentialPositionIterator implements PositionIterator {
     }
     this.stride = dimensions.get(dimensionIdx).elementSize();
     this.end = size;
+    this.pos = 0L;
+  }
+
+  SequentialPositionIterator(DimensionalSpace dimensions, long[] coords) {
+    this(dimensions, coords.length - 1);
+    this.pos = dimensions.positionOf(coords) / stride;
   }
 
   SequentialPositionIterator(long stride, long end) {
@@ -51,5 +58,5 @@ class SequentialPositionIterator implements PositionIterator {
 
   private final long stride;
   private final long end;
-  private long index;
+  private long pos;
 }

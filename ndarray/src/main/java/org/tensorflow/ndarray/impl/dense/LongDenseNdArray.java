@@ -32,6 +32,11 @@ public class LongDenseNdArray extends AbstractDenseNdArray<Long, LongNdArray>
   }
 
   @Override
+  public LongDataBuffer buffer() {
+    return buffer;
+  }
+
+  @Override
   public long getLong(long... indices) {
     return buffer.getLong(positionOf(indices, true));
   }
@@ -75,11 +80,6 @@ public class LongDenseNdArray extends AbstractDenseNdArray<Long, LongNdArray>
   @Override
   LongDenseNdArray instantiate(DataBuffer<Long> buffer, DimensionalSpace dimensions) {
     return new LongDenseNdArray((LongDataBuffer)buffer, dimensions);
-  }
-
-  @Override
-  protected LongDataBuffer buffer() {
-    return buffer;
   }
 
   private final LongDataBuffer buffer;

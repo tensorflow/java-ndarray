@@ -17,9 +17,11 @@
 
 package org.tensorflow.ndarray.impl.sequence;
 
-final class CoordinatesIncrementor {
+import java.util.Arrays;
 
-  boolean increment() {
+public final class CoordinatesIncrementor {
+
+  public boolean increment() {
     for (int i = coords.length - 1; i >= 0; --i) {
       if ((coords[i] = (coords[i] + 1) % shape[i]) > 0) {
         return true;
@@ -28,11 +30,19 @@ final class CoordinatesIncrementor {
     return false;
   }
 
-  CoordinatesIncrementor(long[] shape, int dimensionIdx) {
+  public CoordinatesIncrementor(long[] shape, int dimensionIdx) {
     this.shape = shape;
     this.coords = new long[dimensionIdx + 1];
   }
 
-  final long[] shape;
-  final long[] coords;
+  public CoordinatesIncrementor(long[] shape, long[] coords) {
+    if (coords.length == 0 || coords.length > shape.length) {
+      throw new IllegalArgumentException();
+    }
+    this.shape = shape;
+    this.coords = Arrays.copyOf(coords, coords.length);
+  }
+
+  public final long[] shape;
+  public final long[] coords;
 }

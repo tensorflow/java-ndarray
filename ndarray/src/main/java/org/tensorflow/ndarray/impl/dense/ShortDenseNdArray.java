@@ -32,6 +32,11 @@ public class ShortDenseNdArray extends AbstractDenseNdArray<Short, ShortNdArray>
   }
 
   @Override
+  public ShortDataBuffer buffer() {
+    return buffer;
+  }
+
+  @Override
   public short getShort(long... indices) {
     return buffer.getShort(positionOf(indices, true));
   }
@@ -75,11 +80,6 @@ public class ShortDenseNdArray extends AbstractDenseNdArray<Short, ShortNdArray>
   @Override
   ShortDenseNdArray instantiate(DataBuffer<Short> buffer, DimensionalSpace dimensions) {
     return new ShortDenseNdArray((ShortDataBuffer)buffer, dimensions);
-  }
-
-  @Override
-  protected ShortDataBuffer buffer() {
-    return buffer;
   }
 
   private final ShortDataBuffer buffer;
