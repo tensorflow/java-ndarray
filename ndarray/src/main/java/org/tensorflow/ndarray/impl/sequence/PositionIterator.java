@@ -17,9 +17,9 @@
 
 package org.tensorflow.ndarray.impl.sequence;
 
-import java.util.Arrays;
-import java.util.PrimitiveIterator;
 import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
+
+import java.util.PrimitiveIterator;
 
 public interface PositionIterator extends PrimitiveIterator.OfLong {
 

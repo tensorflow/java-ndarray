@@ -1,9 +1,20 @@
-package org.tensorflow.ndarray.hydrator;
+/*
+ Copyright 2022 The TensorFlow Authors. All Rights Reserved.
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-import java.util.function.Consumer;
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ =======================================================================
+ */
+package org.tensorflow.ndarray.initializer;
 
 import org.junit.jupiter.api.Test;
 import org.tensorflow.ndarray.DoubleNdArray;
@@ -11,14 +22,18 @@ import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.StdArrays;
 
-public abstract class DoubleNdArrayHydratorTestBase {
+import java.util.function.Consumer;
 
-  protected abstract DoubleNdArray newArray(Shape shape, long numValues, Consumer<DoubleNdArrayHydrator> hydrate);
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public abstract class DoubleNdArrayInitializerTestBase {
+
+  protected abstract DoubleNdArray newArray(Shape shape, long numValues, Consumer<DoubleNdArrayInitializer> init);
 
   @Test
-  public void hydrateNdArrayByScalars() {
-    DoubleNdArray array = newArray(Shape.of(3, 2, 3), 14, hydrator -> {
-      hydrator
+  public void initializeNdArrayByScalars() {
+    DoubleNdArray array = newArray(Shape.of(3, 2, 3), 15, init -> {
+      init
           .byScalars()
             .put(0.0)
             .put(0.1)
@@ -29,7 +44,7 @@ public abstract class DoubleNdArrayHydratorTestBase {
             .put(1.0)
             .put(1.1)
             .put(1.2)
-          .at(2, 0, 0)
+          .skipTo(2, 0, 0)
             .put(2.0)
             .put(2.1)
             .put(2.2)
@@ -44,13 +59,13 @@ public abstract class DoubleNdArrayHydratorTestBase {
         {{2.0, 2.1, 2.2}, {2.3, 2.4, 2.5}}
     }), array);
 
-    array = newArray(Shape.of(3, 2), 4, hydrator -> {
-      hydrator
+    array = newArray(Shape.of(3, 2), 4, init -> {
+      init
           .byScalars()
             .put(10.0)
             .put(20.0)
             .put(30.0)
-          .at(2, 1)
+          .skipTo(2, 1)
             .put(40.0);
     });
 
@@ -58,14 +73,14 @@ public abstract class DoubleNdArrayHydratorTestBase {
   }
 
   @Test
-  public void hydrateNdArrayByVectors() {
-    DoubleNdArray array = newArray(Shape.of(3, 2, 3), 14, hydrator -> {
-      hydrator
+  public void initializeNdArrayByVectors() {
+    DoubleNdArray array = newArray(Shape.of(3, 2, 3), 15, init -> {
+      init
           .byVectors()
             .put(0.0, 0.1, 0.2)
             .put(0.3, 0.4, 0.5)
             .put(1.0, 1.1, 1.2)
-          .at(2, 0)
+          .skipTo(2, 0)
             .put(2.0, 2.1, 2.2)
             .put(2.3, 2.4, 2.5);
     });
@@ -76,12 +91,12 @@ public abstract class DoubleNdArrayHydratorTestBase {
         {{2.0, 2.1, 2.2}, {2.3, 2.4, 2.5}}
     }), array);
 
-    array = newArray(Shape.of(3, 2), 5, hydrator -> {
-      hydrator
+    array = newArray(Shape.of(3, 2), 5, init -> {
+      init
           .byVectors()
             .put(10.0, 20.0)
             .put(30.0)
-          .at(2)
+          .skipTo(2)
             .put(40.0, 50.0);
     });
 
@@ -89,27 +104,15 @@ public abstract class DoubleNdArrayHydratorTestBase {
   }
 
   @Test
-  public void vectorCannotBeEmpty() {
-    try {
-      newArray(Shape.of(3, 2), 1, hydrator -> hydrator.byVectors().put());
-      fail();
-    } catch (IllegalArgumentException e) {
-      // ok
-    }
-  }
-
-  @Test
-  public void hydrateNdArrayByElements() {
-    DoubleNdArray array = newArray(Shape.of(3, 2, 3), 14, hydrator -> {
-      hydrator
-          .byElements()
+  public void initializeNdArrayByElements() {
+    DoubleNdArray array = newArray(Shape.of(3, 2, 3), 12, init -> {
+      init
+          .byElements(0)
             .put(StdArrays.ndCopyOf(new double[][]{
                 {0.0, 0.1, 0.2},
                 {0.3, 0.4, 0.5}
             }))
-          .at(1, 0)
-            .put(NdArrays.vectorOf(1.0, 1.1, 1.2))
-          .at(2)
+          .skipTo(2)
             .put(StdArrays.ndCopyOf(new double[][]{
                 {2.0, 2.1, 2.2},
                 {2.3, 2.4, 2.5}
@@ -118,24 +121,27 @@ public abstract class DoubleNdArrayHydratorTestBase {
 
     assertEquals(StdArrays.ndCopyOf(new double[][][]{
         {{0.0, 0.1, 0.2}, {0.3, 0.4, 0.5}},
-        {{1.0, 1.1, 1.2}, {0.0, 0.0, 0.0}},
+        {{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}},
         {{2.0, 2.1, 2.2}, {2.3, 2.4, 2.5}}
     }), array);
 
     DoubleNdArray vector = NdArrays.vectorOf(10.0, 20.0);
-    DoubleNdArray scalar = NdArrays.scalarOf(30.0);
 
-    array = newArray(Shape.of(4, 2), 7, hydrator -> {
-      hydrator
-          .byElements()
+    array = newArray(Shape.of(4, 2, 2), 8, init -> {
+      init
+          .byElements(1)
             .put(vector)
             .put(vector)
-          .at(2, 1)
-            .put(scalar)
-          .at(3)
+            .put(vector)
+          .skipTo(3, 1)
             .put(vector);
     });
 
-    assertEquals(StdArrays.ndCopyOf(new double[][]{{10.0, 20.0}, {10.0, 20.0}, {0.0, 30.0}, {10.0, 20.0}}), array);
+    assertEquals(StdArrays.ndCopyOf(new double[][][]{
+        {{10.0, 20.0}, {10.0, 20.0}},
+        {{10.0, 20.0}, {0.0, 0.0}},
+        {{0.0, 0.0}, {0.0, 0.0}},
+        {{0.0, 0.0}, {10.0, 20.0}}
+    }), array);
   }
 }

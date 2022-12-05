@@ -189,6 +189,15 @@ public class DimensionalSpace {
     return position;
   }
 
+  public boolean increment(long[] coords) {
+    for (int i = coords.length - 1; i >= 0; --i) {
+      if ((coords[i] = (coords[i] + 1) % shape.get(i)) > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Succinct description of the shape meant for debugging.
    */
