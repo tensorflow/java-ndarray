@@ -16,10 +16,11 @@
  */
 package org.tensorflow.ndarray.impl;
 
-import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 import org.tensorflow.ndarray.NdArray;
 import org.tensorflow.ndarray.buffer.DataBuffer;
+
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 
 public class Validator {
 
@@ -39,15 +40,6 @@ public class Validator {
   public static void writeFromBufferArgs(NdArray<?> ndArray, DataBuffer<?> src) {
     if (src.size() < ndArray.size()) {
       throw new BufferUnderflowException();
-    }
-  }
-
-  private static void copyArrayArgs(int arrayLength, int arrayOffset) {
-    if (arrayOffset < 0) {
-      throw new IndexOutOfBoundsException("Offset must be non-negative");
-    }
-    if (arrayOffset > arrayLength) {
-      throw new IndexOutOfBoundsException("Offset must be no larger than array length");
     }
   }
 

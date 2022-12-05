@@ -33,12 +33,12 @@ import org.tensorflow.ndarray.buffer.DataBufferWindow;
 public interface NdArraySequence<T extends NdArray<?>> extends Iterable<T> {
 
   /**
-   * Visit each elements of this iteration and their respective coordinates.
+   * Visit each element of this iteration and their respective coordinates.
    *
    * <p><i>Important: the consumer method should not keep a reference to the coordinates
    * as they might be mutable and reused during the iteration to improve performance.</i>
    *
-   * @param consumer method to invoke for each elements
+   * @param consumer method to invoke for each element
    */
   void forEachIndexed(BiConsumer<long[], T> consumer);
 
@@ -60,7 +60,7 @@ public interface NdArraySequence<T extends NdArray<?>> extends Iterable<T> {
    *     ndArray.elements(0).asSlices().forEach(e -> vectors::add);  // Safe, each `e` is a distinct NdArray instance
    * }</pre>
    *
-   * @return a sequence that returns each elements iterated as a new slice
+   * @return a sequence that returns each element iterated as a new slice
    * @see DataBufferWindow
    */
   NdArraySequence<T> asSlices();

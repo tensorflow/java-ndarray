@@ -21,6 +21,7 @@ module org.tensorflow.ndarray {
   exports org.tensorflow.ndarray.buffer;
   exports org.tensorflow.ndarray.buffer.layout;
   exports org.tensorflow.ndarray.index;
+  exports org.tensorflow.ndarray.initializer;
 
   // Expose all implementions of our interfaces, so consumers can write custom
   // implementations easily by extending from them

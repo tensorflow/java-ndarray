@@ -47,7 +47,7 @@ class NdPositionIterator implements IndexedPositionIterator {
   }
 
   private void incrementCoords() {
-    if (!dimensions.incrementCoordinates(coords)) {
+    if (!dimensions.increment(coords)) {
       coords = null;
     }
   }

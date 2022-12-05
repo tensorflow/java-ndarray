@@ -27,14 +27,14 @@ class IndexedSequentialPositionIterator extends SequentialPositionIterator imple
   public void forEachIndexed(CoordsLongConsumer consumer) {
     while (hasNext()) {
       consumer.consume(coords, super.nextLong());
-      dimensions.incrementCoordinates(coords);
+      dimensions.increment(coords);
     }
   }
 
   @Override
   public long nextLong() {
     long tmp = super.nextLong();
-    dimensions.incrementCoordinates(coords);
+    dimensions.increment(coords);
     return tmp;
   }
 
