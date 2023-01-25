@@ -23,9 +23,9 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/tensorflow/java-ndarray.git</url>
-    <connection>git@github.com:tensorflow/java-ndarray.git</connection>
-    <developerConnection>scm:git:https://github.com/tensorflow/java-ndarray.git</developerConnection>
+    <url>https://github.com/karllessard/tensorflow-java-ndarray.git</url>
+    <connection>git@github.com:karllessard/tensorflow-java-ndarray.git</connection>
+    <developerConnection>scm:git:https://github.com/karllessard/tensorflow-java-ndarray.git</developerConnection>
   </scm>
 
   <modules>
