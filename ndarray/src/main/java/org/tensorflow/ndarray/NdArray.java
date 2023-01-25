@@ -18,7 +18,6 @@ package org.tensorflow.ndarray;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
