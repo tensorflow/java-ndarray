@@ -5,7 +5,7 @@
 
   <groupId>org.tensorflow</groupId>
   <artifactId>tensorflow-java-ndarray</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <packaging>pom</packaging>
 
   <name>NdArray Parent</name>
@@ -82,7 +82,7 @@
     </snapshotRepository>
     <repository>
       <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${stagingRepositoryId}/</url>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
 
