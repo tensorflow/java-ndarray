@@ -32,6 +32,11 @@ public class IntDenseNdArray extends AbstractDenseNdArray<Integer, IntNdArray>
   }
 
   @Override
+  public IntDataBuffer buffer() {
+    return buffer;
+  }
+
+  @Override
   public int getInt(long... indices) {
     return buffer.getInt(positionOf(indices, true));
   }
@@ -75,11 +80,6 @@ public class IntDenseNdArray extends AbstractDenseNdArray<Integer, IntNdArray>
   @Override
   IntDenseNdArray instantiate(DataBuffer<Integer> buffer, DimensionalSpace dimensions) {
     return new IntDenseNdArray((IntDataBuffer)buffer, dimensions);
-  }
-
-  @Override
-  protected IntDataBuffer buffer() {
-    return buffer;
   }
 
   private final IntDataBuffer buffer;

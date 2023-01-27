@@ -31,6 +31,20 @@ import org.tensorflow.ndarray.impl.sequence.SingleElementSequence;
 @SuppressWarnings("unchecked")
 public abstract class AbstractDenseNdArray<T, U extends NdArray<T>> extends AbstractNdArray<T, U> {
 
+  abstract public DataBuffer<T> buffer();
+
+  public NdArraySequence<U> elementsAt(long[] startCoords) {
+    DimensionalSpace elemDims = dimensions().from(startCoords.length);
+    try {
+      DataBufferWindow<? extends DataBuffer<T>> elemWindow = buffer().window(elemDims.physicalSize());
+      U element = instantiate(elemWindow.buffer(), elemDims);
+      return new FastElementSequence<T, U>(this, startCoords, element, elemWindow);
+    } catch (UnsupportedOperationException e) {
+      // If buffer windows are not supported, fallback to slicing (and slower) sequence
+      return new SlicingElementSequence<T, U>(this, startCoords, elemDims);
+    }
+  }
+
   @Override
   public NdArraySequence<U> elements(int dimensionIdx) {
     if (dimensionIdx >= shape().numDimensions()) {
@@ -40,15 +54,7 @@ public abstract class AbstractDenseNdArray<T, U extends NdArray<T>> extends Abst
     if (rank() == 0 && dimensionIdx < 0) {
       return new SingleElementSequence<>(this);
     }
-    DimensionalSpace elemDims = dimensions().from(dimensionIdx + 1);
-    try {
-      DataBufferWindow<? extends DataBuffer<T>> elemWindow = buffer().window(elemDims.physicalSize());
-      U element = instantiate(elemWindow.buffer(), elemDims);
-      return new FastElementSequence(this, dimensionIdx, element, elemWindow);
-    } catch (UnsupportedOperationException e) {
-      // If buffer windows are not supported, fallback to slicing (and slower) sequence
-      return new SlicingElementSequence<>(this, dimensionIdx, elemDims);
-    }
+    return elementsAt(new long[dimensionIdx + 1]);
   }
 
   @Override
@@ -144,8 +150,6 @@ public abstract class AbstractDenseNdArray<T, U extends NdArray<T>> extends Abst
   protected AbstractDenseNdArray(DimensionalSpace dimensions) {
     super(dimensions);
   }
-
-  abstract protected DataBuffer<T> buffer();
 
   abstract U instantiate(DataBuffer<T> buffer, DimensionalSpace dimensions);
 

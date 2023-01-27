@@ -33,18 +33,26 @@ import org.tensorflow.ndarray.impl.dimension.DimensionalSpace;
 public final class SlicingElementSequence<T, U extends NdArray<T>> implements NdArraySequence<U> {
 
   public SlicingElementSequence(AbstractNdArray<T, U> ndArray, int dimensionIdx) {
-    this(ndArray, dimensionIdx, ndArray.dimensions().from(dimensionIdx + 1));
+    this(ndArray, new long[dimensionIdx + 1]);
+  }
+
+  public SlicingElementSequence(AbstractNdArray<T, U> ndArray, long[] startCoords) {
+    this(ndArray, startCoords, ndArray.dimensions().from(startCoords.length));
   }
 
   public SlicingElementSequence(AbstractNdArray<T, U> ndArray, int dimensionIdx, DimensionalSpace elementDimensions) {
+    this(ndArray, new long[dimensionIdx + 1], elementDimensions);
+  }
+
+  public SlicingElementSequence(AbstractNdArray<T, U> ndArray, long[] startCoords, DimensionalSpace elementDimensions) {
     this.ndArray = ndArray;
-    this.dimensionIdx = dimensionIdx;
+    this.startCoords = startCoords;
     this.elementDimensions = elementDimensions;
   }
 
   @Override
   public Iterator<U> iterator() {
-    PositionIterator positionIterator = PositionIterator.create(ndArray.dimensions(), dimensionIdx);
+    PositionIterator positionIterator = PositionIterator.create(ndArray.dimensions(), startCoords);
     return new Iterator<U>() {
 
       @Override
@@ -61,7 +69,7 @@ public final class SlicingElementSequence<T, U extends NdArray<T>> implements Nd
 
   @Override
   public void forEachIndexed(BiConsumer<long[], U> consumer) {
-    PositionIterator.createIndexed(ndArray.dimensions(), dimensionIdx).forEachIndexed((long[] coords, long position) ->
+    PositionIterator.createIndexed(ndArray.dimensions(), startCoords).forEachIndexed((long[] coords, long position) ->
         consumer.accept(coords, ndArray.slice(position, elementDimensions))
     );
   }
@@ -72,6 +80,6 @@ public final class SlicingElementSequence<T, U extends NdArray<T>> implements Nd
   }
 
   private final AbstractNdArray<T, U> ndArray;
-  private final int dimensionIdx;
+  private final long[] startCoords;
   private final DimensionalSpace elementDimensions;
 }
