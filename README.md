@@ -37,7 +37,7 @@ assertEquals(4095L, bufferB.size());
 assertEquals(2, bufferB.getInt(0));
 
 // Resize a buffer to 10 elements
-IntDataBuffer bufferC = bufferA.narrow(10);
+IntDataBuffer bufferC = bufferB.narrow(10);
 assertEquals(10L, bufferB.size());
 assertEquals(2, bufferB.getInt(0));
 ```
