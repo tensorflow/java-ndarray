@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - main
-      # - r[0-9]+.*
+      - r[0-9]+.*
   pull_request:
     branches:
       - main
-      # - r[0-9]+.*
+      - r[0-9]+.*
     types: [opened, reopened, synchronize]
 jobs:
   build:
@@ -30,9 +30,3 @@ jobs:
         run: |
           echo "<settings><servers><server><id>ossrh</id><username>${{ secrets.CI_DEPLOY_USERNAME }}</username><password>${{ secrets.CI_DEPLOY_PASSWORD }}</password></server></servers></settings>" > $HOME/.m2/settings.xml
           mvn deploy -B -U -e -Dmaven.test.skip=true
-      - name: Release artifacts
-        if: github.event_name == 'push' && startsWith(github.ref, 'r')
-        run: |
-          echo "<settings><servers><server><id>ossrh</id><username>${{ secrets.CI_DEPLOY_USERNAME }}</username><password>${{ secrets.CI_DEPLOY_PASSWORD }}</password></server></servers></settings>" > $HOME/.m2/settings.xml
-          mvn release:prepare -B -U -e
-          mvn release:perform -B -U -e -Dmaven.test.skip=true

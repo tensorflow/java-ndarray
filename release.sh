@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2023 The TensorFlow Authors. All Rights Reserved.
+# Copyright 2024 The TensorFlow Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,14 +15,28 @@
 # ==============================================================================
 #
 # Script to upload release artifacts for the TensorFlow Java library to
-# Maven Central. See RELEASE.md for an explanation.
+# Maven Central. See RELEASE.md for explanation.
 
 cd $(dirname "$0")
 shift
 shift
+CMD="$*"
+
+# If release fails, debug with
+#   ./release.sh bash
+# To get a shell to poke around the maven artifacts with.
+if [[ -z "${CMD}" ]]
+then
+  CMD="mvn clean deploy -B -e --settings ./settings.xml -Pdeploying -Preleasing"
+fi
 
 export GPG_TTY=$(tty)
 set -ex
+
+if [[ ! -f settings.xml ]]
+then
+  cp -f ~/.m2/settings.xml .
+fi
 
 docker run \
   -e GPG_TTY="${GPG_TTY}" \
@@ -30,5 +44,9 @@ docker run \
   -v ${HOME}/.gnupg:/root/.gnupg \
   -w /tensorflow-java-ndarray \
   -it \
+  --platform linux/amd64 \
   maven:3.8.6-jdk-11  \
-  mvn --settings settings.xml -Preleasing clean deploy -B -U -e
+  ${CMD}
+
+echo
+echo "Release completed"
