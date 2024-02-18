@@ -23,7 +23,10 @@ import org.tensorflow.ndarray.impl.sparse.IntSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.LongSparseNdArray;
 import org.tensorflow.ndarray.impl.sparse.ShortSparseNdArray;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SparseNdArrayTest {
   long[][] indicesArray = {{0, 0}, {1, 2}, {2, 3}};

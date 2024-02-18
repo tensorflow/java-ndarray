@@ -400,7 +400,7 @@ public abstract class NdArrayTestBase<T> {
     assertEquals(originalShape, originalArray.shape());
     assertEquals(valueOf(10L), newArray.getObject(0, 0));
 
-    NdArray<T> sameArray = originalArray.withShape(originalShape);
+    NdArray<T> sameArray = originalArray.withShape(Shape.scalar());
     assertSame(originalArray, sameArray);
 
     assertThrows(IllegalArgumentException.class, () -> originalArray.withShape(Shape.of(2)));
