@@ -54,11 +54,11 @@ public abstract class AbstractDenseNdArray<T, U extends NdArray<T>> extends Abst
 
   @Override
   public U withShape(Shape shape) {
-    if (shape.equals(this.shape())) {
-      return (U)this;
-    }
     if (shape == null || shape.isUnknown() || shape.size() != this.shape().size()) {
       throw new IllegalArgumentException("Shape " + shape + " cannot be used to reshape ndarray of shape " + this.shape());
+    }
+    if (shape.equals(this.shape())) {
+      return (U)this;
     }
     return instantiateView(buffer(), DimensionalSpace.create(shape));
   }
