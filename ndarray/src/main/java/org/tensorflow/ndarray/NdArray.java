@@ -291,7 +291,8 @@ public interface NdArray<T> extends Shaped {
    * array, or an exception is thrown. After the copy, content of the buffer and of the array can be
    * altered independently, without affecting each other.
    *
-   * <p><i>Note: this method was previously named `read(DataBuffer<T>)`, which led to confusion.</i>
+   * <p><i>Note: in version 0.4.0 and earlier, this method was named {@code read(DataBuffer<T>)}. It has been renamed to
+   * explicitly indicate the direction of the data flow to avoid confusion.</i>
    *
    * @param dst the destination buffer
    * @return this array
@@ -307,7 +308,8 @@ public interface NdArray<T> extends Shaped {
    * array, or an exception is thrown. After the copy, content of the buffer and of the array can be
    * altered independently, without affecting each other.
    *
-   * <p><i>Note: this method was previously named `write(DataBuffer<T>)`, which led to confusion.</i>
+   * <p><i>Note: in version 0.4.0 and earlier, this method was named {@code write(DataBuffer<T>)}. It has been renamed to
+   * explicitly indicate the direction of the data flow to avoid confusion.</i>
    *
    * @param src the source buffer
    * @return this array
