@@ -285,25 +285,29 @@ public interface NdArray<T> extends Shaped {
   NdArray<T> copyTo(NdArray<T> dst);
 
   /**
-   * Read the content of this N-dimensional array into the destination buffer.
+   * Copy the content of this N-dimensional array into the destination buffer.
    *
    * <p>The size of the buffer must be equal or greater to the {@link #size()} of this
    * array, or an exception is thrown. After the copy, content of the buffer and of the array can be
    * altered independently, without affecting each other.
+   *
+   * <p><i>Note: this method was previously named `read(DataBuffer<T>)`, which led to confusion.</i>
    *
    * @param dst the destination buffer
    * @return this array
    * @throws java.nio.BufferOverflowException if the buffer cannot hold the content of this array
    * @see DataBuffer#size()
    */
-  NdArray<T> read(DataBuffer<T> dst);
+  NdArray<T> copyTo(DataBuffer<T> dst);
 
   /**
-   * Write the content of this N-dimensional array from the source buffer.
+   * Copy the content of the source buffer into this N-dimensional array.
    *
    * <p>The size of the buffer must be equal or greater to the {@link #size()} of this
    * array, or an exception is thrown. After the copy, content of the buffer and of the array can be
    * altered independently, without affecting each other.
+   *
+   * <p><i>Note: this method was previously named `write(DataBuffer<T>)`, which led to confusion.</i>
    *
    * @param src the source buffer
    * @return this array
@@ -311,7 +315,7 @@ public interface NdArray<T> extends Shaped {
    * into this array
    * @see DataBuffer#size()
    */
-  NdArray<T> write(DataBuffer<T> src);
+  NdArray<T> copyFrom(DataBuffer<T> src);
 
   /**
    * Checks equality between n-dimensional arrays.

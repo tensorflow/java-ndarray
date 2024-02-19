@@ -75,7 +75,7 @@ IntNdArray vector = matrix3d.get(0, 1);
 assertEquals(1, vector.rank());
 
 // Rewriting the values of the vector using a primitive array
-vector.write(new int[] { 7, 8 });
+vector.copyFrom(DataBuffers.of(new int[] { 7, 8 }));
 assertEquals(7, matrix3d.getInt(0, 1, 0));
 assertEquals(8, matrix3d.getInt(0, 1, 1));
 
