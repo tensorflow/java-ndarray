@@ -27,7 +27,7 @@ CMD="$*"
 # To get a shell to poke around the maven artifacts with.
 if [[ -z "${CMD}" ]]
 then
-  CMD="mvn clean deploy -B -e --settings ./settings.xml -Pdeploying -Preleasing"
+  CMD="mvn clean deploy -B -e --settings ./settings.xml -Preleasing"
 fi
 
 export GPG_TTY=$(tty)
