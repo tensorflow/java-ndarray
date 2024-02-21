@@ -148,10 +148,8 @@ Some things of note:
    ```
    mvn versions:set -DnewVersion=1.1.0-SNAPSHOT
    ```
-3. Update the NdArray Java Library version to reflect the new release at the following locations:
-    - https://github.com/tensorflow/java-ndarray/blob/main/README.md#introduction
 
-4. Commit your changes and push the main branch to the GitHub repository
+3. Commit your changes and push the main branch to the GitHub repository
    ```
    git add .
    git commit -m "Increase version for next iteration"
